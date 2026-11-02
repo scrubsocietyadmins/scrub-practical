@@ -25,6 +25,7 @@ import {
   calculateSelfGradingScore,
   getUngradedQuestionIds,
   finalizeSelfGradingAttempt,
+  autoGradeStation,
 } from '../../services/selfGradingService';
 import { ReferenceAnswerReveal } from './ReferenceAnswerReveal';
 import { SelfGradingControls } from './SelfGradingControls';
@@ -82,6 +83,31 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
     };
     loadImages();
   }, [questions]);
+
+  // Auto-grade objective MCQs on mount if not already graded
+  useEffect(() => {
+    let hasNewGrades = false;
+    const newGrades = { ...grades };
+    const newRevealed = { ...revealedQuestions };
+
+    for (const q of questions) {
+      if (newGrades[q.id] === undefined) {
+        const auto = autoGradeStation(q, session.answers[q.id]);
+        if (auto !== undefined) {
+          newGrades[q.id] = auto;
+          if (['image_mcq', 'clinical_mcq', 'text_mcq'].includes(q.type) || session.answers[q.id]?.selectedOptionId) {
+            newRevealed[q.id] = true;
+          }
+          hasNewGrades = true;
+        }
+      }
+    }
+
+    if (hasNewGrades) {
+      setGrades(newGrades);
+      setRevealedQuestions(newRevealed);
+    }
+  }, [questions, session.answers]);
 
   // If session is already finalized on mount (e.g. from restored session)
   useEffect(() => {
@@ -381,6 +407,10 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
             currentGrade={grades[currentQuestion.id]}
             onSelectGrade={handleSelectGrade}
             maxPoints={currentQuestion.points || 1}
+            isAutoGraded={
+              ['image_mcq', 'clinical_mcq', 'text_mcq'].includes(currentQuestion.type) ||
+              Boolean(session.answers[currentQuestion.id]?.selectedOptionId)
+            }
           />
         </div>
       </main>

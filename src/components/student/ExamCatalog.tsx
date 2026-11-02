@@ -250,7 +250,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {filteredExams.map((exam) => {
             const subject = subjects.find((s) => s.id === exam.subjectId);
             const stationCount = examStationCounts[exam.id] || 0;
@@ -282,7 +282,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
                         {subject?.name || 'Practical Exam'}
                       </span>
                     </div>
-                    <span className="text-[11px] font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/70 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded">
+                    <span className="text-[11px] font-mono font-bold whitespace-nowrap shrink-0 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/70 border border-slate-200 dark:border-slate-600 px-2 py-0.5 rounded">
                       {exam.code}
                     </span>
                   </div>

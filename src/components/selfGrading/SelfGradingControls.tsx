@@ -7,6 +7,7 @@ interface SelfGradingControlsProps {
   onSelectGrade: (grade: SelfGradeValue) => void;
   maxPoints?: number;
   disabled?: boolean;
+  isAutoGraded?: boolean;
 }
 
 export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
@@ -14,22 +15,32 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
   onSelectGrade,
   maxPoints = 1,
   disabled = false,
+  isAutoGraded = false,
 }) => {
+  const fullPts = maxPoints;
+  const partialPts = Math.round(maxPoints * 0.5 * 10) / 10;
+  const awardedPoints = currentGrade !== undefined ? Math.round(currentGrade * maxPoints * 10) / 10 : null;
+
   return (
     <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 shadow-2xs space-y-3.5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-slate-100 dark:border-slate-800">
-        <div>
+        <div className="flex items-center gap-2 flex-wrap">
           <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
             <span>Assign Your Grade:</span>
             <span className="text-[10px] font-normal text-slate-500 dark:text-slate-400 normal-case">
               (Evaluate candidate response against reference criteria)
             </span>
           </h4>
+          {isAutoGraded && (
+            <span className="inline-flex items-center gap-1 text-purple-700 dark:text-purple-300 font-bold bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 rounded border border-purple-200 dark:border-purple-800 text-[10px]">
+              Auto-Graded (Objective MCQ)
+            </span>
+          )}
         </div>
         <div className="text-[11px] font-mono">
-          {currentGrade !== undefined ? (
+          {awardedPoints !== null ? (
             <span className="inline-flex items-center gap-1 text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-              Grade Selected: {currentGrade} / {maxPoints}
+              Grade Selected: {awardedPoints} / {maxPoints} Point{maxPoints !== 1 ? 's' : ''}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 text-amber-800 dark:text-amber-300 font-semibold bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
@@ -41,7 +52,7 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* Option 1: 1.0 Point (Fully Correct) */}
+        {/* Option 1: Full Credit */}
         <button
           type="button"
           disabled={disabled}
@@ -63,7 +74,7 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-950 dark:text-emerald-200">1 Point</span>
+              <span className="text-xs font-bold text-emerald-950 dark:text-emerald-200">{fullPts} Point{fullPts !== 1 ? 's' : ''}</span>
               <span className="text-[10px] font-mono font-bold bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 px-1.5 rounded">
                 100%
               </span>
@@ -74,7 +85,7 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
           </div>
         </button>
 
-        {/* Option 2: 0.5 Points (Partially Correct) */}
+        {/* Option 2: Partial Credit */}
         <button
           type="button"
           disabled={disabled}
@@ -96,7 +107,7 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-950 dark:text-amber-200">0.5 Points</span>
+              <span className="text-xs font-bold text-amber-950 dark:text-amber-200">{partialPts} Point{partialPts !== 1 ? 's' : ''}</span>
               <span className="text-[10px] font-mono font-bold bg-amber-200/80 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 px-1.5 rounded">
                 50%
               </span>

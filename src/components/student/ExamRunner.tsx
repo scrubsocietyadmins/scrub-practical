@@ -13,6 +13,7 @@ import {
   VolumeX,
   Timer,
   LogOut,
+  Lock,
 } from 'lucide-react';
 import type { Exam, Question, StudentStationAnswer, Subject } from '../../types';
 import { getImageObjectUrl } from '../../db';
@@ -38,7 +39,7 @@ interface ExamRunnerProps {
 interface PersistedExamProgress {
   currentStationIndex: number;
   answers: Record<string, StudentStationAnswer>;
-  startTimestamp: number; // wall-clock time the exam started, for accurate restoration
+  startTimestamp: number;
   totalTimeSpentSeconds: number;
 }
 
@@ -71,18 +72,24 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   const [feedbackAnnouncement, setFeedbackAnnouncement] = useState<string>('');
   const [activePacingAlert, setActivePacingAlert] = useState<PacingAlert | null>(null);
 
-  // Bell ring: per-station countdown
+  // Spotter view toggle when spotterAnswerMode === 'both'
+  const [spotterViewMode, setSpotterViewMode] = useState<'mcq' | 'typed'>('mcq');
+
+  // Station lock state for strict bell rotation
+  const [isStationLocked, setIsStationLocked] = useState<boolean>(false);
+  const stationEndTimeRef = useRef<number>(0);
+  const isTransitioningRef = useRef<boolean>(false);
+
+  // Countdown values
   const [stationTimeRemaining, setStationTimeRemaining] = useState<number>(
     questions[0]?.stationDurationSeconds || exam.stationDurationSeconds || 90
   );
-  // Total timer: overall countdown
   const [totalTimeRemaining, setTotalTimeRemaining] = useState<number>(
     (exam.totalDurationMinutes || 20) * 60
   );
-  // Elapsed time (all modes)
   const [totalTimeSpentSeconds, setTotalTimeSpentSeconds] = useState<number>(0);
 
-  // Modals
+  // Modals & Navigation
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isStationDrawerOpen, setIsStationDrawerOpen] = useState(false);
   const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
@@ -110,7 +117,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     }, 4500);
   }, []);
 
-  // Restore progress from localStorage with timestamp-based timer accuracy
+  // Restore progress from localStorage
   useEffect(() => {
     if (hasRestoredRef.current) return;
     hasRestoredRef.current = true;
@@ -131,11 +138,9 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             setAnswers(saved.answers);
           }
 
-          // Recompute elapsed time using wall-clock timestamp
           if (typeof saved.startTimestamp === 'number' && saved.startTimestamp > 0) {
             const elapsedSinceStart = Math.floor((Date.now() - saved.startTimestamp) / 1000);
             const stored = typeof saved.totalTimeSpentSeconds === 'number' ? saved.totalTimeSpentSeconds : 0;
-            // Use the larger of stored and wall-clock elapsed (more accurate after gap)
             const computed = Math.max(stored, elapsedSinceStart);
             setTotalTimeSpentSeconds(computed);
 
@@ -179,7 +184,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     }
   }, [storageKey, currentStationIndex, answers, totalTimeSpentSeconds]);
 
-  // Load image when station changes
+  // Load image & setup timer when station changes
   useEffect(() => {
     if (!currentStation) return;
 
@@ -187,9 +192,20 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     warnedStation60sRef.current = false;
     warnedStation30sRef.current = false;
     warnedTenSecondsRef.current = false;
+    setIsStationLocked(false);
+    isTransitioningRef.current = false;
+
+    // Reset spotter view mode if current station has typed answers recorded
+    const existingAns = answers[currentStation.id];
+    if (existingAns?.typedAnswer && !existingAns?.selectedOptionId) {
+      setSpotterViewMode('typed');
+    } else {
+      setSpotterViewMode('mcq');
+    }
 
     const allocatedTime = currentStation.stationDurationSeconds || exam.stationDurationSeconds || 90;
     setStationTimeRemaining(allocatedTime);
+    stationEndTimeRef.current = Date.now() + allocatedTime * 1000;
 
     if (currentStation.imageId) {
       getImageObjectUrl(currentStation.imageId).then(setCurrentImageUrl);
@@ -198,13 +214,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     }
   }, [currentStationIndex, currentStation, exam.stationDurationSeconds]);
 
-  // Countdown timer
+  // Countdown timer with wall-clock drift protection
   useEffect(() => {
     if (timeExpiredRef.current) return;
 
-    const timer = setInterval(() => {
-      setTotalTimeSpentSeconds((s) => s + 1);
-
+    const checkTiming = () => {
       // Total timer mode countdown
       if (isTotalTimer) {
         setTotalTimeRemaining((prev) => {
@@ -219,56 +233,130 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           if (prev === 91 && !warnedTotal90sRef.current) {
             warnedTotal90sRef.current = true;
             playPacingWarningChime('ninety_seconds');
-            triggerPacingAlert({ id: 'exam-90', type: 'ninety_seconds', timeLabel: '1m 30s', title: '1 minute 30 seconds remaining', message: 'Review flagged stations before time runs out.', severity: 'info' });
+            triggerPacingAlert({
+              id: 'exam-90',
+              type: 'ninety_seconds',
+              timeLabel: '1m 30s',
+              title: '1 minute 30 seconds remaining',
+              message: 'Review flagged stations before time runs out.',
+              severity: 'info',
+            });
           } else if (prev === 61 && !warnedTotal60sRef.current) {
             warnedTotal60sRef.current = true;
             playPacingWarningChime('one_minute');
-            triggerPacingAlert({ id: 'exam-60', type: 'one_minute', timeLabel: '1m', title: '1 minute remaining', message: 'Finalize your answers soon.', severity: 'warning' });
+            triggerPacingAlert({
+              id: 'exam-60',
+              type: 'one_minute',
+              timeLabel: '1m',
+              title: '1 minute remaining',
+              message: 'Finalize your answers soon.',
+              severity: 'warning',
+            });
           } else if (prev === 31 && !warnedTotal30sRef.current) {
             warnedTotal30sRef.current = true;
             playPacingWarningChime('thirty_seconds');
-            triggerPacingAlert({ id: 'exam-30', type: 'thirty_seconds', timeLabel: '30s', title: '30 seconds — time almost up', message: 'The exam will submit automatically.', severity: 'urgent' });
+            triggerPacingAlert({
+              id: 'exam-30',
+              type: 'thirty_seconds',
+              timeLabel: '30s',
+              title: '30 seconds — time almost up',
+              message: 'The exam will submit automatically.',
+              severity: 'urgent',
+            });
           }
 
           return prev - 1;
         });
       }
 
-      // Bell ring mode: per-station countdown
-      if (isBellRing) {
-        setStationTimeRemaining((prev) => {
-          if (prev === 91 && !warnedStation90sRef.current) {
-            warnedStation90sRef.current = true;
-            playPacingWarningChime('ninety_seconds');
-            triggerPacingAlert({ id: `st-90-${currentStationIndex}`, type: 'ninety_seconds', timeLabel: '1m 30s', title: 'Station: 1 minute 30 seconds', message: 'Review your answer and pointer.', severity: 'info' });
-          }
-          if (prev === 61 && !warnedStation60sRef.current) {
-            warnedStation60sRef.current = true;
-            playPacingWarningChime('one_minute');
-            triggerPacingAlert({ id: `st-60-${currentStationIndex}`, type: 'one_minute', timeLabel: '1m', title: 'Station: 1 minute remaining', message: 'Select your final answer.', severity: 'warning' });
-          }
-          if (prev === 31 && !warnedStation30sRef.current) {
-            warnedStation30sRef.current = true;
-            playPacingWarningChime('thirty_seconds');
-            triggerPacingAlert({ id: `st-30-${currentStationIndex}`, type: 'thirty_seconds', timeLabel: '30s', title: 'Station: 30 seconds', message: 'Bell rings soon.', severity: 'urgent' });
-          }
-          if (prev === 11 && !warnedTenSecondsRef.current) {
-            warnedTenSecondsRef.current = true;
-            playWarningChime();
-          }
-          if (prev <= 1) {
+      // Bell ring mode: per-station countdown with wall-clock end timestamp
+      if (isBellRing && stationEndTimeRef.current > 0) {
+        const remaining = Math.max(0, Math.ceil((stationEndTimeRef.current - Date.now()) / 1000));
+        setStationTimeRemaining(remaining);
+
+        if (remaining === 90 && !warnedStation90sRef.current) {
+          warnedStation90sRef.current = true;
+          playPacingWarningChime('ninety_seconds');
+          triggerPacingAlert({
+            id: `st-90-${currentStationIndex}`,
+            type: 'ninety_seconds',
+            timeLabel: '1m 30s',
+            title: 'Station: 1 minute 30 seconds',
+            message: 'Review your answer and pointer.',
+            severity: 'info',
+          });
+        }
+        if (remaining === 60 && !warnedStation60sRef.current) {
+          warnedStation60sRef.current = true;
+          playPacingWarningChime('one_minute');
+          triggerPacingAlert({
+            id: `st-60-${currentStationIndex}`,
+            type: 'one_minute',
+            timeLabel: '1m',
+            title: 'Station: 1 minute remaining',
+            message: 'Select your final answer.',
+            severity: 'warning',
+          });
+        }
+        if (remaining === 30 && !warnedStation30sRef.current) {
+          warnedStation30sRef.current = true;
+          playPacingWarningChime('thirty_seconds');
+          triggerPacingAlert({
+            id: `st-30-${currentStationIndex}`,
+            type: 'thirty_seconds',
+            timeLabel: '30s',
+            title: 'Station: 30 seconds',
+            message: 'Bell rings soon.',
+            severity: 'urgent',
+          });
+        }
+        if (remaining === 10 && !warnedTenSecondsRef.current) {
+          warnedTenSecondsRef.current = true;
+          playWarningChime();
+        }
+
+        // When station timer expires: strict lock and rotation
+        if (remaining <= 0) {
+          setIsStationLocked(true);
+
+          if (!isTransitioningRef.current) {
+            isTransitioningRef.current = true;
             playStationBell();
-            if (autoAdvanceOnBell && currentStationIndex < questions.length - 1) {
-              setCurrentStationIndex((curr) => curr + 1);
+
+            if (autoAdvanceOnBell) {
+              if (currentStationIndex < questions.length - 1) {
+                setTimeout(() => {
+                  setCurrentStationIndex((curr) => curr + 1);
+                }, 400);
+              } else {
+                // Last station expired in strict rotation -> auto-submit exam
+                setTimeout(() => {
+                  setTimeExpiredSubmit(true);
+                }, 400);
+              }
             }
-            return 0;
           }
-          return prev - 1;
-        });
+        }
       }
+    };
+
+    const timer = setInterval(() => {
+      setTotalTimeSpentSeconds((s) => s + 1);
+      checkTiming();
     }, 1000);
 
-    return () => clearInterval(timer);
+    const handleVisibilityOrFocus = () => {
+      checkTiming();
+    };
+
+    window.addEventListener('visibilitychange', handleVisibilityOrFocus);
+    window.addEventListener('focus', handleVisibilityOrFocus);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('visibilitychange', handleVisibilityOrFocus);
+      window.removeEventListener('focus', handleVisibilityOrFocus);
+    };
   }, [autoAdvanceOnBell, currentStationIndex, questions.length, triggerPacingAlert, isBellRing, isTotalTimer]);
 
   // Auto-submit when total timer expires
@@ -284,7 +372,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     return (
       <div className="p-12 text-center text-slate-600 bg-white min-h-screen flex flex-col items-center justify-center">
         <p className="text-base font-semibold">No stations found for this examination.</p>
-        <button onClick={onExitExam} className="mt-4 px-5 py-2.5 bg-rose-950 text-white text-xs font-bold rounded-lg">
+        <button onClick={onExitExam} className="mt-4 px-5 py-2.5 bg-rose-950 text-white text-xs font-bold rounded-lg cursor-pointer">
           Return to Exam Library
         </button>
       </div>
@@ -298,6 +386,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   };
 
   const handleSelectOption = (optionId: string) => {
+    if (isStationLocked) return;
     setAnswers((prev) => ({
       ...prev,
       [currentStation.id]: { ...currentAnswer, questionId: currentStation.id, selectedOptionId: optionId },
@@ -305,6 +394,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   };
 
   const handleTypedAnswerChange = (val: string) => {
+    if (isStationLocked) return;
     setAnswers((prev) => ({
       ...prev,
       [currentStation.id]: { ...currentAnswer, questionId: currentStation.id, typedAnswer: val },
@@ -357,7 +447,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (!currentStation?.options) return;
+      if (!currentStation?.options || isStationLocked) return;
 
       const opts = currentStation.options;
       if (e.key === '1' || e.key === 'a' || e.key === 'A') { if (opts[0]) handleSelectOption(opts[0].id); }
@@ -369,7 +459,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentStationIndex, currentStation]);
+  }, [currentStationIndex, currentStation, isStationLocked]);
 
   const formatTimer = (totalSeconds: number) => {
     const mins = Math.floor(Math.max(0, totalSeconds) / 60);
@@ -423,7 +513,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         </div>
       )}
 
-      {/* Exam header — focus mode, no global nav */}
+      {/* Exam Header — Compact, streamlined, no premature Finish button */}
       <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs">
         {/* Progress bar */}
         <div className="w-full bg-slate-100 dark:bg-slate-800 h-1 overflow-hidden">
@@ -435,32 +525,34 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         </div>
 
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-3 py-2.5">
-            {/* Left: exam identity + station */}
-            <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 py-2 sm:py-2.5">
+            {/* Left: station indicator and exam title */}
+            <div className="flex items-center gap-2.5 min-w-0">
               <div className="shrink-0">
-                <span className="w-9 h-9 rounded-lg bg-purple-950 dark:bg-purple-900/90 text-white font-mono font-bold text-sm flex items-center justify-center shadow-xs border border-purple-800/40">
+                <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-purple-950 dark:bg-purple-900/90 text-white font-mono font-bold text-xs sm:text-sm flex items-center justify-center shadow-xs border border-purple-800/40">
                   {currentStationIndex + 1}
                 </span>
               </div>
               <div className="min-w-0">
-                <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
+                <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white block truncate">
                   Station {currentStationIndex + 1} of {questions.length}
                 </span>
-                <span className="text-[11px] text-slate-400 dark:text-slate-400 truncate block max-w-[160px] sm:max-w-xs">
+                <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate block max-w-[120px] sm:max-w-xs font-medium">
                   {exam.title}
                 </span>
               </div>
             </div>
 
-            {/* Center: timer(s) */}
-            <div className="flex items-center gap-2">
-              {/* Bell ring timer */}
+            {/* Center: timer badge (MM:SS) */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Bell ring per-station timer */}
               {isBellRing && (
                 <div
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono text-xs transition-colors ${
-                    stationUrgent
-                      ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 font-bold'
+                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border font-mono text-xs sm:text-sm transition-colors ${
+                    isStationLocked
+                      ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-bold'
+                      : stationUrgent
+                      ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 font-bold animate-pulse'
                       : stationWarning
                       ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-200 font-semibold'
                       : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
@@ -468,18 +560,17 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   aria-label={`Station time remaining: ${formatTimer(stationTimeRemaining)}`}
                 >
                   <Bell
-                    className={`w-3.5 h-3.5 ${stationUrgent ? 'text-red-600 dark:text-red-400 animate-bounce' : stationWarning ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'}`}
+                    className={`w-3.5 h-3.5 ${isStationLocked ? 'text-rose-600' : stationUrgent ? 'text-red-600 dark:text-red-400' : stationWarning ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'}`}
                     aria-hidden="true"
                   />
-                  <span>{formatTimer(stationTimeRemaining)}</span>
-                  <span className="text-[9px] text-slate-400 hidden sm:inline">station</span>
+                  <span className="font-bold">{formatTimer(stationTimeRemaining)}</span>
                 </div>
               )}
 
               {/* Total timer */}
               {isTotalTimer && (
                 <div
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono text-xs transition-colors ${
+                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border font-mono text-xs sm:text-sm transition-colors ${
                     totalUrgent
                       ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 font-bold'
                       : totalWarning
@@ -489,27 +580,25 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   aria-label={`Total time remaining: ${formatTimer(totalTimeRemaining)}`}
                 >
                   <Clock className={`w-3.5 h-3.5 ${totalUrgent ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`} aria-hidden="true" />
-                  <span>{formatTimer(totalTimeRemaining)}</span>
-                  <span className="text-[9px] text-slate-400 hidden sm:inline">remaining</span>
+                  <span className="font-bold">{formatTimer(totalTimeRemaining)}</span>
                 </div>
               )}
 
-              {/* Flexible: elapsed only */}
+              {/* Flexible mode */}
               {isFlexible && (
                 <div
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono text-xs text-slate-600 dark:text-slate-300"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono text-xs text-slate-600 dark:text-slate-300"
                   aria-label={`Elapsed time: ${formatTimer(totalTimeSpentSeconds)}`}
                 >
                   <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
                   <span>{formatTimer(totalTimeSpentSeconds)}</span>
-                  <span className="text-[9px] text-slate-400 hidden sm:inline">elapsed</span>
                 </div>
               )}
             </div>
 
-            {/* Right: actions */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              {/* Flag */}
+            {/* Right: Flag, Roster, Sound, Leave */}
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+              {/* Flag button */}
               <button
                 type="button"
                 onClick={handleToggleFlag}
@@ -518,10 +607,25 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 className={`p-2 rounded-lg border transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer ${
                   currentAnswer.isFlagged
                     ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300'
-                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-850 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <Bookmark className={`w-4 h-4 ${currentAnswer.isFlagged ? 'fill-amber-500 text-amber-500' : ''}`} aria-hidden="true" />
+              </button>
+
+              {/* Stations Roster button (Visible on mobile too!) */}
+              <button
+                type="button"
+                onClick={() => setIsStationDrawerOpen(true)}
+                title="View Stations Roster"
+                aria-label="Open station roster"
+                className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors min-h-[36px] cursor-pointer"
+              >
+                <Menu className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" aria-hidden="true" />
+                <span className="hidden sm:inline">Answered:</span>
+                <span className="font-mono font-bold text-slate-700 dark:text-slate-300 text-[11px]">
+                  {answeredCount}/{questions.length}
+                </span>
               </button>
 
               {/* Sound toggle */}
@@ -534,45 +638,33 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 }}
                 title={soundOn ? 'Mute audio chimes' : 'Enable audio chimes'}
                 aria-label={soundOn ? 'Mute OSPE bell sounds' : 'Enable OSPE bell sounds'}
-                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
               >
                 {soundOn ? (
-                  <Volume2 className="w-4 h-4 text-slate-600 dark:text-slate-300" aria-hidden="true" />
+                  <Volume2 className="w-4 h-4 text-purple-700 dark:text-purple-400" aria-hidden="true" />
                 ) : (
                   <VolumeX className="w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
                 )}
               </button>
 
-              {/* Station roster */}
+              {/* Exit/Leave Icon */}
               <button
                 type="button"
-                onClick={() => setIsStationDrawerOpen(true)}
-                aria-label="Open station roster"
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors min-h-[36px] cursor-pointer"
+                onClick={() => setIsLeaveConfirmOpen(true)}
+                title="Leave exam session"
+                aria-label="Leave exam session"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
               >
-                <Menu className="w-3.5 h-3.5" aria-hidden="true" />
-                <span className="hidden md:inline">Stations</span>
-                <span className="font-mono text-slate-400 dark:text-slate-400 text-[11px]">({answeredCount}/{questions.length})</span>
-              </button>
-
-              {/* Submit */}
-              <button
-                id="submit-exam-btn"
-                type="button"
-                onClick={() => setIsSubmitConfirmOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[36px] cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" aria-hidden="true" />
-                <span className="hidden sm:inline">Finish</span>
+                <LogOut className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main workspace */}
+      {/* Main Examination Workspace: Desktop two-column, Mobile clean vertical stack */}
       <main className="flex-1 max-w-7xl mx-auto w-full p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Specimen viewer */}
+        {/* Left Column (Desktop) / Top Section (Mobile): Specimen Image & Clinical Scenario */}
         <div
           className={`${
             currentStation.type === 'text_mcq' || !currentImageUrl
@@ -580,30 +672,32 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               : 'lg:col-span-7'
           } space-y-4`}
         >
+          {/* Specimen image viewer with pan & zoom pin */}
           {currentImageUrl && (
-            <div className="h-[360px] sm:h-[460px] w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-xs">
+            <div className="h-64 sm:h-80 md:h-[400px] lg:h-[460px] w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-xs">
               <SpecimenViewer
                 imageUrl={currentImageUrl}
                 spotterPin={currentStation.spotterPin}
-                altText={currentStation.title || 'Specimen slide'}
+                altText={currentStation.title || 'Examination specimen slide'}
                 className="w-full h-full"
               />
             </div>
           )}
 
+          {/* Clinical scenario / Vignette */}
           {currentStation.clinicalVignette && (
             <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 block">
                 Clinical scenario
               </span>
-              <p className="text-sm text-amber-950 dark:text-amber-200 leading-relaxed">
+              <p className="text-sm text-amber-950 dark:text-amber-200 leading-relaxed font-sans">
                 {currentStation.clinicalVignette}
               </p>
             </div>
           )}
         </div>
 
-        {/* Question + answer panel */}
+        {/* Right Column (Desktop) / Bottom Section (Mobile): Question Prompt & Answer Input */}
         <div
           className={`${
             currentStation.type === 'text_mcq' || !currentImageUrl
@@ -611,22 +705,64 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               : 'lg:col-span-5'
           } space-y-4`}
         >
+          {/* Station Question Card */}
           <div className="bg-white dark:bg-slate-850 p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-            <div className="space-y-1 mb-4">
+            <div className="space-y-1.5 mb-4">
               <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span className="font-semibold uppercase tracking-wide text-purple-700 dark:text-purple-400">
                   {currentStation.type.replace(/_/g, ' ')}
                 </span>
-                <span className="font-mono">{currentStation.points || 1} mark{currentStation.points !== 1 ? 's' : ''}</span>
+                <span className="font-mono font-bold text-slate-700 dark:text-slate-300">
+                  {currentStation.points || 1} mark{(currentStation.points || 1) !== 1 ? 's' : ''}
+                </span>
               </div>
               <h2 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
                 {currentStation.questionText}
               </h2>
             </div>
 
-            {/* Typed spotter answer */}
+            {/* Station Expired & Locked Alert */}
+            {isStationLocked && (
+              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-xl text-xs text-red-900 dark:text-red-200 font-semibold flex items-center gap-2 mb-4">
+                <Lock className="w-4 h-4 text-red-600 shrink-0" />
+                <span>Station time expired. Answering is locked for this station.</span>
+              </div>
+            )}
+
+            {/* Mode switch for spotters with spotterAnswerMode === 'both' */}
+            {currentStation.type === 'spotter' && currentStation.spotterAnswerMode === 'both' && (
+              <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg mb-4 text-xs font-semibold">
+                <button
+                  type="button"
+                  disabled={isStationLocked}
+                  onClick={() => setSpotterViewMode('mcq')}
+                  className={`flex-1 py-1.5 rounded-md transition-all cursor-pointer ${
+                    spotterViewMode === 'mcq'
+                      ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 shadow-xs font-bold'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  Multiple Choice
+                </button>
+                <button
+                  type="button"
+                  disabled={isStationLocked}
+                  onClick={() => setSpotterViewMode('typed')}
+                  className={`flex-1 py-1.5 rounded-md transition-all cursor-pointer ${
+                    spotterViewMode === 'typed'
+                      ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 shadow-xs font-bold'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  Typed Identification
+                </button>
+              </div>
+            )}
+
+            {/* 1. Free-text Input: Rendered ONLY when spotter is in typed mode or active view */}
             {currentStation.type === 'spotter' &&
-              (currentStation.spotterAnswerMode === 'typed' || currentStation.spotterAnswerMode === 'both') && (
+              (currentStation.spotterAnswerMode === 'typed' ||
+                (currentStation.spotterAnswerMode === 'both' && spotterViewMode === 'typed')) && (
                 <div className="space-y-2 p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl mb-4">
                   <label htmlFor="typed-answer-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                     Your identification:
@@ -634,24 +770,25 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   <input
                     id="typed-answer-input"
                     type="text"
+                    disabled={isStationLocked}
                     placeholder="Type the anatomical structure or pathological finding…"
                     value={currentAnswer.typedAnswer || ''}
                     onChange={(e) => handleTypedAnswerChange(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/30 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/30 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
                     autoComplete="off"
                   />
                   <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                    Your answer is saved automatically. You'll review it after submitting.
+                    Your answer is saved automatically. You'll evaluate it during self-grading.
                   </p>
                 </div>
               )}
 
-            {/* Multiple choice options */}
+            {/* 2. Multiple Choice Options: Rendered for MCQs or spotters in MCQ mode */}
             {currentStation.options &&
               currentStation.options.length > 0 &&
               (currentStation.type !== 'spotter' ||
                 currentStation.spotterAnswerMode === 'multiple_choice' ||
-                currentStation.spotterAnswerMode === 'both') && (
+                (currentStation.spotterAnswerMode === 'both' && spotterViewMode === 'mcq')) && (
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between mb-1">
                     <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
@@ -670,9 +807,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                           id={`option-${opt.id}`}
                           type="button"
                           role="radio"
+                          disabled={isStationLocked}
                           aria-checked={isSelected}
                           onClick={() => handleSelectOption(opt.id)}
-                          className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
+                          className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 ${
+                            isStationLocked
+                              ? 'opacity-60 cursor-not-allowed'
+                              : 'cursor-pointer'
+                          } ${
                             isSelected
                               ? 'border-purple-600 dark:border-purple-500 bg-purple-50/70 dark:bg-purple-950/40 ring-2 ring-purple-600/20'
                               : 'border-slate-200 dark:border-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800/80'
@@ -696,28 +838,29 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               )}
           </div>
 
-          {/* Auto-save note */}
+          {/* Auto-save status note */}
           <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
-            Answers saved automatically on this device.
+            Answers are saved automatically on this device.
           </p>
         </div>
       </main>
 
-      {/* Bottom navigation bar — fixed */}
+      {/* Bottom Navigation Bar */}
       <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-3 px-4 sticky bottom-0 z-20 transition-colors">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          {/* Previous Station button */}
           <button
             disabled={currentStationIndex === 0}
             onClick={handlePrevStation}
-            className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 rounded-lg transition-colors min-h-[44px] cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 rounded-lg transition-colors min-h-[44px] cursor-pointer"
             aria-label="Previous station"
           >
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             <span>Previous</span>
           </button>
 
-          {/* Station mini-grid */}
-          <div className="hidden sm:flex items-center gap-1 overflow-x-auto max-w-sm py-1 px-1" role="list" aria-label="Station list">
+          {/* Station mini-grid pills */}
+          <div className="flex items-center gap-1 overflow-x-auto max-w-[160px] sm:max-w-sm py-1 px-1 scrollbar-none" role="list" aria-label="Station list">
             {questions.map((q, idx) => {
               const isCurrent = idx === currentStationIndex;
               const ans = answers[q.id];
@@ -745,37 +888,44 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             })}
           </div>
 
+          {/* Next / Finish & Submit */}
           <div className="flex items-center gap-2">
-            {/* Leave session — explicit, separated */}
-            <button
-              type="button"
-              onClick={() => setIsLeaveConfirmOpen(true)}
-              title="Leave exam session (progress will be lost)"
-              aria-label="Leave exam session"
-              className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors min-h-[44px] cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Leave</span>
-            </button>
-
-            <button
-              onClick={handleNextStation}
-              className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[44px] cursor-pointer"
-              aria-label={currentStationIndex === questions.length - 1 ? 'Finish exam' : 'Next station'}
-            >
-              <span>{currentStationIndex === questions.length - 1 ? 'Finish & submit' : 'Next'}</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </button>
+            {currentStationIndex === questions.length - 1 ? (
+              <button
+                id="finish-exam-submit-btn"
+                type="button"
+                onClick={() => setIsSubmitConfirmOpen(true)}
+                className="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 rounded-lg transition-all shadow-md min-h-[44px] cursor-pointer"
+                aria-label="Finish and submit examination"
+              >
+                <Send className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Finish &amp; Submit</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleNextStation}
+                className="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[44px] cursor-pointer"
+                aria-label="Next station"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              </button>
+            )}
           </div>
         </div>
       </footer>
 
-      {/* Station roster modal */}
+      {/* Station Roster Drawer Modal */}
       {isStationDrawerOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Station roster">
           <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-5 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Station roster</h3>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Stations Roster</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Stations Answered: <strong>{answeredCount} of {questions.length}</strong>
+                </p>
+              </div>
               <button onClick={() => setIsStationDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 cursor-pointer" aria-label="Close roster">
                 <X className="w-5 h-5" />
               </button>
@@ -787,7 +937,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-slate-200 dark:bg-slate-700" aria-hidden="true" /> Unanswered ({questions.length - answeredCount})</span>
             </div>
 
-            <div className="grid grid-cols-5 gap-2 max-h-64 overflow-y-auto" role="list">
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-64 overflow-y-auto" role="list">
               {questions.map((q, idx) => {
                 const isCurrent = idx === currentStationIndex;
                 const ans = answers[q.id];
@@ -809,14 +959,24 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   >
                     <span>{idx + 1}</span>
                     <span className="text-[10px] font-normal opacity-70 uppercase">
-                      {q.type === 'spotter' ? 'Spot' : 'MCQ'}
+                      {q.type === 'spotter' ? 'Spotter' : 'MCQ'}
                     </span>
                   </button>
                 );
               })}
             </div>
 
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsStationDrawerOpen(false);
+                  setIsSubmitConfirmOpen(true);
+                }}
+                className="px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 rounded-lg hover:from-purple-800 hover:to-indigo-700 cursor-pointer"
+              >
+                Submit Exam Now
+              </button>
               <button onClick={() => setIsStationDrawerOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg cursor-pointer">
                 Close
               </button>
@@ -825,7 +985,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         </div>
       )}
 
-      {/* Submit confirmation */}
+      {/* Submit Confirmation Modal */}
       {isSubmitConfirmOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Submit exam">
           <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
@@ -836,7 +996,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">Submit your answers?</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  You'll then review and self-grade each station.
+                  You'll proceed to the self-grading evaluation and answer review.
                 </p>
               </div>
             </div>
@@ -846,14 +1006,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
                 <span>
                   <strong>{questions.length - answeredCount} station{questions.length - answeredCount > 1 ? 's' : ''} unanswered.</strong>{' '}
-                  You can still submit — unanswered stations score 0.
+                  You can still submit — unanswered stations receive 0 credit.
                 </span>
               </div>
             )}
 
             <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1">
-              <p>Answered: <strong>{answeredCount} of {questions.length}</strong></p>
-              <p>Flagged: <strong>{flaggedCount}</strong></p>
+              <p>Stations Answered: <strong>{answeredCount} of {questions.length}</strong></p>
+              <p>Flagged for review: <strong>{flaggedCount}</strong></p>
               <p>Time elapsed: <strong className="font-mono">{formatTimer(totalTimeSpentSeconds)}</strong></p>
             </div>
 
@@ -874,7 +1034,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         </div>
       )}
 
-      {/* Leave session confirmation */}
+      {/* Leave Session Confirmation Modal */}
       {isLeaveConfirmOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Leave session">
           <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">

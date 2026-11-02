@@ -17,7 +17,7 @@ export const ExamPreStartModal: React.FC<ExamPreStartModalProps> = ({
   exam,
   stationCount,
 }) => {
-  const [autoAdvanceOnBell, setAutoAdvanceOnBell] = useState(false);
+  const [autoAdvanceOnBell, setAutoAdvanceOnBell] = useState(true);
 
   if (!isOpen) return null;
 

@@ -7,7 +7,6 @@ import {
   User,
   FileCheck2,
   FileText,
-  Filter,
 } from 'lucide-react';
 import type { Question, StudentStationAnswer, SelfGradeValue } from '../../types';
 import { SpecimenViewer } from '../common/SpecimenViewer';
@@ -106,26 +105,26 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
       {/* Questions List */}
       <div className="space-y-6">
         {filteredQuestions.map((q, idx) => {
-          const answer = answers[q.id];
+          const ans = answers[q.id];
           const grade = grades[q.id];
-          const imageUrl = imageUrls[q.imageId || ''];
+          const maxPts = q.points || 1;
+          const pointsAwarded = grade !== undefined ? Math.round(grade * maxPts * 10) / 10 : 0;
+          const imageUrl = q.imageId ? imageUrls[q.imageId] : null;
 
-          // Determine Student Answer text
-          let studentAnswerText = 'No answer submitted (blank)';
-          if (answer) {
-            if (answer.typedAnswer && answer.typedAnswer.trim()) {
-              studentAnswerText = answer.typedAnswer.trim();
-            } else if (answer.selectedOptionId && q.options) {
-              const selectedOpt = q.options.find((o) => o.id === answer.selectedOptionId);
-              const optIndex = q.options.findIndex((o) => o.id === answer.selectedOptionId);
+          // Resolve student's answer text
+          let studentAnswerText = 'No response submitted';
+          if (ans) {
+            if (ans.selectedOptionId && q.options) {
+              const opt = q.options.find((o) => o.id === ans.selectedOptionId);
+              const optIndex = q.options.findIndex((o) => o.id === ans.selectedOptionId);
               const letter = optIndex >= 0 ? String.fromCharCode(65 + optIndex) : '';
-              studentAnswerText = selectedOpt
-                ? `Option ${letter}: ${selectedOpt.text}`
-                : 'Unknown option selected';
+              studentAnswerText = opt ? `Option ${letter}: ${opt.text}` : 'Option selected';
+            } else if (ans.typedAnswer && ans.typedAnswer.trim()) {
+              studentAnswerText = ans.typedAnswer.trim();
             }
           }
 
-          // Determine Reference Answer text
+          // Resolve reference answer text
           const correctOpt = q.options?.find((o) => o.isCorrect);
           const correctLetter = q.options
             ? String.fromCharCode(65 + Math.max(0, q.options.findIndex((o) => o.isCorrect)))
@@ -167,19 +166,19 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
                   {grade === 1 && (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800 font-bold text-xs">
                       <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-700 dark:text-emerald-400" />
-                      <span>Awarded: 1.0 / {q.points || 1} pt (Fully Correct)</span>
+                      <span>Awarded: {pointsAwarded} / {maxPts} pt{maxPts !== 1 ? 's' : ''} (Fully Correct)</span>
                     </div>
                   )}
                   {grade === 0.5 && (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 border border-amber-300 dark:border-amber-800 font-bold text-xs">
                       <Slash className="w-3.5 h-3.5 stroke-[2.5] text-amber-700 dark:text-amber-400" />
-                      <span>Awarded: 0.5 / {q.points || 1} pt (Partially Correct)</span>
+                      <span>Awarded: {pointsAwarded} / {maxPts} pt{maxPts !== 1 ? 's' : ''} (Partially Correct)</span>
                     </div>
                   )}
                   {grade === 0 && (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-950 dark:text-rose-200 border border-rose-300 dark:border-rose-800 font-bold text-xs">
                       <X className="w-3.5 h-3.5 stroke-[3] text-rose-700 dark:text-rose-400" />
-                      <span>Awarded: 0.0 / {q.points || 1} pt (Incorrect)</span>
+                      <span>Awarded: 0 / {maxPts} pt{maxPts !== 1 ? 's' : ''} (Incorrect)</span>
                     </div>
                   )}
                   {grade === undefined && (

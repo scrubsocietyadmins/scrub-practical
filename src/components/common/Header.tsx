@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({
                     id={`nav-tab-${tab.id}`}
                     onClick={() => onTabChange(tab.id)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${isActive
+                    className={`relative z-10 flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${isActive
                       ? 'text-purple-950 dark:text-purple-200'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
                       }`}
@@ -139,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={() => onTabChange(educatorTab.id)}
                     aria-current={isActive ? 'page' : undefined}
                     title="Educator Workspace — authoring, packages, backups"
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${isActive
+                    className={`relative z-10 flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${isActive
                       ? 'text-purple-950 dark:text-purple-200'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
                       }`}

@@ -149,7 +149,7 @@ export default function App() {
     const { exam, subject, questions } = activeExamRunning;
     const subjectName = subject?.name || 'Practical Exam';
 
-    const session = createInitialSelfGradingSession(exam, subjectName, answers, timeSpentSeconds);
+    const session = createInitialSelfGradingSession(exam, subjectName, answers, timeSpentSeconds, questions);
     await saveSelfGradingSession(session);
 
     setActiveSelfGrading({ session, exam, questions });

@@ -56,8 +56,8 @@ export function createSchistosomaEggSvg(): string {
     <path d="M 390 445 L 400 482 L 410 445 Z" fill="#854d0e" stroke="#713f12" stroke-width="2"/>
     
     <!-- Specimen Header & Microscopic Details -->
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PARASITOLOGY SPOTTER: URINE SEDIMENT (400x)</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Specimen: Clean catch terminal urine / Suspected urinary bilharziasis</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PARASITOLOGY: URINE SEDIMENT (400x)</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Specimen: Urine sediment wet mount · 50 µm Scale</text>
   </svg>`;
 }
 
@@ -111,8 +111,8 @@ export function createGiardiaTrophozoiteSvg(): string {
       <path d="M 420 340 Q 500 360 520 400"/>
     </g>
     
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PARASITOLOGY: DUODENAL ASPIRATE / STOOL WET MOUNT</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Magnification: 1000x Oil Immersion / Falling-leaf motility</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PARASITOLOGY: DIRECT WET MOUNT (1000x)</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Magnification: 1000x Oil Immersion · Saline Wet Mount</text>
   </svg>`;
 }
 
@@ -170,8 +170,8 @@ export function createGramStainDiplococciSvg(): string {
       <circle cx="572" cy="342" r="7"/>
     </g>
     
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">MICROBIOLOGY SPOTTER: CEREBROSPINAL FLUID (CSF) GRAM STAIN</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Acute Purulent Meningitis / Intracellular Gram-Negative Diplococci</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">MICROBIOLOGY: CEREBROSPINAL FLUID (CSF) PREPARATION</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Magnification: 1000x Oil Immersion · Gram Stain Preparation</text>
   </svg>`;
 }
 
@@ -193,19 +193,26 @@ export function createAcidFastBacilliSvg(): string {
     <ellipse cx="320" cy="270" rx="30" ry="20" fill="#0369a1" opacity="0.6"/>
     
     <!-- Acid-Fast Bacilli (AFB): Slender, slightly curved beaded magenta/bright pink rods -->
-    <g stroke="#f43f5e" stroke-width="7" stroke-linecap="round" fill="none">
-      <path d="M 390 280 Q 405 285 425 282"/>
-      <path d="M 430 286 Q 445 292 460 288"/>
-      <path d="M 380 315 Q 400 310 420 320"/>
-      <path d="M 428 322 Q 450 330 465 325"/>
+    <g stroke="#f43f5e" stroke-width="6" stroke-linecap="round" fill="none">
+      <path d="M 390 280 Q 405 285 425 282" stroke-dasharray="7,3"/>
+      <path d="M 430 286 Q 445 292 460 288" stroke-dasharray="6,3"/>
+      <path d="M 380 315 Q 400 310 420 320" stroke-dasharray="6,2"/>
+      <path d="M 428 322 Q 450 330 465 325" stroke-dasharray="8,3"/>
       <!-- Clump/cord formation -->
-      <path d="M 330 340 L 360 345"/>
-      <path d="M 350 350 L 375 352"/>
-      <path d="M 490 240 Q 510 245 525 240"/>
+      <path d="M 330 340 L 360 345" stroke-dasharray="5,2"/>
+      <path d="M 350 350 L 375 352" stroke-dasharray="7,2"/>
+      <path d="M 490 240 Q 510 245 525 240" stroke-dasharray="6,3"/>
+    </g>
+
+    <!-- Pointer B indicator -->
+    <g stroke="#e11d48" stroke-width="2" fill="#e11d48">
+      <line x1="480" y1="360" x2="435" y2="330"/>
+      <polygon points="430,325 440,327 435,337"/>
+      <text x="490" y="375" fill="#f43f5e" font-family="sans-serif" font-weight="bold" font-size="18" stroke="none">B</text>
     </g>
     
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">MICROBIOLOGY: ZIEHL-NEELSEN (ZN) ACID-FAST STAIN</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Sputum smear from patient with chronic cough &amp; apical cavitation (1000x)</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">MICROBIOLOGY: ZIEHL-NEELSEN (ZN) STAIN</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Sputum Smear Examination · High-Power Field (1000x Oil Immersion)</text>
   </svg>`;
 }
 
@@ -258,7 +265,7 @@ export function createPepticUlcerSvg(): string {
     
     <rect x="50" y="540" width="100" height="4" fill="#ffffff" opacity="0.8"/>
     <text x="50" y="560" fill="#ffffff" font-family="monospace" font-size="12" opacity="0.8">2.0 cm SCALE</text>
-    <text x="50" y="50" fill="#fecdd3" font-family="sans-serif" font-weight="bold" font-size="16">PATHOLOGY: GASTRIC ANTRUM (CHRONIC PEPTIC ULCER)</text>
+    <text x="50" y="50" fill="#fecdd3" font-family="sans-serif" font-weight="bold" font-size="16">PATHOLOGY: GASTRIC RESECTION SPECIMEN</text>
   </svg>`;
 }
 
@@ -298,8 +305,8 @@ export function createReedSternbergSvg(): string {
     <ellipse cx="475" cy="285" rx="30" ry="35" fill="#fbcfe8" opacity="0.35"/>
     <circle cx="475" cy="285" r="20" fill="url(#inclusionNucleolus)"/>
     
-    <text x="50" y="50" fill="#831843" font-family="sans-serif" font-weight="bold" font-size="16">HISTOPATHOLOGY: CLASSICAL HODGKIN LYMPHOMA (H&amp;E)</text>
-    <text x="50" y="560" fill="#9d174d" font-family="monospace" font-size="12">Diagnostic Reed-Sternberg cell with owl-eye inclusion-like nucleoli (400x)</text>
+    <text x="50" y="50" fill="#831843" font-family="sans-serif" font-weight="bold" font-size="16">HISTOPATHOLOGY: CERVICAL LYMPH NODE BIOPSY (H&amp;E)</text>
+    <text x="50" y="560" fill="#9d174d" font-family="monospace" font-size="12">High-Power Field (400x Oil Immersion)</text>
   </svg>`;
 }
 
@@ -341,24 +348,23 @@ export function createDoseResponseCurveSvg(): string {
     <path d="M 140 438 C 220 435, 240 370, 280 280 C 320 190, 340 125, 420 120 L 700 120" 
           fill="none" stroke="#38bdf8" stroke-width="4.5"/>
     <circle cx="280" cy="280" r="6" fill="#38bdf8"/>
-    <text x="250" y="105" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="13">Curve A: Full Agonist Alone</text>
+    <text x="250" y="105" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="13">Curve A</text>
     
     <!-- Curve B: Agonist + Competitive Antagonist (Parallel Right Shift, unchanged Emax) - Emerald -->
-    <!-- Sigmoidal curve shifted right: EC50 at x:430, same Emax 100% -->
     <path d="M 270 438 C 360 435, 390 370, 430 280 C 470 190, 500 125, 580 120 L 700 120" 
           fill="none" stroke="#34d399" stroke-width="4.5" stroke-dasharray="6,3"/>
     <circle cx="430" cy="280" r="6" fill="#34d399"/>
-    <text x="440" y="150" fill="#34d399" font-family="sans-serif" font-weight="bold" font-size="13">Curve B: + Competitive Antagonist</text>
+    <text x="440" y="150" fill="#34d399" font-family="sans-serif" font-weight="bold" font-size="13">Curve B</text>
     
     <!-- Curve C: Agonist + Non-Competitive Antagonist (Depressed Emax to 50%) - Amber -->
     <path d="M 140 438 C 220 436, 240 395, 280 360 C 320 300, 340 280, 420 280 L 700 280" 
           fill="none" stroke="#f59e0b" stroke-width="4.5"/>
     <circle cx="280" cy="360" r="6" fill="#f59e0b"/>
-    <text x="440" y="270" fill="#f59e0b" font-family="sans-serif" font-weight="bold" font-size="13">Curve C: + Non-Competitive Antagonist</text>
+    <text x="440" y="270" fill="#f59e0b" font-family="sans-serif" font-weight="bold" font-size="13">Curve C</text>
     
     <!-- Header -->
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PHARMACOLOGY SPOTTER: RECEPTOR ANTAGONISM MECHANISMS</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Identification spotter: Distinguishing competitive surmountable vs allosteric non-competitive blockade</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PHARMACOLOGY: CONCENTRATION-RESPONSE RELATIONSHIPS</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Log Concentration-Effect Curves for Receptor Ligands</text>
   </svg>`;
 }
 
@@ -375,8 +381,7 @@ export function createAutonomicEyeSvg(): string {
       <circle cx="0" cy="0" r="16" fill="#020617"/>
       <!-- Light reflection -->
       <circle cx="-6" cy="-6" r="4" fill="#ffffff" opacity="0.8"/>
-      <text x="0" y="115" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">Pupil A: Pinpoint Miosis (2 mm)</text>
-      <text x="0" y="135" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="middle">Muscarinic M3 activation (e.g. Pilocarpine)</text>
+      <text x="0" y="115" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">Pupil A (Diameter: 2 mm)</text>
     </g>
     
     <!-- Right Eye: Sympathetic Stimulation / Anticholinergic Blockade (Mydriasis) -->
@@ -388,12 +393,11 @@ export function createAutonomicEyeSvg(): string {
       <circle cx="0" cy="0" r="46" fill="#020617"/>
       <!-- Light reflection -->
       <circle cx="-16" cy="-16" r="8" fill="#ffffff" opacity="0.8"/>
-      <text x="0" y="115" fill="#fbbf24" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">Pupil B: Marked Mydriasis (8 mm)</text>
-      <text x="0" y="135" fill="#94a3b8" font-family="sans-serif" font-size="11" text-anchor="middle">Alpha-1 adrenergic agonism OR Muscarinic blockade (Atropine)</text>
+      <text x="0" y="115" fill="#fbbf24" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">Pupil B (Diameter: 8 mm)</text>
     </g>
     
-    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PHARMACOLOGY SPOTTER: AUTONOMIC PUPILLARY PHARMACODYNAMICS</text>
-    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Compare autonomic innervation of pupillary sphincter (M3) vs pupillary dilator (Alpha-1)</text>
+    <text x="50" y="45" fill="#f8fafc" font-family="sans-serif" font-weight="bold" font-size="16">PHARMACOLOGY: PUPILLARY DIAMETER EVALUATION</text>
+    <text x="50" y="565" fill="#94a3b8" font-family="monospace" font-size="12">Clinical Examination of Pupillary Diameter Following Pharmacological Instillation</text>
   </svg>`;
 }
 
