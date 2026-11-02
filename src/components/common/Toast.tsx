@@ -26,22 +26,22 @@ export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
             key={toast.id}
             className={`pointer-events-auto p-3 rounded-xl shadow-lg border flex items-center justify-between gap-3 text-xs transition-all animate-in slide-in-from-bottom-2 duration-150 ${
               isSuccess
-                ? 'bg-slate-900 text-white border-slate-800'
+                ? 'bg-slate-900 dark:bg-slate-800 text-white border-slate-800 dark:border-slate-700'
                 : isError
                 ? 'bg-rose-950 text-rose-100 border-rose-800'
-                : 'bg-white text-slate-900 border-slate-200'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700'
             }`}
           >
             <div className="flex items-center gap-2.5">
               {isSuccess && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
               {isError && <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />}
-              {!isSuccess && !isError && <Info className="w-4 h-4 text-rose-800 shrink-0" />}
+              {!isSuccess && !isError && <Info className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />}
               <span className="font-medium leading-tight">{toast.message}</span>
             </div>
 
             <button
               onClick={() => onDismiss(toast.id)}
-              className="text-slate-400 hover:text-white p-0.5 rounded shrink-0"
+              className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-0.5 rounded shrink-0 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>

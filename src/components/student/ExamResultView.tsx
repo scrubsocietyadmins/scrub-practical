@@ -203,33 +203,33 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Segmented Filter Buttons */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg w-full sm:w-auto">
+        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg w-full sm:w-auto">
           <button
             onClick={() => setFilter('all')}
-            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
               filter === 'all'
-                ? 'bg-white text-slate-900 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             All Stations ({stationResults.length})
           </button>
           <button
             onClick={() => setFilter('incorrect')}
-            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
               filter === 'incorrect'
-                ? 'bg-white text-rose-950 shadow-xs font-bold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 shadow-xs font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Missed ({incorrectCount})
           </button>
           <button
             onClick={() => setFilter('flagged')}
-            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
               filter === 'flagged'
-                ? 'bg-white text-amber-900 shadow-xs font-bold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-amber-900 dark:text-amber-300 shadow-xs font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Flagged ({flaggedCount})
@@ -240,13 +240,13 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
           <button
             onClick={handleDownloadPdf}
             disabled={isExportingPdf}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg transition-colors shadow-2xs disabled:opacity-60"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-lg transition-colors shadow-2xs disabled:opacity-60 cursor-pointer"
             title="Download formatted OSPE Examination Report as PDF"
           >
             {isExportingPdf ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-950" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-purple-700 dark:text-purple-400" />
             ) : (
-              <FileDown className="w-3.5 h-3.5 text-rose-950" />
+              <FileDown className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
             )}
             <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
           </button>
@@ -254,20 +254,20 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
           <button
             onClick={handlePrintPdf}
             disabled={isPrintingPdf}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs disabled:opacity-60"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs disabled:opacity-60 cursor-pointer"
             title="Open printable report"
           >
             {isPrintingPdf ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-600" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-600 dark:text-slate-400" />
             ) : (
-              <Printer className="w-3.5 h-3.5 text-slate-600" />
+              <Printer className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
             )}
             <span>{isPrintingPdf ? 'Preparing...' : 'Print'}</span>
           </button>
 
           <button
             onClick={onRetakeExam}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Retake Exam</span>
@@ -275,7 +275,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 
           <button
             onClick={onBackToCatalog}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs cursor-pointer"
           >
             <BookOpen className="w-3.5 h-3.5" />
             <span>Exam Catalog</span>
@@ -284,24 +284,24 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       </div>
 
       {/* Candidate Personal Study Notes Card */}
-      <div className="bg-white rounded-xl border border-amber-200 p-5 shadow-2xs space-y-3 bg-amber-50/20">
+      <div className="bg-white dark:bg-slate-850 rounded-xl border border-amber-200 dark:border-amber-900/60 p-5 shadow-2xs space-y-3 bg-amber-50/20 dark:bg-amber-950/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 flex items-center justify-center shrink-0">
               <FileText className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                 Candidate Personal Study Notes
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Log takeaways, difficult pointers, or mnemonics directly into IndexedDB for future review
               </p>
             </div>
           </div>
 
           {notesSaveStatus && (
-            <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1 animate-in fade-in">
+            <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1 animate-in fade-in">
               <Check className="w-3.5 h-3.5" />
               <span>{notesSaveStatus}</span>
             </span>
@@ -314,17 +314,17 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
             value={personalNotes}
             onChange={(e) => setPersonalNotes(e.target.value)}
             placeholder="e.g. 'Station 2: Review Reed-Sternberg owl-eye nucleolus vs Hodgkin mononuclear cell. Station 3: Note the T8 vena caval foramen inside the central tendon.'"
-            className="w-full p-3 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 bg-white leading-relaxed"
+            className="w-full p-3 text-xs sm:text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white leading-relaxed"
           />
 
           <div className="flex items-center justify-between pt-1">
-            <span className="text-[11px] text-slate-400">
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">
               Stored locally alongside this attempt record in IndexedDB
             </span>
             <button
               onClick={handleSavePersonalNotes}
               disabled={isNotesSaving}
-              className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-2xs disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-2xs disabled:opacity-50 cursor-pointer"
             >
               <Check className="w-3.5 h-3.5" />
               <span>{isNotesSaving ? 'Saving...' : 'Save Study Notes'}</span>
@@ -342,16 +342,16 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
           return (
             <div
               key={q.id}
-              className={`bg-white rounded-xl border overflow-hidden shadow-2xs transition-all ${
-                res.isCorrect ? 'border-emerald-200' : 'border-rose-200'
+              className={`bg-white dark:bg-slate-850 rounded-xl border overflow-hidden shadow-2xs transition-all ${
+                res.isCorrect ? 'border-emerald-200 dark:border-emerald-800' : 'border-rose-200 dark:border-rose-800'
               }`}
             >
               {/* Card Header */}
               <div
                 className={`px-5 py-3 border-b flex items-center justify-between gap-3 ${
                   res.isCorrect
-                    ? 'bg-emerald-50/60 border-emerald-100'
-                    : 'bg-rose-50/60 border-rose-100'
+                    ? 'bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-100 dark:border-emerald-850'
+                    : 'bg-rose-50/60 dark:bg-rose-950/40 border-rose-100 dark:border-rose-850'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -364,14 +364,14 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                   >
                     {q.orderIndex + 1}
                   </span>
-                  <span className="text-xs font-bold text-slate-900">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">
                     {q.title || `Station ${q.orderIndex + 1}`}
                   </span>
-                  <span className="text-[11px] font-mono text-slate-500">
+                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                     · {q.type.replace('_', ' ').toUpperCase()}
                   </span>
                   {res.studentAnswer?.isFlagged && (
-                    <span className="text-[11px] font-semibold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded flex items-center gap-1">
+                    <span className="text-[11px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-1.5 py-0.5 rounded flex items-center gap-1">
                       <Bookmark className="w-3 h-3 fill-amber-500" />
                       <span>Flagged</span>
                     </span>
@@ -382,8 +382,8 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                   <span
                     className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
                       res.isCorrect
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-rose-100 text-rose-800'
+                        ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300'
+                        : 'bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300'
                     }`}
                   >
                     {res.earnedPoints} / {res.maxPoints} pts
@@ -395,7 +395,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
               <div className="p-5 space-y-4">
                 {/* Specimen Visual */}
                 {imageUrl && (
-                  <div className="h-[280px] sm:h-[340px] w-full rounded-lg overflow-hidden border border-slate-200">
+                  <div className="h-[280px] sm:h-[340px] w-full rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800">
                     <SpecimenViewer
                       imageUrl={imageUrl}
                       spotterPin={q.spotterPin}
@@ -406,8 +406,8 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 
                 {/* Vignette */}
                 {q.clinicalVignette && (
-                  <div className="p-3 bg-amber-50/60 border border-amber-200/80 rounded-lg text-xs text-amber-950">
-                    <span className="font-bold block mb-0.5 text-[11px] uppercase tracking-wider text-amber-900">
+                  <div className="p-3 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 rounded-lg text-xs text-amber-950 dark:text-amber-200">
+                    <span className="font-bold block mb-0.5 text-[11px] uppercase tracking-wider text-amber-900 dark:text-amber-300">
                       Case Presentation:
                     </span>
                     {q.clinicalVignette}
@@ -415,7 +415,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                 )}
 
                 {/* Question Text */}
-                <h3 className="text-sm font-bold text-slate-900 leading-snug">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
                   {q.questionText}
                 </h3>
 
@@ -425,11 +425,11 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                   <div
                     className={`p-3 rounded-lg border flex flex-col gap-1 ${
                       res.isCorrect
-                        ? 'bg-emerald-50/30 border-emerald-200'
-                        : 'bg-rose-50/30 border-rose-200'
+                        ? 'bg-emerald-50/30 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/80'
+                        : 'bg-rose-50/30 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800/80'
                     }`}
                   >
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       Your Answer:
                     </span>
                     <div className="flex items-center gap-2 font-medium">
@@ -438,19 +438,19 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                       ) : (
                         <X className="w-4 h-4 text-rose-600 shrink-0" />
                       )}
-                      <span className={res.isCorrect ? 'text-emerald-950 font-bold' : 'text-rose-950 font-bold'}>
+                      <span className={res.isCorrect ? 'text-emerald-950 dark:text-emerald-200 font-bold' : 'text-rose-950 dark:text-rose-200 font-bold'}>
                         {res.studentAnswerSummary || 'Unanswered'}
                       </span>
                     </div>
                   </div>
 
                   {/* Official Key */}
-                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col gap-1">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 flex flex-col gap-1">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       Official Key &amp; Accepted Synonyms:
                     </span>
-                    <div className="flex items-center gap-2 font-medium text-slate-900">
-                      <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <div className="flex items-center gap-2 font-medium text-slate-900 dark:text-white">
+                      <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <span className="font-bold">{res.correctAnswerSummary}</span>
                     </div>
                   </div>
@@ -458,11 +458,11 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 
                 {/* Clinical Explanation & Pathology Rationale */}
                 {q.explanation && (
-                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1">
-                    <span className="font-bold text-[11px] uppercase tracking-wider text-rose-950 block">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs space-y-1">
+                    <span className="font-bold text-[11px] uppercase tracking-wider text-purple-700 dark:text-purple-400 block">
                       Clinical Rationale &amp; Key Finding:
                     </span>
-                    <p className="text-slate-700 leading-relaxed">{q.explanation}</p>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{q.explanation}</p>
                   </div>
                 )}
               </div>

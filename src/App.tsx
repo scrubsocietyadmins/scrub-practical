@@ -230,10 +230,15 @@ export default function App() {
   // Loading screen
   if (!isDbReady) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-rose-950 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-medium text-slate-500">Loading Scrub Practical…</p>
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] flex items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800/90 p-2 shadow-lg border border-purple-200/50 dark:border-purple-800/40 mx-auto flex items-center justify-center">
+            <img src="/logo.png" alt="Scrub Practical" className="w-full h-full object-contain animate-pulse" />
+          </div>
+          <div className="space-y-1">
+            <div className="w-6 h-6 border-2 border-purple-900 dark:border-purple-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Loading Scrub Practical…</p>
+          </div>
         </div>
       </div>
     );
@@ -256,7 +261,7 @@ export default function App() {
   // 2. Self-grading / review mode
   if (activeSelfGrading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
         <Header
           activeTab="library"
           onTabChange={(tab) => {
@@ -288,7 +293,7 @@ export default function App() {
 
   // 3. Primary views
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
       <Header
         activeTab={activeTab}
         onTabChange={(tab) => {

@@ -214,11 +214,11 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
   return (
     <div className="space-y-6">
       {/* Overview Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-2xs space-y-4">
+      <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900">Specimen &amp; Missing Images Directory</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Specimen &amp; Missing Images Directory</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Manage clinical specimen slides, attach missing package assets, and keep specimen references intact.
             </p>
           </div>
@@ -226,51 +226,51 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleCleanupOrphaned}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors cursor-pointer"
             >
-              <Trash2 className="w-3.5 h-3.5 text-slate-500" />
+              <Trash2 className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span>Clean Orphaned Images</span>
             </button>
             <button
               onClick={loadImages}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 text-slate-500 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 text-slate-500 dark:text-slate-400 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
             </button>
           </div>
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2 overflow-x-auto">
             <button
               onClick={() => setFilterMode('missing')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 filterMode === 'missing'
-                  ? 'bg-rose-950 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-purple-700 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-300" />
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-300" />
               <span>Missing Images ({missingCount})</span>
             </button>
             <button
               onClick={() => setFilterMode('all')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 filterMode === 'all'
-                  ? 'bg-rose-950 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-purple-700 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               All Assets ({images.length})
             </button>
             <button
               onClick={() => setFilterMode('available')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 filterMode === 'available'
-                  ? 'bg-rose-950 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-purple-700 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -279,41 +279,41 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
           </div>
 
           <div className="relative flex-1 max-w-sm">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by ID, filename, station..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 bg-slate-50/60 focus:bg-white transition-all placeholder:text-slate-400"
+              className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-700/30 focus:border-purple-700 bg-slate-50/60 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-750 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
             />
           </div>
         </div>
       </div>
 
       {/* Images Table / List */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs">
+      <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs">
         {filteredImages.length === 0 ? (
           <div className="p-12 text-center space-y-2">
-            <FileQuestion className="w-10 h-10 text-slate-300 mx-auto" />
-            <p className="text-xs font-semibold text-slate-700">No images match current filter criteria</p>
-            <p className="text-[11px] text-slate-400">
+            <FileQuestion className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">No images match current filter criteria</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500">
               {filterMode === 'missing'
                 ? 'All specimen assets are available in local storage!'
                 : 'Try modifying your search or filter tab.'}
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100 overflow-x-auto">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800 overflow-x-auto">
             {filteredImages.map((item) => (
               <div
                 key={item.id}
-                className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-slate-50/60 transition-colors"
+                className="p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors"
               >
                 {/* Left: Thumbnail & Info */}
                 <div className="flex items-start gap-4 min-w-0">
                   {/* Thumbnail / Placeholder */}
-                  <div className="w-16 h-16 rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center shrink-0 overflow-hidden relative group">
+                  <div className="w-16 h-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 overflow-hidden relative group">
                     {item.previewUrl ? (
                       <>
                         <img
@@ -323,37 +323,37 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
                         />
                         <button
                           onClick={() => setActivePreviewUrl(item.previewUrl)}
-                          className="absolute inset-0 bg-slate-900/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute inset-0 bg-slate-900/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                       </>
                     ) : (
-                      <ImageIcon className="w-6 h-6 text-slate-300" />
+                      <ImageIcon className="w-6 h-6 text-slate-300 dark:text-slate-600" />
                     )}
                   </div>
 
                   {/* Metadata */}
                   <div className="space-y-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-bold text-slate-900 truncate">{item.name}</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{item.name}</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                         {item.id}
                       </span>
                       {item.status === 'missing' ? (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
-                          <AlertTriangle className="w-3 h-3 text-rose-600" />
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                          <AlertTriangle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                           <span>Missing Asset</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                           <span>Available</span>
                         </span>
                       )}
                     </div>
 
-                    <div className="text-[11px] text-slate-500 flex flex-wrap items-center gap-2">
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-2">
                       <span>MIME: {item.mimeType}</span>
                       {item.hasBlob && <span>· {(item.blobSize / 1024).toFixed(1)} KB</span>}
                     </div>
@@ -361,13 +361,13 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
                     {/* Associated Questions List */}
                     {item.associatedQuestions.length > 0 ? (
                       <div className="pt-1 flex flex-wrap items-center gap-1.5">
-                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                        <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                           Linked Stations ({item.associatedQuestions.length}):
                         </span>
                         {item.associatedQuestions.map((aq) => (
                           <span
                             key={aq.questionId}
-                            className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200"
+                            className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700"
                             title={`Exam: ${aq.examTitle}`}
                           >
                             {aq.questionTitle} ({aq.examTitle})
@@ -375,14 +375,14 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[10px] text-slate-400 italic">No stations currently reference this asset</p>
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 italic">No stations currently reference this asset</p>
                     )}
                   </div>
                 </div>
 
                 {/* Right: Actions */}
                 <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg cursor-pointer transition-colors shadow-2xs">
+                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg cursor-pointer transition-all shadow-2xs">
                     <Upload className="w-3.5 h-3.5" />
                     <span>{item.status === 'missing' ? 'Attach Image' : 'Replace Image'}</span>
                     <input
@@ -405,43 +405,43 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
 
       {/* Filename Mismatch Confirmation Modal */}
       {pendingUpload && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
-                <AlertTriangle className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Filename Mismatch Warning</h3>
-                <p className="text-xs text-slate-500">The selected filename differs from the manifest expectation.</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Filename Mismatch Warning</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">The selected filename differs from the manifest expectation.</p>
               </div>
             </div>
 
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs space-y-2 text-amber-950">
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-lg text-xs space-y-2 text-amber-950 dark:text-amber-200">
               <p>
-                <span className="font-semibold text-slate-700">Expected File Name:</span>{' '}
-                <span className="font-mono text-slate-900 font-bold">{pendingUpload.expectedName}</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Expected File Name:</span>{' '}
+                <span className="font-mono text-slate-900 dark:text-white font-bold">{pendingUpload.expectedName}</span>
               </p>
               <p>
-                <span className="font-semibold text-slate-700">Selected File Name:</span>{' '}
-                <span className="font-mono text-rose-900 font-bold">{pendingUpload.file.name}</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Selected File Name:</span>{' '}
+                <span className="font-mono text-purple-700 dark:text-purple-300 font-bold">{pendingUpload.file.name}</span>
               </p>
-              <p className="text-[11px] text-amber-800">
+              <p className="text-[11px] text-amber-800 dark:text-amber-300">
                 The image will still be stored with the permanent key{' '}
                 <span className="font-mono font-bold">{pendingUpload.imageId}</span>, preserving all station spotter coordinates.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => setPendingUpload(null)}
-                className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={() => executeSaveImage(pendingUpload.imageId, pendingUpload.file)}
-                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-2xs"
+                className="px-4 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shadow-2xs cursor-pointer"
               >
                 Confirm &amp; Attach Image
               </button>

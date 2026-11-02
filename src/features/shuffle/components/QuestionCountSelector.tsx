@@ -38,42 +38,42 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
   const percentOfBank = safeMax > 0 ? Math.round((safeCount / safeMax) * 100) : 0;
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-5">
+    <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+          <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300">
             <Layers className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900">Question Volume</h3>
-            <p className="text-xs text-slate-500">Select target question count for this shuffle practice</p>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Question Volume</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Select target question count for this shuffle practice</p>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
             {percentOfBank}% of Bank ({safeCount}/{safeMax})
           </span>
         </div>
       </div>
 
       {/* Main Counter & Stepper */}
-      <div className="flex items-center justify-between gap-4 bg-slate-50/80 p-4 rounded-xl border border-slate-200/60">
+      <div className="flex items-center justify-between gap-4 bg-slate-50/80 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200/60 dark:border-slate-700/80">
         <button
           type="button"
           onClick={handleDecrement}
           disabled={disabled || safeCount <= min}
           aria-label="Decrease question count"
-          className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white active:scale-95 transition-all shadow-2xs font-semibold cursor-pointer min-h-[44px] min-w-[44px]"
+          className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-white active:scale-95 transition-all shadow-2xs font-semibold cursor-pointer min-h-[44px] min-w-[44px]"
         >
           <Minus className="w-5 h-5" />
         </button>
 
         <div className="text-center">
-          <div className="text-4xl font-extrabold text-slate-900 tracking-tight font-mono">
+          <div className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight font-mono">
             {safeCount}
           </div>
-          <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mt-0.5">
+          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-0.5">
             Questions
           </div>
         </div>
@@ -83,7 +83,7 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
           onClick={handleIncrement}
           disabled={disabled || safeCount >= safeMax}
           aria-label="Increase question count"
-          className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white active:scale-95 transition-all shadow-2xs font-semibold cursor-pointer min-h-[44px] min-w-[44px]"
+          className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-white active:scale-95 transition-all shadow-2xs font-semibold cursor-pointer min-h-[44px] min-w-[44px]"
         >
           <Plus className="w-5 h-5" />
         </button>
@@ -98,9 +98,9 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
           value={safeCount}
           disabled={disabled || safeMax <= min}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-950 disabled:opacity-50"
+          className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-700 dark:accent-purple-500 disabled:opacity-50"
         />
-        <div className="flex justify-between text-[11px] font-mono text-slate-400">
+        <div className="flex justify-between text-[11px] font-mono text-slate-400 dark:text-slate-500">
           <span>{min} station</span>
           <span>{Math.round(safeMax / 2)} stations</span>
           <span>{safeMax} (Full Bank)</span>
@@ -109,7 +109,7 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
 
       {/* Quick Preset Buttons */}
       <div className="flex flex-wrap items-center gap-2 pt-1">
-        <span className="text-xs font-medium text-slate-500 mr-1">Quick Sets:</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400 mr-1">Quick Sets:</span>
         {presets.map((presetVal) => {
           const isSelected = safeCount === presetVal;
           const label = presetVal === safeMax ? `Max (${safeMax})` : `${presetVal}`;
@@ -121,8 +121,8 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
               onClick={() => onChange(presetVal)}
               className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer min-h-[36px] ${
                 isSelected
-                  ? 'bg-rose-950 text-white shadow-2xs'
-                  : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                  ? 'bg-purple-700 dark:bg-purple-600 text-white shadow-2xs'
+                  : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
               }`}
             >
               {label}

@@ -57,20 +57,20 @@ export const EducatorWorkspace: React.FC<EducatorWorkspaceProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
       {/* Educator workspace header */}
-      <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
-        <div className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
+      <div className="flex items-center gap-3 pb-2 border-b border-slate-200 dark:border-slate-700">
+        <div className="w-9 h-9 rounded-lg bg-slate-800 dark:bg-slate-700 flex items-center justify-center shrink-0">
           <GraduationCap className="w-5 h-5 text-slate-300" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-slate-900">Educator Workspace</h1>
-          <p className="text-xs text-slate-500">
+          <h1 className="text-lg font-bold text-slate-900 dark:text-white">Educator Workspace</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Manage content, import packages, and validate exams before publishing.
           </p>
         </div>
       </div>
 
       {/* Sub-navigation */}
-      <div className="flex items-center gap-1 overflow-x-auto scrollbar-none border-b border-slate-100 pb-1">
+      <div className="flex items-center gap-1 overflow-x-auto scrollbar-none border-b border-slate-100 dark:border-slate-800 pb-1">
         {subTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeSubTab === tab.id;
@@ -79,10 +79,10 @@ export const EducatorWorkspace: React.FC<EducatorWorkspaceProps> = ({
               key={tab.id}
               id={`educator-subtab-${tab.id}`}
               onClick={() => setActiveSubTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg whitespace-nowrap transition-colors min-h-[36px] ${
+              className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg whitespace-nowrap transition-colors min-h-[36px] cursor-pointer ${
                 isActive
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-slate-900 dark:bg-purple-700 text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

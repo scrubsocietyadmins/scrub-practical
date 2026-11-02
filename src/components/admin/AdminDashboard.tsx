@@ -279,29 +279,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {selectedExamId && activeExam ? (
         <div className="space-y-6">
           {/* Breadcrumb & Navigation */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSelectedExamId(null)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>All Exams</span>
               </button>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold text-slate-900">{activeExam.title}</h2>
-                  <span className="text-xs font-mono px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200">
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">{activeExam.title}</h2>
+                  <span className="text-xs font-mono px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
                     {activeExam.code}
                   </span>
                   {/* Status Badge */}
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                       activeExam.status === 'published'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                         : activeExam.status === 'review'
-                        ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                        : 'bg-amber-50 text-amber-700 border-amber-200'
+                        ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'
+                        : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
                     }`}
                   >
                     {activeExam.status === 'published'
@@ -311,7 +311,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       : 'Draft'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {subjects.find((s) => s.id === activeExam.subjectId)?.name} · {questions.length} stations
                 </p>
               </div>
@@ -319,19 +319,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             <div className="flex flex-wrap items-center gap-2">
               {/* Quick Status Selector */}
-              <div className="flex items-center rounded-lg border border-slate-200 bg-white p-0.5 text-xs shadow-2xs">
+              <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-0.5 text-xs shadow-2xs">
                 {(['draft', 'review', 'published'] as ExamStatus[]).map((st) => (
                   <button
                     key={st}
                     onClick={() => handleChangeExamStatus(activeExam, st)}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
                       activeExam.status === st
                         ? st === 'published'
-                          ? 'bg-emerald-950 text-white font-bold'
+                          ? 'bg-emerald-600 dark:bg-emerald-600 text-white font-bold'
                           : st === 'review'
-                          ? 'bg-indigo-900 text-white font-bold'
-                          : 'bg-amber-900 text-white font-bold'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                          ? 'bg-indigo-600 dark:bg-indigo-600 text-white font-bold'
+                          : 'bg-amber-600 dark:bg-amber-600 text-white font-bold'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     {st === 'published' ? 'Published' : st === 'review' ? 'Review' : 'Draft'}
@@ -344,7 +344,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   setEditingExam(activeExam);
                   setIsExamModalOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
               >
                 <Settings className="w-3.5 h-3.5" />
                 <span>Settings</span>
@@ -352,7 +352,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <button
                 onClick={() => handleExportExam(activeExam.id)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>Export ZIP</span>
@@ -360,7 +360,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <button
                 onClick={() => handleAttemptLaunchSimulator(activeExam.id)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-xs"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shadow-xs cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 fill-white" />
                 <span>Launch Simulator</span>
@@ -370,14 +370,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Missing Images Banner in Exam Station View */}
           {activeExamMissing.length > 0 && (
-            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-rose-950 shadow-2xs">
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-950 dark:text-amber-200 shadow-2xs">
               <div className="flex items-center gap-2.5">
-                <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
                 <div>
                   <span className="font-bold block">
                     {activeExamMissing.length} Station Specimen Images Missing
                   </span>
-                  <p className="text-[11px] text-rose-800">
+                  <p className="text-[11px] text-amber-800 dark:text-amber-300">
                     Stations requiring images cannot run in the simulator until slides are attached.
                   </p>
                 </div>
@@ -386,7 +386,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {onNavigateToMissingImages && (
                 <button
                   onClick={onNavigateToMissingImages}
-                  className="px-3 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shrink-0 shadow-2xs flex items-center gap-1.5"
+                  className="px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shrink-0 shadow-2xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>Attach Images in Manager</span>
@@ -417,10 +417,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* Header Action Bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold tracking-tight text-slate-900 font-sans">
+              <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-sans">
                 Medical Authoring Studio
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Design custom OSPE rotations, upload specimen slides, and manage exam lifecycle
               </p>
             </div>
@@ -431,9 +431,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   setEditingSubject(null);
                   setIsSubjectModalOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
               >
-                <FolderPlus className="w-3.5 h-3.5 text-slate-600" />
+                <FolderPlus className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 <span>New Subject</span>
               </button>
               <button
@@ -442,7 +442,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   setEditingExam(null);
                   setIsExamModalOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-xs disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shadow-xs disabled:opacity-50 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Practical Exam</span>
@@ -456,10 +456,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full scrollbar-none">
               <button
                 onClick={() => setSelectedSubjectId('all')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                   selectedSubjectId === 'all'
-                    ? 'bg-rose-950 text-white shadow-xs'
-                    : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
+                    ? 'bg-purple-700 text-white shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750'
                 }`}
               >
                 All Subjects ({exams.length})
@@ -471,15 +471,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <button
                     key={subj.id}
                     onClick={() => setSelectedSubjectId(subj.id)}
-                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                       isSelected
-                        ? 'bg-rose-950 text-white shadow-xs'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-purple-700 text-white shadow-xs'
+                        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750'
                     }`}
                   >
                     <span
                       className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: subj.color || '#881337' }}
+                      style={{ backgroundColor: subj.color || '#7c3aed' }}
                     />
                     <span>{subj.name}</span>
                     <span className="opacity-75 font-mono text-[11px]">({count})</span>
@@ -489,35 +489,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             {/* Lifecycle Status Filter */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs shrink-0 self-end md:self-auto">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs shrink-0 self-end md:self-auto">
               <button
                 onClick={() => setStatusFilter('all')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
-                  statusFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  statusFilter === 'all' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 All Statuses
               </button>
               <button
                 onClick={() => setStatusFilter('draft')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
-                  statusFilter === 'draft' ? 'bg-amber-100 text-amber-950 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  statusFilter === 'draft' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 shadow-2xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Draft
               </button>
               <button
                 onClick={() => setStatusFilter('review')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
-                  statusFilter === 'review' ? 'bg-indigo-100 text-indigo-950 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  statusFilter === 'review' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-950 dark:text-indigo-200 shadow-2xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Needs Review
               </button>
               <button
                 onClick={() => setStatusFilter('published')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors ${
-                  statusFilter === 'published' ? 'bg-emerald-100 text-emerald-950 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  statusFilter === 'published' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 shadow-2xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Published
@@ -527,10 +527,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Exam Cards Grid */}
           {filteredExams.length === 0 ? (
-            <div className="p-12 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
-              <Layers className="w-10 h-10 text-slate-300 mx-auto" />
-              <h3 className="text-sm font-bold text-slate-800">No practical exams found</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <div className="p-12 text-center bg-white dark:bg-slate-850 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 space-y-3">
+              <Layers className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">No practical exams found</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
                 No examinations match your current subject or status filters.
               </p>
               {subjects.length > 0 && (
@@ -539,7 +539,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     setEditingExam(null);
                     setIsExamModalOpen(true);
                   }}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-rose-950 rounded-lg hover:bg-rose-900 inline-flex items-center gap-1.5 shadow-2xs"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Create Practical Exam</span>
@@ -556,25 +556,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 return (
                   <div
                     key={exam.id}
-                    className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between"
+                    className="bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/80 rounded-xl overflow-hidden shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 transition-all flex flex-col justify-between"
                   >
                     <div className="p-5 space-y-3">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold text-slate-500 tracking-wider uppercase">
+                        <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase">
                           {subject?.code || 'MEDICAL'}
                         </span>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[11px] font-mono font-medium px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200">
+                          <span className="text-[11px] font-mono font-medium px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
                             {exam.code}
                           </span>
                           {/* Lifecycle Status Badge */}
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                               exam.status === 'published'
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                                 : exam.status === 'review'
-                                ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                                : 'bg-amber-50 text-amber-700 border-amber-200'
+                                ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'
+                                : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
                             }`}
                           >
                             {exam.status === 'published'
@@ -586,27 +586,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         </div>
                       </div>
 
-                      <h3 className="text-base font-bold text-slate-900 leading-snug line-clamp-2">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug line-clamp-2">
                         {exam.title}
                       </h3>
 
                       {exam.description && (
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                           {exam.description}
                         </p>
                       )}
 
                       {/* Missing Images Alert Card on Exam Tile */}
                       {hasMissing && (
-                        <div className="p-2 bg-rose-50 border border-rose-200 rounded-lg flex items-center justify-between gap-2 text-xs text-rose-950">
+                        <div className="p-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-lg flex items-center justify-between gap-2 text-xs text-amber-950 dark:text-amber-200">
                           <span className="flex items-center gap-1.5 font-bold text-[11px]">
-                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
                             <span>{missingList.length} Missing Image{missingList.length > 1 ? 's' : ''}</span>
                           </span>
                           {onNavigateToMissingImages && (
                             <button
                               onClick={onNavigateToMissingImages}
-                              className="text-[10px] text-rose-900 underline font-semibold hover:text-rose-950"
+                              className="text-[10px] text-purple-700 dark:text-purple-400 underline font-semibold hover:text-purple-800 dark:hover:text-purple-300 cursor-pointer"
                             >
                               Attach Assets →
                             </button>
@@ -615,9 +615,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       )}
 
                       {/* Meta stats */}
-                      <div className="pt-2 border-t border-slate-100 flex items-center gap-3 text-xs text-slate-500">
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-slate-400" />
+                          <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                           <span>{exam.stationDurationSeconds}s/station</span>
                         </span>
                         <span>·</span>
@@ -628,11 +628,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
 
                     {/* Bottom Actions Bar */}
-                    <div className="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setSelectedExamId(exam.id)}
-                          className="px-2.5 py-1 text-xs font-bold text-rose-950 hover:bg-rose-100/50 rounded-lg transition-colors"
+                          className="px-2.5 py-1 text-xs font-bold text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 rounded-lg transition-colors cursor-pointer"
                         >
                           Stations →
                         </button>
@@ -649,7 +649,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             handleChangeExamStatus(exam, next);
                           }}
                           title="Click to advance status: Draft → Review → Published"
-                          className="px-2 py-0.5 text-[10px] font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-md transition-colors"
+                          className="px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md transition-colors cursor-pointer"
                         >
                           Next: {exam.status === 'draft' ? 'Review' : exam.status === 'review' ? 'Publish' : 'Draft'}
                         </button>
@@ -659,14 +659,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <button
                           onClick={() => handleExportExam(exam.id)}
                           title="Export Exam ZIP"
-                          className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-md transition-colors"
+                          className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded-md transition-colors cursor-pointer"
                         >
                           <FileDown className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDuplicateExam(exam.id)}
                           title="Duplicate Exam"
-                          className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-md transition-colors"
+                          className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded-md transition-colors cursor-pointer"
                         >
                           <Copy className="w-4 h-4" />
                         </button>
@@ -676,27 +676,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             setIsExamModalOpen(true);
                           }}
                           title="Exam Settings"
-                          className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-md transition-colors"
+                          className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded-md transition-colors cursor-pointer"
                         >
                           <Settings className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteExam(exam.id)}
                           title="Delete Exam"
-                          className="p-1.5 text-slate-400 hover:text-rose-700 hover:bg-rose-50 rounded-md transition-colors"
+                          className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-md transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleAttemptLaunchSimulator(exam.id)}
                           title={hasMissing ? 'Cannot launch: missing specimen images' : 'Launch in Simulator'}
-                          className={`p-1.5 rounded-md transition-colors ml-1 ${
+                          className={`p-1.5 rounded-md transition-colors ml-1 cursor-pointer ${
                             hasMissing
-                              ? 'text-slate-300 cursor-not-allowed'
-                              : 'text-rose-900 hover:bg-rose-100'
+                              ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                              : 'text-purple-700 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-950/50'
                           }`}
                         >
-                          <Play className={`w-4 h-4 ${hasMissing ? 'fill-slate-300' : 'fill-rose-900'}`} />
+                          <Play className={`w-4 h-4 ${hasMissing ? 'fill-slate-300 dark:fill-slate-600' : 'fill-purple-700 dark:fill-purple-400'}`} />
                         </button>
                       </div>
                     </div>
@@ -710,23 +710,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Validation / Publishing Errors Modal */}
       {publishErrorsModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-lg w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-950 flex items-center justify-center shrink-0">
-                <AlertCircle className="w-5 h-5 text-rose-900" />
+              <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center shrink-0">
+                <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Exam Publishing Blocked</h3>
-                <p className="text-xs text-slate-500">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Exam Publishing Blocked</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   "{publishErrorsModal.examTitle}" does not satisfy medical examination standards.
                 </p>
               </div>
             </div>
 
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-950 space-y-2 max-h-60 overflow-y-auto">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 rounded-lg text-xs text-rose-950 dark:text-rose-200 space-y-2 max-h-60 overflow-y-auto">
               <span className="font-bold block">Please resolve the following issues:</span>
-              <ul className="list-disc pl-4 space-y-1 text-[11px] text-rose-900">
+              <ul className="list-disc pl-4 space-y-1 text-[11px] text-rose-900 dark:text-rose-300">
                 {publishErrorsModal.errors.map((err, i) => (
                   <li key={i}>{err}</li>
                 ))}
@@ -734,8 +734,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             {publishErrorsModal.missingImages.length > 0 && onNavigateToMissingImages && (
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3 text-xs">
-                <span className="text-slate-600">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg flex items-center justify-between gap-3 text-xs">
+                <span className="text-slate-600 dark:text-slate-400">
                   {publishErrorsModal.missingImages.length} missing specimen slide(s) detected.
                 </span>
                 <button
@@ -743,17 +743,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     setPublishErrorsModal(null);
                     onNavigateToMissingImages();
                   }}
-                  className="px-3 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shrink-0 shadow-2xs"
+                  className="px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shrink-0 shadow-2xs cursor-pointer"
                 >
                   Open Missing Images Manager
                 </button>
               </div>
             )}
 
-            <div className="flex justify-end pt-2 border-t border-slate-100">
+            <div className="flex justify-end pt-2 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => setPublishErrorsModal(null)}
-                className="px-4 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                className="px-4 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
               >
                 Understood, Return to Editing
               </button>

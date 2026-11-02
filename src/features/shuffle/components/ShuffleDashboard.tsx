@@ -211,17 +211,17 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
 
       {/* Main Configuration Layout */}
       {totalAvailable === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
+        <div className="bg-white dark:bg-slate-850 rounded-2xl p-12 text-center border border-slate-200 dark:border-slate-800">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-900">No Questions in Question Bank</h3>
-          <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">No Questions in Question Bank</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
             The question bank is currently empty. Create exams in the Authoring Studio or import exam packages to populate the bank.
           </p>
           {onNavigateToAuthoring && (
             <button
               type="button"
               onClick={onNavigateToAuthoring}
-              className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
+              className="mt-4 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
             >
               Go to Authoring Studio
             </button>
@@ -241,15 +241,15 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             />
 
             {/* 2. Topic Group Filter Selector */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300">
                     <Filter className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-900">Curriculum Filters</h3>
-                    <p className="text-xs text-slate-500">Focus on all topics or select specific groups</p>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">Curriculum Filters</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Focus on all topics or select specific groups</p>
                   </div>
                 </div>
 
@@ -258,8 +258,8 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
                   onClick={handleSelectAllTopics}
                   className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                     selectedTopicGroupIds.length === 0
-                      ? 'bg-slate-900 text-white border-slate-900'
-                      : 'text-slate-600 border-slate-200 hover:bg-slate-50'
+                      ? 'bg-purple-700 dark:bg-purple-600 text-white border-purple-700 dark:border-purple-600'
+                      : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   All Topics ({allTopicGroups.length})
@@ -278,19 +278,19 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
                       onClick={() => toggleTopicGroup(group.topicGroupId)}
                       className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer select-none ${
                         isChecked
-                          ? 'bg-slate-50 border-slate-300 text-slate-900'
-                          : 'bg-white border-slate-100 text-slate-400 opacity-60'
+                          ? 'bg-slate-50 dark:bg-slate-800/60 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white'
+                          : 'bg-white dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 text-slate-400 opacity-60'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         {isChecked ? (
-                          <CheckSquare className="w-4 h-4 text-rose-950 shrink-0" />
+                          <CheckSquare className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
                         ) : (
-                          <Square className="w-4 h-4 text-slate-300 shrink-0" />
+                          <Square className="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0" />
                         )}
                         <span className="text-xs font-medium truncate">{group.topicGroupName}</span>
                       </div>
-                      <span className="text-[11px] font-mono text-slate-500 shrink-0 ml-2">
+                      <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0 ml-2">
                         {group.totalQuestions} q
                       </span>
                     </div>
@@ -300,16 +300,16 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             </div>
 
             {/* 3. Examination Options */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-slate-500" />
+            <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Clock className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                 Session Settings
               </h3>
 
               <div className="space-y-3">
                 {/* Duration per Station */}
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-700 font-medium">Station Bell Duration:</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Station Bell Duration:</span>
                   <div className="flex items-center gap-1.5 font-mono">
                     {[60, 90, 120].map((sec) => (
                       <button
@@ -318,8 +318,8 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
                         onClick={() => setStationDuration(sec)}
                         className={`px-2.5 py-1 rounded-lg border text-xs font-semibold cursor-pointer ${
                           stationDuration === sec
-                            ? 'bg-rose-950 text-white border-rose-950'
-                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                            ? 'bg-purple-700 dark:bg-purple-600 text-white border-purple-700 dark:border-purple-600'
+                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                         }`}
                       >
                         {sec}s
@@ -330,23 +330,23 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
 
                 {/* Auto-advance Toggle */}
                 <label className="flex items-center justify-between text-xs cursor-pointer select-none py-1">
-                  <span className="text-slate-700 font-medium">Auto-Advance on Station Bell</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Auto-Advance on Station Bell</span>
                   <input
                     type="checkbox"
                     checked={autoAdvanceOnBell}
                     onChange={(e) => setAutoAdvanceOnBell(e.target.checked)}
-                    className="w-4 h-4 rounded text-rose-950 focus:ring-rose-900/30 cursor-pointer"
+                    className="w-4 h-4 rounded text-purple-700 focus:ring-purple-600/30 cursor-pointer"
                   />
                 </label>
 
                 {/* Randomize Option Order */}
                 <label className="flex items-center justify-between text-xs cursor-pointer select-none py-1">
-                  <span className="text-slate-700 font-medium">Randomize MCQ Option Order</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Randomize MCQ Option Order</span>
                   <input
                     type="checkbox"
                     checked={randomizeOptions}
                     onChange={(e) => setRandomizeOptions(e.target.checked)}
-                    className="w-4 h-4 rounded text-rose-950 focus:ring-rose-900/30 cursor-pointer"
+                    className="w-4 h-4 rounded text-purple-700 focus:ring-purple-600/30 cursor-pointer"
                   />
                 </label>
               </div>
@@ -357,9 +357,9 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
               type="button"
               onClick={handleLaunch}
               disabled={isStarting || totalAvailable === 0}
-              className="w-full py-4 px-6 bg-rose-950 hover:bg-rose-900 active:scale-[0.99] text-white rounded-2xl font-bold text-base shadow-sm hover:shadow transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+              className="w-full py-4 px-6 bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 active:scale-[0.99] text-white rounded-2xl font-bold text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
             >
-              <Play className="w-5 h-5 text-rose-300 fill-rose-300" />
+              <Play className="w-5 h-5 text-purple-200 fill-purple-200" />
               <span>
                 Start Shuffle Practice ({Math.min(targetCount, totalAvailable)} Stations)
               </span>
@@ -374,12 +374,12 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             />
 
             {/* Explanatory Callout */}
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 text-xs text-slate-600 space-y-2">
-              <div className="flex items-center gap-1.5 font-bold text-slate-900">
-                <HelpCircle className="w-4 h-4 text-slate-500" />
+            <div className="bg-slate-50 dark:bg-slate-850 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-2">
+              <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                <HelpCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 How the Stratified Practice Engine Works
               </div>
-              <ul className="list-disc pl-5 space-y-1 text-slate-600">
+              <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
                 <li>
                   <strong>Proportional Quotas:</strong> Target count is divided evenly among all available topic groups and lectures.
                 </li>

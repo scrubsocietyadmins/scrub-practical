@@ -37,11 +37,11 @@ function getTimingLabel(exam: Exam): string {
 function getTimingIcon(exam: Exam): React.ReactNode {
   switch (exam.timingMode) {
     case 'bell_ring':
-      return <span className="text-[10px] font-mono bg-rose-100 text-rose-800 border border-rose-200 px-1.5 py-0.5 rounded">Bell ring</span>;
+      return <span className="text-[10px] font-mono bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60 px-1.5 py-0.5 rounded">Bell ring</span>;
     case 'total_timer':
-      return <span className="text-[10px] font-mono bg-slate-100 text-slate-700 border border-slate-200 px-1.5 py-0.5 rounded">Total timer</span>;
+      return <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded">Total timer</span>;
     case 'flexible':
-      return <span className="text-[10px] font-mono bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded">Flexible</span>;
+      return <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded">Flexible</span>;
     default:
       return null;
   }
@@ -146,8 +146,8 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
       {/* Compact page header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Exam Library</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Exam Library</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Select a published exam to begin a timed station session.
           </p>
         </div>
@@ -155,7 +155,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
           <button
             id="go-to-progress-btn"
             onClick={onNavigateToHistory}
-            className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors min-h-[36px]"
+            className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] cursor-pointer"
           >
             View your progress →
           </button>
@@ -173,12 +173,12 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search exams by title, code, or subject…"
-            className="w-full pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 bg-white placeholder:text-slate-400"
+            className="w-full pl-9 pr-8 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
               aria-label="Clear search"
             >
               <X className="w-3.5 h-3.5" />
@@ -192,7 +192,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
             id="subject-filter-select"
             value={selectedSubjectId}
             onChange={(e) => setSelectedSubjectId(e.target.value)}
-            className="pl-3 pr-8 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 cursor-pointer appearance-none"
+            className="pl-3 pr-8 py-2 text-sm font-medium border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 cursor-pointer appearance-none"
           >
             <option value="all">All subjects ({exams.length})</option>
             {activeSubjectNames.map((s) => (
@@ -206,22 +206,22 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
       </div>
 
       {/* Result count */}
-      <div className="flex items-center justify-between text-xs text-slate-500 -mt-1">
+      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 -mt-1">
         <span>
           {filteredExams.length === exams.length
             ? `${exams.length} exam${exams.length !== 1 ? 's' : ''}`
             : `${filteredExams.length} of ${exams.length} exams`}
           {selectedSubjectId !== 'all' && (
-            <> · <strong className="text-slate-700">{subjects.find((s) => s.id === selectedSubjectId)?.name}</strong></>
+            <> · <strong className="text-slate-700 dark:text-slate-300">{subjects.find((s) => s.id === selectedSubjectId)?.name}</strong></>
           )}
           {searchQuery && (
-            <> · matching "<strong className="text-slate-700">{searchQuery}</strong>"</>
+            <> · matching "<strong className="text-slate-700 dark:text-slate-300">{searchQuery}</strong>"</>
           )}
         </span>
         {(searchQuery || selectedSubjectId !== 'all') && (
           <button
             onClick={handleClearFilters}
-            className="text-rose-900 hover:text-rose-950 font-medium"
+            className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium cursor-pointer"
           >
             Clear filters
           </button>
@@ -230,10 +230,10 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
 
       {/* Exam grid */}
       {filteredExams.length === 0 ? (
-        <div className="py-16 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
-          <BookOpen className="w-9 h-9 text-slate-300 mx-auto" />
-          <h2 className="text-base font-semibold text-slate-700">No exams found</h2>
-          <p className="text-sm text-slate-500 max-w-sm mx-auto">
+        <div className="py-16 text-center bg-white dark:bg-slate-850 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 space-y-3">
+          <BookOpen className="w-9 h-9 text-slate-300 dark:text-slate-600 mx-auto" />
+          <h2 className="text-base font-semibold text-slate-700 dark:text-slate-300">No exams found</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
             {searchQuery
               ? `No published exams match "${searchQuery}".`
               : 'No published exams in this subject.'}
@@ -242,7 +242,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
           {(searchQuery || selectedSubjectId !== 'all') && (
             <button
               onClick={handleClearFilters}
-              className="px-4 py-2 text-xs font-semibold text-white bg-rose-950 rounded-lg hover:bg-rose-900 inline-flex items-center gap-1.5"
+              className="px-4 py-2 text-xs font-semibold text-white bg-purple-700 dark:bg-purple-600 rounded-lg hover:bg-purple-800 inline-flex items-center gap-1.5 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
               Clear filters
@@ -264,11 +264,10 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
             return (
               <div
                 key={exam.id}
-                className={`bg-white border rounded-xl overflow-hidden flex flex-col transition-all ${
-                  isAvailable
-                    ? 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
-                    : 'border-slate-200 opacity-90'
-                }`}
+                className={`bg-white dark:bg-slate-800/90 border rounded-xl overflow-hidden flex flex-col transition-all shadow-xs ${isAvailable
+                  ? 'border-slate-200 dark:border-slate-700/80 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-md'
+                  : 'border-slate-200 dark:border-slate-700/60 opacity-90'
+                  }`}
               >
                 <div className="p-5 space-y-3 flex-1">
                   {/* Subject + code row */}
@@ -276,36 +275,36 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
                     <div className="flex items-center gap-1.5">
                       <span
                         className="w-2 h-2 rounded-full shrink-0"
-                        style={{ backgroundColor: subject?.color || '#881337' }}
+                        style={{ backgroundColor: subject?.color || '#7c3aed' }}
                         aria-hidden="true"
                       />
-                      <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
+                      <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                         {subject?.name || 'Practical Exam'}
                       </span>
                     </div>
-                    <span className="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
+                    <span className="text-[11px] font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/70 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded">
                       {exam.code}
                     </span>
                   </div>
 
-                  <h2 className="text-base font-bold text-slate-900 leading-snug">
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
                     {exam.title}
                   </h2>
 
                   {exam.description && (
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {exam.description}
                     </p>
                   )}
 
                   {/* Station info */}
-                  <div className="flex items-center gap-3 text-xs text-slate-600 flex-wrap">
+                  <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-300 flex-wrap">
                     <span className="flex items-center gap-1">
-                      <Crosshair className="w-3.5 h-3.5 text-slate-400" />
+                      <Crosshair className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                       {stationCount} station{stationCount !== 1 ? 's' : ''}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                       {getTimingLabel(exam)}
                     </span>
                     {getTimingIcon(exam)}
@@ -313,9 +312,9 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
 
                   {/* Missing images notice — student-facing only */}
                   {hasMissingImages && (
-                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                      <p className="text-xs text-amber-900 flex items-start gap-2">
-                        <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                    <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-lg">
+                      <p className="text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                        <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                         <span>
                           <span className="font-semibold">{missingForExam.length} image{missingForExam.length > 1 ? 's' : ''} missing.</span>{' '}
                           This exam cannot be started until an educator uploads the missing specimen slides.
@@ -328,18 +327,17 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
                   {hasPastAttempt && !hasMissingImages && (
                     <div className="flex items-center gap-2 text-xs pt-1">
                       {bestPercentage >= exam.passingScorePercent ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600 shrink-0" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400 shrink-0" />
                       ) : (
                         <RotateCcw className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       )}
-                      <span className="text-slate-500">
+                      <span className="text-slate-500 dark:text-slate-400">
                         Best score:{' '}
                         <span
-                          className={`font-semibold ${
-                            bestPercentage >= exam.passingScorePercent
-                              ? 'text-green-700'
-                              : 'text-slate-700'
-                          }`}
+                          className={`font-semibold ${bestPercentage >= exam.passingScorePercent
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-slate-700 dark:text-slate-300'
+                            }`}
                         >
                           {bestPercentage}%
                         </span>
@@ -353,19 +351,19 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
                 {/* Card footer action */}
                 <div className="px-5 pb-4 pt-1">
                   {hasMissingImages ? (
-                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-200 rounded-lg">
+                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded-lg">
                       <AlertTriangle className="w-3.5 h-3.5" />
                       <span>Unavailable — missing images</span>
                     </div>
                   ) : stationCount === 0 ? (
-                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200 rounded-lg">
+                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg">
                       <span>No stations added yet</span>
                     </div>
                   ) : (
                     <button
                       id={`start-exam-btn-${exam.id}`}
                       onClick={() => onStartExam(exam)}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors min-h-[44px]"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs cursor-pointer min-h-[44px]"
                     >
                       <Play className="w-3.5 h-3.5 fill-white" />
                       <span>{hasPastAttempt ? 'Retake exam' : 'Start exam'}</span>
@@ -380,37 +378,37 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
 
       {/* Missing images detail modal (educator context) */}
       {blockedExamModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                <AlertTriangle className="w-5 h-5 text-amber-700" />
+              <div className="w-9 h-9 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-900">Missing specimen images</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Missing specimen images</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   "{blockedExamModal.examTitle}" cannot be started.
                 </p>
               </div>
             </div>
 
-            <ul className="text-xs text-slate-700 space-y-1 list-disc pl-5 max-h-40 overflow-y-auto">
+            <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-1 list-disc pl-5 max-h-40 overflow-y-auto">
               {blockedExamModal.missing.map((m) => (
                 <li key={m.questionId}>
                   <strong>{m.questionTitle}</strong> — image key{' '}
-                  <code className="font-mono bg-slate-100 px-1 rounded text-[11px]">{m.imageId}</code>
+                  <code className="font-mono bg-slate-100 dark:bg-slate-700 px-1 rounded text-[11px]">{m.imageId}</code>
                 </li>
               ))}
             </ul>
 
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Upload the missing images in the Educator Workspace to enable this exam.
             </p>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700">
               <button
                 onClick={() => setBlockedExamModal(null)}
-                className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg cursor-pointer"
               >
                 Close
               </button>
@@ -419,7 +417,7 @@ export const ExamCatalog: React.FC<ExamCatalogProps> = ({
                   setBlockedExamModal(null);
                   onNavigateToMissingImages();
                 }}
-                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors"
+                className="px-4 py-1.5 text-xs font-bold text-white bg-purple-700 hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-700 rounded-lg transition-colors cursor-pointer"
               >
                 Go to Educator Workspace
               </button>

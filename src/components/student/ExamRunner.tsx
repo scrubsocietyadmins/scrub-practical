@@ -393,7 +393,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   const totalWarning = isTotalTimer && totalTimeRemaining > 30 && totalTimeRemaining <= 60;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] flex flex-col font-sans text-slate-900 dark:text-slate-100 transition-colors">
       <div aria-live="polite" aria-atomic="true" className="sr-only">{feedbackAnnouncement}</div>
 
       {/* Pacing alert banner */}
@@ -402,10 +402,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           role="alert"
           className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 max-w-lg w-[92%] sm:w-auto mt-2 px-4 py-3 rounded-xl border shadow-lg flex items-center gap-3 ${
             activePacingAlert.severity === 'urgent'
-              ? 'bg-red-50 border-red-300 text-red-900'
+              ? 'bg-red-50 dark:bg-red-950/80 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200'
               : activePacingAlert.severity === 'warning'
-              ? 'bg-amber-50 border-amber-300 text-amber-900'
-              : 'bg-slate-50 border-slate-300 text-slate-800'
+              ? 'bg-amber-50 dark:bg-amber-950/80 border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200'
+              : 'bg-slate-50 dark:bg-slate-850 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200'
           }`}
         >
           <Timer className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -415,7 +415,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           </div>
           <button
             onClick={() => setActivePacingAlert(null)}
-            className="p-1 rounded text-slate-400 hover:text-slate-700"
+            className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
             aria-label="Dismiss alert"
           >
             <X className="w-4 h-4" />
@@ -424,11 +424,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       )}
 
       {/* Exam header — focus mode, no global nav */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs">
         {/* Progress bar */}
-        <div className="w-full bg-slate-100 h-1 overflow-hidden">
+        <div className="w-full bg-slate-100 dark:bg-slate-800 h-1 overflow-hidden">
           <div
-            className="h-full bg-rose-950 transition-[width] duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-purple-700 to-indigo-600 dark:from-purple-500 dark:to-indigo-400 transition-[width] duration-500 ease-out"
             style={{ width: `${((currentStationIndex + 1) / questions.length) * 100}%` }}
             aria-hidden="true"
           />
@@ -439,15 +439,15 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             {/* Left: exam identity + station */}
             <div className="flex items-center gap-3 min-w-0">
               <div className="shrink-0">
-                <span className="w-9 h-9 rounded-lg bg-rose-950 text-white font-mono font-bold text-sm flex items-center justify-center shadow-sm">
+                <span className="w-9 h-9 rounded-lg bg-purple-950 dark:bg-purple-900/90 text-white font-mono font-bold text-sm flex items-center justify-center shadow-xs border border-purple-800/40">
                   {currentStationIndex + 1}
                 </span>
               </div>
               <div className="min-w-0">
-                <span className="text-xs font-bold text-slate-900 block truncate">
+                <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
                   Station {currentStationIndex + 1} of {questions.length}
                 </span>
-                <span className="text-[11px] text-slate-400 truncate block max-w-[160px] sm:max-w-xs">
+                <span className="text-[11px] text-slate-400 dark:text-slate-400 truncate block max-w-[160px] sm:max-w-xs">
                   {exam.title}
                 </span>
               </div>
@@ -460,15 +460,15 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 <div
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono text-xs transition-colors ${
                     stationUrgent
-                      ? 'bg-red-50 border-red-300 text-red-900 font-bold'
+                      ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 font-bold'
                       : stationWarning
-                      ? 'bg-amber-50 border-amber-300 text-amber-800 font-semibold'
-                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                      ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-200 font-semibold'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                   aria-label={`Station time remaining: ${formatTimer(stationTimeRemaining)}`}
                 >
                   <Bell
-                    className={`w-3.5 h-3.5 ${stationUrgent ? 'text-red-600 animate-bounce' : stationWarning ? 'text-amber-600' : 'text-slate-400'}`}
+                    className={`w-3.5 h-3.5 ${stationUrgent ? 'text-red-600 dark:text-red-400 animate-bounce' : stationWarning ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'}`}
                     aria-hidden="true"
                   />
                   <span>{formatTimer(stationTimeRemaining)}</span>
@@ -481,14 +481,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 <div
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono text-xs transition-colors ${
                     totalUrgent
-                      ? 'bg-red-50 border-red-300 text-red-900 font-bold'
+                      ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 font-bold'
                       : totalWarning
-                      ? 'bg-amber-50 border-amber-300 text-amber-800 font-semibold'
-                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                      ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-200 font-semibold'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                   aria-label={`Total time remaining: ${formatTimer(totalTimeRemaining)}`}
                 >
-                  <Clock className={`w-3.5 h-3.5 ${totalUrgent ? 'text-red-600' : 'text-slate-400'}`} aria-hidden="true" />
+                  <Clock className={`w-3.5 h-3.5 ${totalUrgent ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`} aria-hidden="true" />
                   <span>{formatTimer(totalTimeRemaining)}</span>
                   <span className="text-[9px] text-slate-400 hidden sm:inline">remaining</span>
                 </div>
@@ -497,7 +497,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               {/* Flexible: elapsed only */}
               {isFlexible && (
                 <div
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 font-mono text-xs text-slate-600"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono text-xs text-slate-600 dark:text-slate-300"
                   aria-label={`Elapsed time: ${formatTimer(totalTimeSpentSeconds)}`}
                 >
                   <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
@@ -515,10 +515,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 onClick={handleToggleFlag}
                 title={currentAnswer.isFlagged ? 'Remove flag' : 'Flag for review'}
                 aria-label={currentAnswer.isFlagged ? 'Remove flag from this station' : 'Flag this station for review'}
-                className={`p-2 rounded-lg border transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center ${
+                className={`p-2 rounded-lg border transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer ${
                   currentAnswer.isFlagged
-                    ? 'bg-amber-50 border-amber-300 text-amber-700'
-                    : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+                    ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300'
+                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <Bookmark className={`w-4 h-4 ${currentAnswer.isFlagged ? 'fill-amber-500 text-amber-500' : ''}`} aria-hidden="true" />
@@ -534,12 +534,12 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 }}
                 title={soundOn ? 'Mute audio chimes' : 'Enable audio chimes'}
                 aria-label={soundOn ? 'Mute OSPE bell sounds' : 'Enable OSPE bell sounds'}
-                className="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
               >
                 {soundOn ? (
-                  <Volume2 className="w-4 h-4 text-slate-600" aria-hidden="true" />
+                  <Volume2 className="w-4 h-4 text-slate-600 dark:text-slate-300" aria-hidden="true" />
                 ) : (
-                  <VolumeX className="w-4 h-4 text-slate-400" aria-hidden="true" />
+                  <VolumeX className="w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
                 )}
               </button>
 
@@ -548,11 +548,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 type="button"
                 onClick={() => setIsStationDrawerOpen(true)}
                 aria-label="Open station roster"
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors min-h-[36px]"
+                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors min-h-[36px] cursor-pointer"
               >
                 <Menu className="w-3.5 h-3.5" aria-hidden="true" />
                 <span className="hidden md:inline">Stations</span>
-                <span className="font-mono text-slate-400 text-[11px]">({answeredCount}/{questions.length})</span>
+                <span className="font-mono text-slate-400 dark:text-slate-400 text-[11px]">({answeredCount}/{questions.length})</span>
               </button>
 
               {/* Submit */}
@@ -560,7 +560,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 id="submit-exam-btn"
                 type="button"
                 onClick={() => setIsSubmitConfirmOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-sm min-h-[36px]"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[36px] cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" aria-hidden="true" />
                 <span className="hidden sm:inline">Finish</span>
@@ -581,7 +581,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           } space-y-4`}
         >
           {currentImageUrl && (
-            <div className="h-[360px] sm:h-[460px] w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
+            <div className="h-[360px] sm:h-[460px] w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-xs">
               <SpecimenViewer
                 imageUrl={currentImageUrl}
                 spotterPin={currentStation.spotterPin}
@@ -592,11 +592,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           )}
 
           {currentStation.clinicalVignette && (
-            <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block">
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
                 Clinical scenario
               </span>
-              <p className="text-sm text-amber-950 leading-relaxed">
+              <p className="text-sm text-amber-950 dark:text-amber-200 leading-relaxed">
                 {currentStation.clinicalVignette}
               </p>
             </div>
@@ -611,15 +611,15 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               : 'lg:col-span-5'
           } space-y-4`}
         >
-          <div className="bg-white p-5 sm:p-6 rounded-xl border border-slate-200">
+          <div className="bg-white dark:bg-slate-850 p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <div className="space-y-1 mb-4">
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span className="font-semibold uppercase tracking-wide text-rose-900">
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span className="font-semibold uppercase tracking-wide text-purple-700 dark:text-purple-400">
                   {currentStation.type.replace(/_/g, ' ')}
                 </span>
                 <span className="font-mono">{currentStation.points || 1} mark{currentStation.points !== 1 ? 's' : ''}</span>
               </div>
-              <h2 className="text-base font-bold text-slate-900 leading-snug">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
                 {currentStation.questionText}
               </h2>
             </div>
@@ -627,8 +627,8 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             {/* Typed spotter answer */}
             {currentStation.type === 'spotter' &&
               (currentStation.spotterAnswerMode === 'typed' || currentStation.spotterAnswerMode === 'both') && (
-                <div className="space-y-2 p-4 bg-slate-50 border border-slate-200 rounded-xl mb-4">
-                  <label htmlFor="typed-answer-input" className="block text-xs font-semibold text-slate-700">
+                <div className="space-y-2 p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl mb-4">
+                  <label htmlFor="typed-answer-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                     Your identification:
                   </label>
                   <input
@@ -637,10 +637,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                     placeholder="Type the anatomical structure or pathological finding…"
                     value={currentAnswer.typedAnswer || ''}
                     onChange={(e) => handleTypedAnswerChange(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-900/30 focus:border-rose-900 bg-white"
+                    className="w-full px-3.5 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/30 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                     autoComplete="off"
                   />
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
                     Your answer is saved automatically. You'll review it after submitting.
                   </p>
                 </div>
@@ -654,10 +654,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 currentStation.spotterAnswerMode === 'both') && (
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
                       Select one option:
                     </label>
-                    <span className="text-[11px] text-slate-400 hidden sm:inline">Keys: 1–4 or A–D</span>
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500 hidden sm:inline">Keys: 1–4 or A–D</span>
                   </div>
 
                   <div className="space-y-2" role="radiogroup" aria-label="Answer options">
@@ -672,20 +672,20 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                           role="radio"
                           aria-checked={isSelected}
                           onClick={() => handleSelectOption(opt.id)}
-                          className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 ${
+                          className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                             isSelected
-                              ? 'border-rose-950 bg-rose-50 ring-2 ring-rose-950/15'
-                              : 'border-slate-200 hover:border-slate-300 bg-white'
+                              ? 'border-purple-600 dark:border-purple-500 bg-purple-50/70 dark:bg-purple-950/40 ring-2 ring-purple-600/20'
+                              : 'border-slate-200 dark:border-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800/80'
                           }`}
                         >
                           <span
                             className={`w-6 h-6 rounded-md font-mono text-xs font-bold flex items-center justify-center shrink-0 ${
-                              isSelected ? 'bg-rose-950 text-white' : 'bg-slate-100 text-slate-700'
+                              isSelected ? 'bg-purple-700 dark:bg-purple-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                             }`}
                           >
                             {letter}
                           </span>
-                          <span className={`text-sm leading-relaxed ${isSelected ? 'font-semibold text-slate-900' : 'text-slate-700'}`}>
+                          <span className={`text-sm leading-relaxed ${isSelected ? 'font-semibold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-200'}`}>
                             {opt.text}
                           </span>
                         </button>
@@ -697,19 +697,19 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           </div>
 
           {/* Auto-save note */}
-          <p className="text-[11px] text-slate-400 text-center">
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
             Answers saved automatically on this device.
           </p>
         </div>
       </main>
 
       {/* Bottom navigation bar — fixed */}
-      <footer className="bg-white border-t border-slate-200 py-3 px-4 sticky bottom-0 z-20">
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-3 px-4 sticky bottom-0 z-20 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <button
             disabled={currentStationIndex === 0}
             onClick={handlePrevStation}
-            className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 rounded-lg transition-colors min-h-[44px]"
+            className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 rounded-lg transition-colors min-h-[44px] cursor-pointer"
             aria-label="Previous station"
           >
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -724,10 +724,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               const isAnswered = ans && (ans.selectedOptionId || (ans.typedAnswer && ans.typedAnswer.trim().length > 0));
               const isFlagged = ans?.isFlagged;
 
-              let style = 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent';
-              if (isCurrent) style = 'bg-rose-950 text-white ring-2 ring-rose-900/30 font-bold border border-transparent';
-              else if (isFlagged) style = 'bg-amber-100 text-amber-800 border border-amber-300';
-              else if (isAnswered) style = 'bg-green-100 text-green-800 border border-green-300';
+              let style = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 border border-transparent';
+              if (isCurrent) style = 'bg-purple-700 dark:bg-purple-600 text-white ring-2 ring-purple-600/30 font-bold border border-transparent';
+              else if (isFlagged) style = 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
+              else if (isAnswered) style = 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
 
               return (
                 <button
@@ -737,7 +737,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   title={`Station ${idx + 1}${isFlagged ? ' — flagged' : ''}${isAnswered ? ' — answered' : ' — unanswered'}`}
                   aria-label={`Station ${idx + 1}${isFlagged ? ', flagged' : ''}${isAnswered ? ', answered' : ', unanswered'}`}
                   aria-current={isCurrent ? 'true' : undefined}
-                  className={`w-7 h-7 rounded-md text-xs font-mono transition-all shrink-0 ${style}`}
+                  className={`w-7 h-7 rounded-md text-xs font-mono transition-all shrink-0 cursor-pointer ${style}`}
                 >
                   {idx + 1}
                 </button>
@@ -752,7 +752,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               onClick={() => setIsLeaveConfirmOpen(true)}
               title="Leave exam session (progress will be lost)"
               aria-label="Leave exam session"
-              className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-700 rounded-lg transition-colors min-h-[44px]"
+              className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors min-h-[44px] cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Leave</span>
@@ -760,7 +760,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
 
             <button
               onClick={handleNextStation}
-              className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-sm min-h-[44px]"
+              className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[44px] cursor-pointer"
               aria-label={currentStationIndex === questions.length - 1 ? 'Finish exam' : 'Next station'}
             >
               <span>{currentStationIndex === questions.length - 1 ? 'Finish & submit' : 'Next'}</span>
@@ -772,19 +772,19 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
 
       {/* Station roster modal */}
       {isStationDrawerOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Station roster">
-          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-lg w-full p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="text-sm font-bold text-slate-900">Station roster</h3>
-              <button onClick={() => setIsStationDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 p-1" aria-label="Close roster">
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Station roster">
+          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Station roster</h3>
+              <button onClick={() => setIsStationDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 cursor-pointer" aria-label="Close roster">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-3 text-xs text-slate-600">
-              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-green-400" aria-hidden="true" /> Answered ({answeredCount})</span>
+            <div className="flex flex-wrap gap-3 text-xs text-slate-600 dark:text-slate-400">
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-400" aria-hidden="true" /> Answered ({answeredCount})</span>
               <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-400" aria-hidden="true" /> Flagged ({flaggedCount})</span>
-              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-slate-200" aria-hidden="true" /> Unanswered ({questions.length - answeredCount})</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-slate-200 dark:bg-slate-700" aria-hidden="true" /> Unanswered ({questions.length - answeredCount})</span>
             </div>
 
             <div className="grid grid-cols-5 gap-2 max-h-64 overflow-y-auto" role="list">
@@ -794,10 +794,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 const isAnswered = ans && (ans.selectedOptionId || (ans.typedAnswer && ans.typedAnswer.trim().length > 0));
                 const isFlagged = ans?.isFlagged;
 
-                let boxStyle = 'bg-slate-100 text-slate-600 hover:bg-slate-200';
-                if (isCurrent) boxStyle = 'ring-2 ring-rose-950 bg-rose-50 text-rose-950 font-extrabold';
-                else if (isFlagged) boxStyle = 'bg-amber-100 text-amber-900 border border-amber-300';
-                else if (isAnswered) boxStyle = 'bg-green-100 text-green-900 border border-green-300';
+                let boxStyle = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700';
+                if (isCurrent) boxStyle = 'ring-2 ring-purple-600 bg-purple-50 dark:bg-purple-950/60 text-purple-950 dark:text-purple-200 font-extrabold';
+                else if (isFlagged) boxStyle = 'bg-amber-100 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800';
+                else if (isAnswered) boxStyle = 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800';
 
                 return (
                   <button
@@ -805,7 +805,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                     role="listitem"
                     onClick={() => handleJumpToStation(idx)}
                     aria-label={`Go to station ${idx + 1}`}
-                    className={`p-3 rounded-lg text-xs font-mono font-bold flex flex-col items-center justify-center gap-0.5 transition-all ${boxStyle}`}
+                    className={`p-3 rounded-lg text-xs font-mono font-bold flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer ${boxStyle}`}
                   >
                     <span>{idx + 1}</span>
                     <span className="text-[10px] font-normal opacity-70 uppercase">
@@ -816,8 +816,8 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               })}
             </div>
 
-            <div className="pt-2 border-t border-slate-100 flex justify-end">
-              <button onClick={() => setIsStationDrawerOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg">
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+              <button onClick={() => setIsStationDrawerOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg cursor-pointer">
                 Close
               </button>
             </div>
@@ -827,23 +827,23 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
 
       {/* Submit confirmation */}
       {isSubmitConfirmOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Submit exam">
-          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Submit exam">
+          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center shrink-0">
-                <Send className="w-5 h-5 text-rose-900" />
+              <div className="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-950/60 flex items-center justify-center shrink-0">
+                <Send className="w-5 h-5 text-purple-700 dark:text-purple-400" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-900">Submit your answers?</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Submit your answers?</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   You'll then review and self-grade each station.
                 </p>
               </div>
             </div>
 
             {answeredCount < questions.length && (
-              <div className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg text-xs flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-amber-900 dark:text-amber-200 rounded-lg text-xs flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
                 <span>
                   <strong>{questions.length - answeredCount} station{questions.length - answeredCount > 1 ? 's' : ''} unanswered.</strong>{' '}
                   You can still submit — unanswered stations score 0.
@@ -851,21 +851,21 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               </div>
             )}
 
-            <div className="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1">
+            <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1">
               <p>Answered: <strong>{answeredCount} of {questions.length}</strong></p>
               <p>Flagged: <strong>{flaggedCount}</strong></p>
               <p>Time elapsed: <strong className="font-mono">{formatTimer(totalTimeSpentSeconds)}</strong></p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
-              <button type="button" onClick={() => setIsSubmitConfirmOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors min-h-[40px]">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <button type="button" onClick={() => setIsSubmitConfirmOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-h-[40px] cursor-pointer">
                 Keep reviewing
               </button>
               <button
                 id="confirm-submit-btn"
                 type="button"
                 onClick={handleConfirmFinish}
-                className="px-5 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-sm min-h-[40px]"
+                className="px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 rounded-lg transition-all shadow-xs min-h-[40px] cursor-pointer"
               >
                 Submit answers
               </button>
@@ -876,30 +876,30 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
 
       {/* Leave session confirmation */}
       {isLeaveConfirmOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Leave session">
-          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Leave session">
+          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                <LogOut className="w-5 h-5 text-amber-700" />
+              <div className="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center shrink-0">
+                <LogOut className="w-5 h-5 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-900">Leave this exam?</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Leave this exam?</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Your answers will be discarded and you'll return to the Exam Library.
                   This cannot be undone.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
-              <button type="button" onClick={() => setIsLeaveConfirmOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors min-h-[40px]">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <button type="button" onClick={() => setIsLeaveConfirmOpen(false)} className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-h-[40px] cursor-pointer">
                 Stay in exam
               </button>
               <button
                 id="confirm-leave-btn"
                 type="button"
                 onClick={handleConfirmLeave}
-                className="px-5 py-2 text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-lg transition-colors min-h-[40px]"
+                className="px-5 py-2 text-xs font-bold text-white bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 rounded-lg transition-colors min-h-[40px] cursor-pointer"
               >
                 Leave and discard
               </button>

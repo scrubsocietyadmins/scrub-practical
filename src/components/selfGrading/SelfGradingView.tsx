@@ -286,7 +286,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col font-sans select-none text-slate-900 pb-16">
+    <div className="min-h-screen bg-slate-100 dark:bg-[#0b0f19] flex flex-col font-sans select-none text-slate-900 dark:text-slate-100 pb-16 transition-colors">
       {/* Top Grading Progress Bar */}
       <GradingProgress
         questions={questions}
@@ -311,7 +311,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
           } space-y-4`}
         >
           {currentImageUrl && (
-            <div className="h-[360px] sm:h-[440px] w-full rounded-xl overflow-hidden shadow-sm border border-slate-200 bg-black">
+            <div className="h-[360px] sm:h-[440px] w-full rounded-xl overflow-hidden shadow-xs border border-slate-200 dark:border-slate-800 bg-black">
               <SpecimenViewer
                 imageUrl={currentImageUrl}
                 spotterPin={currentQuestion.spotterPin}
@@ -322,11 +322,11 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
           )}
 
           {currentQuestion.clinicalVignette && (
-            <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900 block">
+            <div className="p-4 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 block">
                 Clinical Vignette:
               </span>
-              <p className="text-xs text-amber-950 leading-relaxed font-serif">
+              <p className="text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-serif">
                 {currentQuestion.clinicalVignette}
               </p>
             </div>
@@ -342,29 +342,29 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
           } space-y-5`}
         >
           {/* Question Details Card */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-500">
-              <span className="font-semibold uppercase tracking-wider text-rose-950">
+          <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span className="font-semibold uppercase tracking-wider text-purple-700 dark:text-purple-400">
                 {currentQuestion.type.replace('_', ' ')}
               </span>
               <span className="font-mono">{currentQuestion.points || 1} Maximum Points</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 leading-snug">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
               {currentQuestion.questionText}
             </h3>
           </div>
 
           {/* 1. Student's Submitted Answer Container */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 uppercase tracking-wider">
-                <User className="w-3.5 h-3.5 text-rose-950" />
+          <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <User className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
                 <span>Your Submitted Candidate Answer:</span>
               </div>
               <span className="text-[10px] font-mono text-slate-400">Recorded at submission</span>
             </div>
 
-            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-900 font-mono">
+            <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white font-mono">
               {getStudentAnswerText(currentQuestion)}
             </div>
           </div>
@@ -387,14 +387,14 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
 
       {/* Confirmation Step Before Finalizing Grades */}
       {confirmModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-850 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3">
               <div
                 className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-xs ${
                   ungradedIds.length > 0
-                    ? 'bg-amber-100 text-amber-800'
-                    : 'bg-emerald-100 text-emerald-800'
+                    ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                    : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
                 }`}
               >
                 {ungradedIds.length > 0 ? (
@@ -404,12 +404,12 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
                 )}
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   {ungradedIds.length > 0
                     ? 'Incomplete Self-Grading Assessment'
                     : 'Finalize Self-Grading Assessment?'}
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {ungradedIds.length > 0
                     ? 'All questions must have an explicit self-assigned mark before finalizing.'
                     : 'Review your calculated totals before committing your grade to history.'}
@@ -419,7 +419,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
 
             {ungradedIds.length > 0 ? (
               <div className="space-y-3">
-                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1.5">
+                <div className="p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-xl text-xs text-amber-950 dark:text-amber-200 space-y-1.5">
                   <p className="font-bold">
                     Attention: You have {ungradedIds.length} question(s) without an assigned grade:
                   </p>
@@ -439,7 +439,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
                           setConfirmModalOpen(false);
                           handleJumpToQuestion(idx);
                         }}
-                        className="px-2.5 py-1 text-xs font-mono font-bold rounded-lg bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition-colors"
+                        className="px-2.5 py-1 text-xs font-mono font-bold rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 hover:bg-amber-200 dark:hover:bg-amber-900 transition-colors cursor-pointer"
                       >
                         Station {idx + 1} &rarr;
                       </button>
@@ -455,7 +455,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
                       const firstUngraded = questions.findIndex((q) => q.id === ungradedIds[0]);
                       if (firstUngraded >= 0) handleJumpToQuestion(firstUngraded);
                     }}
-                    className="px-4 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg shadow-xs"
+                    className="px-4 py-2 text-xs font-bold text-white bg-purple-700 hover:bg-purple-800 rounded-lg shadow-xs cursor-pointer"
                   >
                     Go to Next Ungraded Station
                   </button>
@@ -463,47 +463,47 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
-                    <span className="text-slate-600">Calculated Final Score:</span>
-                    <span className="font-mono font-bold text-sm text-slate-900">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl space-y-2 text-xs">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-700">
+                    <span className="text-slate-600 dark:text-slate-400">Calculated Final Score:</span>
+                    <span className="font-mono font-bold text-sm text-slate-900 dark:text-white">
                       {scoreResult.totalScore} / {scoreResult.maxScore} marks
                     </span>
                   </div>
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
-                    <span className="text-slate-600">Score Percentage:</span>
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-700">
+                    <span className="text-slate-600 dark:text-slate-400">Score Percentage:</span>
                     <span
                       className={`font-mono font-bold text-sm ${
-                        scoreResult.passed ? 'text-emerald-700' : 'text-rose-700'
+                        scoreResult.passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                       }`}
                     >
                       {scoreResult.percentage}%
                     </span>
                   </div>
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
-                    <span className="text-slate-600">Grade Breakdown:</span>
-                    <span className="font-mono text-slate-700">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-700">
+                    <span className="text-slate-600 dark:text-slate-400">Grade Breakdown:</span>
+                    <span className="font-mono text-slate-700 dark:text-slate-300">
                       {scoreResult.fullyCorrectCount} Full | {scoreResult.partiallyCorrectCount} Partial | {scoreResult.incorrectCount} Incorrect
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
+                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                     <span>Passing Standard:</span>
                     <span className="font-mono">{exam.passingScorePercent || 60}%</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => setConfirmModalOpen(false)}
-                    className="px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                    className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                   >
                     Keep Adjusting Grades
                   </button>
                   <button
                     type="button"
                     onClick={handleConfirmFinalize}
-                    className="px-5 py-2 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg shadow-xs transition-colors"
+                    className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors cursor-pointer"
                   >
                     Confirm &amp; Finalize Assessment
                   </button>

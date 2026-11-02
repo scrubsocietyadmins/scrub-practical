@@ -205,42 +205,42 @@ export const PackageHub: React.FC<PackageHubProps> = ({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
       {/* Title & Navigation Subtabs */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
             Package &amp; Asset Exchange Hub
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Offline ZIP exam packages, specimen image synchronization, and full clinical library backups
           </p>
         </div>
 
         {/* Subtabs Bar */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
           <button
             onClick={() => setActiveSubTab('packages')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
               activeSubTab === 'packages'
-                ? 'bg-white text-rose-950 font-bold shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <FolderArchive className="w-3.5 h-3.5 text-rose-900" />
+            <FolderArchive className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
             <span>ZIP Packages</span>
           </button>
 
           <button
             onClick={() => setActiveSubTab('missing_images')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors relative ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors relative cursor-pointer ${
               activeSubTab === 'missing_images'
-                ? 'bg-white text-rose-950 font-bold shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <ImageIcon className="w-3.5 h-3.5 text-rose-900" />
+            <ImageIcon className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
             <span>Missing Images</span>
             {missingImagesCount > 0 && (
-              <span className="w-4 h-4 rounded-full bg-rose-600 text-white text-[10px] font-mono flex items-center justify-center font-bold">
+              <span className="w-4 h-4 rounded-full bg-amber-500 text-white text-[10px] font-mono flex items-center justify-center font-bold">
                 {missingImagesCount}
               </span>
             )}
@@ -248,13 +248,13 @@ export const PackageHub: React.FC<PackageHubProps> = ({
 
           <button
             onClick={() => setActiveSubTab('backup')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
               activeSubTab === 'backup'
-                ? 'bg-white text-rose-950 font-bold shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <Database className="w-3.5 h-3.5 text-rose-900" />
+            <Database className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
             <span>Backup &amp; Restore</span>
           </button>
         </div>
@@ -278,26 +278,26 @@ export const PackageHub: React.FC<PackageHubProps> = ({
             }}
             className={`relative border-2 border-dashed rounded-2xl p-8 sm:p-12 text-center transition-all ${
               isDragging
-                ? 'border-rose-900 bg-rose-50/50 scale-[1.01]'
-                : 'border-slate-300 bg-white hover:border-slate-400'
+                ? 'border-purple-700 bg-purple-50/50 dark:bg-purple-950/30 scale-[1.01]'
+                : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-850 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <div className="max-w-md mx-auto space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-950 flex items-center justify-center mx-auto border border-rose-200 shadow-2xs">
+              <div className="w-14 h-14 rounded-2xl bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 flex items-center justify-center mx-auto border border-purple-200 dark:border-purple-800 shadow-2xs">
                 <Archive className="w-7 h-7" />
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Drag and Drop Examination ZIP Package
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Inspect manifest, stations, spotter pins, and specimen images with atomic transaction safety.
                 </p>
               </div>
 
               <div>
-                <label className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg cursor-pointer transition-colors shadow-xs">
+                <label className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg cursor-pointer transition-all shadow-xs">
                   <Upload className="w-4 h-4" />
                   <span>{isProcessing ? 'Validating Package...' : 'Select .zip Package to Inspect'}</span>
                   <input
@@ -314,20 +314,20 @@ export const PackageHub: React.FC<PackageHubProps> = ({
                 </label>
               </div>
 
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500">
                 Maintains formatVersion 1.0.0 · Detects missing images without data loss
               </p>
             </div>
           </div>
 
           {/* Installed Packages Table */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs space-y-4 p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs space-y-4 p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Stored Examination Packages ({exams.length})
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   All clinical stations and high-res specimen slides held offline in browser IndexedDB
                 </p>
               </div>
@@ -335,19 +335,19 @@ export const PackageHub: React.FC<PackageHubProps> = ({
               <button
                 onClick={handleResetSamplePackages}
                 disabled={isProcessing}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors shadow-2xs cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
+                <RefreshCw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                 <span>Restore Starter Samples</span>
               </button>
             </div>
 
             {exams.length === 0 ? (
-              <div className="text-center py-8 text-xs text-slate-500">
+              <div className="text-center py-8 text-xs text-slate-500 dark:text-slate-400">
                 No exams in local storage. Click "Restore Starter Samples" above or import a package.
               </div>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
                 {exams.map((exam) => {
                   const subject = subjects.find((s) => s.id === exam.subjectId);
                   const count = questionCounts[exam.id] || 0;
@@ -355,32 +355,32 @@ export const PackageHub: React.FC<PackageHubProps> = ({
                   return (
                     <div
                       key={exam.id}
-                      className="py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors"
+                      className="py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
-                          <FolderArchive className="w-5 h-5 text-rose-950" />
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0">
+                          <FolderArchive className="w-5 h-5 text-purple-700 dark:text-purple-400" />
                         </div>
 
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-slate-900">{exam.title}</span>
-                            <span className="text-[11px] font-mono px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded border border-slate-200">
+                            <span className="text-xs font-bold text-slate-900 dark:text-white">{exam.title}</span>
+                            <span className="text-[11px] font-mono px-1.5 py-0.2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
                               {exam.code}
                             </span>
                             <span
                               className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                 exam.status === 'published'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                                   : exam.status === 'review'
-                                  ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                  ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
+                                  : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                               }`}
                             >
                               {exam.status === 'published' ? 'Published' : exam.status === 'review' ? 'Needs Review' : 'Draft'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                             <span>{subject?.name || 'Medical Subject'}</span>
                             <span>·</span>
                             <span>{count} Stations</span>
@@ -393,7 +393,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
                       <div className="flex items-center gap-2 self-end sm:self-center">
                         <button
                           onClick={() => handleExportExam(exam.id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-950 bg-rose-50 hover:bg-rose-100/70 border border-rose-200 rounded-lg transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100/70 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-800 rounded-lg transition-colors cursor-pointer"
                         >
                           <FileDown className="w-3.5 h-3.5" />
                           <span>Export Standalone ZIP</span>
@@ -416,29 +416,29 @@ export const PackageHub: React.FC<PackageHubProps> = ({
       {/* Subtab 3: Backup & Restore */}
       {activeSubTab === 'backup' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-2xs space-y-6">
+          <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-6">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Clinical Database Backup &amp; Disaster Recovery</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Clinical Database Backup &amp; Disaster Recovery</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Full snapshot containing subjects, exams, questions, student attempts, and embedded specimen images.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               {/* Card 1: Full Export */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50 flex flex-col justify-between">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-3 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="w-10 h-10 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-950">
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-950/50 border border-purple-200 dark:border-purple-800 flex items-center justify-center text-purple-700 dark:text-purple-300">
                     <Database className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900">Export All Data Backup</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Export All Data Backup</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Downloads a single consolidated JSON archive containing all subjects, examinations, candidate attempt histories, and base64 specimen slide images.
                   </p>
                 </div>
                 <button
                   onClick={handleExportFullBackup}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-4 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors shadow-2xs"
+                  className="w-full flex items-center justify-center gap-2 py-2 px-4 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg transition-all shadow-2xs cursor-pointer"
                 >
                   <FileDown className="w-4 h-4" />
                   <span>Download Full Library Backup (.json)</span>
@@ -446,18 +446,18 @@ export const PackageHub: React.FC<PackageHubProps> = ({
               </div>
 
               {/* Card 2: Full Restore */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50 flex flex-col justify-between">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-3 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-900">
+                  <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-700 dark:text-indigo-300">
                     <Upload className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900">Import Full Backup</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Import Full Backup</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Restore previously exported library backups. A verification prompt will confirm before applying updates.
                   </p>
                 </div>
 
-                <label className="w-full flex items-center justify-center gap-2 py-2 px-4 text-xs font-bold text-indigo-950 bg-indigo-50 hover:bg-indigo-100/80 border border-indigo-200 rounded-lg cursor-pointer transition-colors shadow-2xs">
+                <label className="w-full flex items-center justify-center gap-2 py-2 px-4 text-xs font-bold text-indigo-950 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100/80 dark:hover:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg cursor-pointer transition-colors shadow-2xs">
                   <Upload className="w-4 h-4" />
                   <span>Select Full Backup JSON File</span>
                   <input
@@ -479,61 +479,61 @@ export const PackageHub: React.FC<PackageHubProps> = ({
 
       {/* Inspected Package / Import Preview Modal */}
       {inspectedPackage && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-lg w-full p-6 space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-6 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-rose-50 text-rose-950 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 flex items-center justify-center">
                   <FolderArchive className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Package Inspection Report</h3>
-                  <p className="text-xs text-slate-500">Validated manifest and specimen asset integrity.</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Package Inspection Report</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Validated manifest and specimen asset integrity.</p>
                 </div>
               </div>
             </div>
 
             {/* Exam Details Summary */}
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200/80 space-y-2 text-xs">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">Exam Title:</span>
-                <span className="font-bold text-slate-900">{inspectedPackage.manifest.exam.title}</span>
+                <span className="text-slate-500 dark:text-slate-400">Exam Title:</span>
+                <span className="font-bold text-slate-900 dark:text-white">{inspectedPackage.manifest.exam.title}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Course Code:</span>
-                <span className="font-mono font-medium text-slate-700">{inspectedPackage.manifest.exam.code}</span>
+                <span className="text-slate-500 dark:text-slate-400">Course Code:</span>
+                <span className="font-mono font-medium text-slate-700 dark:text-slate-300">{inspectedPackage.manifest.exam.code}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Subject:</span>
-                <span className="font-semibold text-slate-700">{inspectedPackage.manifest.subject.name}</span>
+                <span className="text-slate-500 dark:text-slate-400">Subject:</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">{inspectedPackage.manifest.subject.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Stations:</span>
-                <span className="font-bold text-slate-900">{inspectedPackage.manifest.questions.length} stations</span>
+                <span className="text-slate-500 dark:text-slate-400">Stations:</span>
+                <span className="font-bold text-slate-900 dark:text-white">{inspectedPackage.manifest.questions.length} stations</span>
               </div>
             </div>
 
             {/* Image Assets Status Breakdown */}
             <div className="space-y-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Specimen Asset Audit</span>
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">Specimen Asset Audit</span>
               <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <div>
-                    <span className="font-bold text-emerald-950 block">
+                    <span className="font-bold text-emerald-950 dark:text-emerald-300 block">
                       {inspectedPackage.inspectionSummary.availableImagesCount} Available
                     </span>
-                    <span className="text-[11px] text-emerald-800">Packed in ZIP</span>
+                    <span className="text-[11px] text-emerald-800 dark:text-emerald-400">Packed in ZIP</span>
                   </div>
                 </div>
 
                 <div className={`p-3 border rounded-lg flex items-center gap-2 ${
                   inspectedPackage.inspectionSummary.missingImagesCount > 0
-                    ? 'bg-rose-50 border-rose-200 text-rose-950'
-                    : 'bg-slate-50 border-slate-200 text-slate-600'
+                    ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 text-amber-950 dark:text-amber-200'
+                    : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                 }`}>
                   <AlertTriangle className={`w-4 h-4 shrink-0 ${
-                    inspectedPackage.inspectionSummary.missingImagesCount > 0 ? 'text-rose-600' : 'text-slate-400'
+                    inspectedPackage.inspectionSummary.missingImagesCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'
                   }`} />
                   <div>
                     <span className="font-bold block">
@@ -546,19 +546,19 @@ export const PackageHub: React.FC<PackageHubProps> = ({
 
               {/* If images are missing, display their details */}
               {inspectedPackage.inspectionSummary.missingImagesCount > 0 && (
-                <div className="p-3 bg-rose-50/60 border border-rose-200 rounded-lg text-xs space-y-1.5 max-h-36 overflow-y-auto">
-                  <span className="font-bold text-rose-950 block">Missing Image Files:</span>
+                <div className="p-3 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-xs space-y-1.5 max-h-36 overflow-y-auto">
+                  <span className="font-bold text-amber-950 dark:text-amber-200 block">Missing Image Files:</span>
                   {inspectedPackage.inspectionSummary.images
                     .filter((img) => img.status === 'missing')
                     .map((m) => (
-                      <div key={m.id} className="text-[11px] text-rose-900 flex items-center justify-between">
+                      <div key={m.id} className="text-[11px] text-amber-900 dark:text-amber-300 flex items-center justify-between">
                         <span className="font-mono font-medium truncate">{m.fileName}</span>
-                        <span className="text-rose-700 text-[10px]">
+                        <span className="text-amber-700 dark:text-amber-400 text-[10px]">
                           ({m.associatedQuestionTitles.join(', ') || 'No station'})
                         </span>
                       </div>
                     ))}
-                  <p className="text-[10px] text-rose-800 pt-1">
+                  <p className="text-[10px] text-amber-800 dark:text-amber-400 pt-1">
                     * The exam will import as a <strong>Draft</strong> so you can attach these slides before launching.
                   </p>
                 </div>
@@ -567,20 +567,20 @@ export const PackageHub: React.FC<PackageHubProps> = ({
 
             {/* Conflict Detection Prompt */}
             {inspectedPackage.conflict ? (
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs space-y-2">
-                <div className="flex items-center gap-2 text-amber-950 font-bold">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-xs space-y-2">
+                <div className="flex items-center gap-2 text-amber-950 dark:text-amber-200 font-bold">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   <span>Existing Exam Conflict</span>
                 </div>
-                <p className="text-[11px] text-amber-900">{inspectedPackage.conflict.message}</p>
+                <p className="text-[11px] text-amber-900 dark:text-amber-300">{inspectedPackage.conflict.message}</p>
 
-                <div className="pt-2 border-t border-amber-200/80 space-y-2">
-                  <label className="flex items-center gap-2 text-[11px] text-amber-950 font-medium cursor-pointer">
+                <div className="pt-2 border-t border-amber-200/80 dark:border-amber-800/60 space-y-2">
+                  <label className="flex items-center gap-2 text-[11px] text-amber-950 dark:text-amber-200 font-medium cursor-pointer">
                     <input
                       type="checkbox"
                       checked={deleteAttemptsOnOverwrite}
                       onChange={(e) => setDeleteAttemptsOnOverwrite(e.target.checked)}
-                      className="rounded text-rose-950 focus:ring-rose-900"
+                      className="rounded text-purple-700 focus:ring-purple-700"
                     />
                     <span>Also wipe existing past student attempt history on overwrite</span>
                   </label>
@@ -589,10 +589,10 @@ export const PackageHub: React.FC<PackageHubProps> = ({
             ) : null}
 
             {/* Import Buttons */}
-            <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-end gap-2">
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-end gap-2">
               <button
                 onClick={() => setInspectedPackage(null)}
-                className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
@@ -601,13 +601,13 @@ export const PackageHub: React.FC<PackageHubProps> = ({
                 <>
                   <button
                     onClick={() => handleConfirmImport('keep_both')}
-                    className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg shadow-2xs"
+                    className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 rounded-lg shadow-2xs cursor-pointer"
                   >
                     Keep Both (Import as Copy)
                   </button>
                   <button
                     onClick={() => handleConfirmImport('overwrite')}
-                    className="w-full sm:w-auto px-4 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg shadow-2xs"
+                    className="w-full sm:w-auto px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg shadow-2xs cursor-pointer"
                   >
                     Overwrite Existing
                   </button>
@@ -615,7 +615,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
               ) : (
                 <button
                   onClick={() => handleConfirmImport('overwrite')}
-                  className="w-full sm:w-auto px-5 py-2 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg shadow-xs"
+                  className="w-full sm:w-auto px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg shadow-xs cursor-pointer"
                 >
                   Import Examination Package
                 </button>
@@ -627,36 +627,36 @@ export const PackageHub: React.FC<PackageHubProps> = ({
 
       {/* Full Database Restore Confirmation Modal */}
       {pendingRestoreFile && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-950 flex items-center justify-center shrink-0">
-                <ShieldAlert className="w-5 h-5 text-rose-900" />
+              <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center shrink-0">
+                <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Confirm Database Restore</h3>
-                <p className="text-xs text-slate-500">Restoring from: "{pendingRestoreFile.name}"</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Confirm Database Restore</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Restoring from: "{pendingRestoreFile.name}"</p>
               </div>
             </div>
 
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-950 space-y-1 leading-relaxed">
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-lg text-xs text-amber-950 dark:text-amber-200 space-y-1 leading-relaxed">
               <p className="font-bold">Caution: Library Data Merge</p>
-              <p className="text-[11px] text-amber-800">
+              <p className="text-[11px] text-amber-800 dark:text-amber-300">
                 This operation will merge or update existing subjects, exams, stations, and specimen images in your local IndexedDB storage.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => setPendingRestoreFile(null)}
-                className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmRestoreBackup}
                 disabled={isProcessing}
-                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg shadow-2xs"
+                className="px-4 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 rounded-lg shadow-2xs cursor-pointer"
               >
                 {isProcessing ? 'Restoring...' : 'Confirm Restore'}
               </button>
