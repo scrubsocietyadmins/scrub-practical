@@ -1,0 +1,8 @@
+{
+  "name": "Scrub Practical",
+  "description": "Lightweight medical practical examination platform for authoring, testing, and sharing OSPE and spotter exams offline.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

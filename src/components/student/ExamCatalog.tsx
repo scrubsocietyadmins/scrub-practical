@@ -1,0 +1,432 @@
+import React, { useState, useEffect } from 'react';
+import {
+  BookOpen,
+  Clock,
+  Play,
+  Crosshair,
+  Search,
+  X,
+  AlertTriangle,
+  CheckCircle2,
+  RotateCcw,
+  ChevronDown,
+  Lock,
+} from 'lucide-react';
+import { db } from '../../db';
+import type { Exam, Subject, ExamAttempt } from '../../types';
+
+interface ExamCatalogProps {
+  onStartExam: (exam: Exam) => void;
+  onNavigateToMissingImages: () => void;
+  onNavigateToHistory?: () => void;
+}
+
+function getTimingLabel(exam: Exam): string {
+  switch (exam.timingMode) {
+    case 'bell_ring':
+      return `${exam.stationDurationSeconds}s per station`;
+    case 'total_timer':
+      return `${exam.totalDurationMinutes}min total`;
+    case 'flexible':
+      return 'Self-paced';
+    default:
+      return '';
+  }
+}
+
+function getTimingIcon(exam: Exam): React.ReactNode {
+  switch (exam.timingMode) {
+    case 'bell_ring':
+      return <span className="text-[10px] font-mono bg-rose-100 text-rose-800 border border-rose-200 px-1.5 py-0.5 rounded">Bell ring</span>;
+    case 'total_timer':
+      return <span className="text-[10px] font-mono bg-slate-100 text-slate-700 border border-slate-200 px-1.5 py-0.5 rounded">Total timer</span>;
+    case 'flexible':
+      return <span className="text-[10px] font-mono bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded">Flexible</span>;
+    default:
+      return null;
+  }
+}
+
+export const ExamCatalog: React.FC<ExamCatalogProps> = ({
+  onStartExam,
+  onNavigateToMissingImages,
+  onNavigateToHistory,
+}) => {
+  const [exams, setExams] = useState<Exam[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [examStationCounts, setExamStationCounts] = useState<Record<string, number>>({});
+  const [pastAttempts, setPastAttempts] = useState<Record<string, ExamAttempt[]>>({});
+  const [missingImagesMap, setMissingImagesMap] = useState<
+    Record<string, Array<{ questionId: string; questionTitle: string; imageId: string }>>
+  >({});
+  const [blockedExamModal, setBlockedExamModal] = useState<{
+    examTitle: string;
+    missing: Array<{ questionId: string; questionTitle: string; imageId: string }>;
+  } | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      // Only load published exams for the student library
+      const allExams = await db.exams.where('status').equals('published').toArray();
+      const allSubjects = await db.subjects.toArray();
+      const allAttempts = await db.attempts.toArray();
+
+      setExams(allExams);
+      setSubjects(allSubjects);
+
+      const counts: Record<string, number> = {};
+      const missingMap: Record<string, Array<{ questionId: string; questionTitle: string; imageId: string }>> = {};
+      for (const ex of allExams) {
+        counts[ex.id] = await db.questions.where('examId').equals(ex.id).count();
+        const questions = await db.questions.where('examId').equals(ex.id).toArray();
+        const missing: Array<{ questionId: string; questionTitle: string; imageId: string }> = [];
+        for (const q of questions) {
+          if (q.type === 'spotter' || q.type === 'image_mcq') {
+            if (!q.imageId) {
+              missing.push({
+                questionId: q.id,
+                questionTitle: q.title || `Station ${q.orderIndex + 1}`,
+                imageId: 'UNASSIGNED',
+              });
+            } else {
+              const img = await db.images.get(q.imageId);
+              if (!img || !img.blob || img.blob.size === 0 || img.status === 'missing') {
+                missing.push({
+                  questionId: q.id,
+                  questionTitle: q.title || `Station ${q.orderIndex + 1}`,
+                  imageId: q.imageId,
+                });
+              }
+            }
+          }
+        }
+        missingMap[ex.id] = missing;
+      }
+      setExamStationCounts(counts);
+      setMissingImagesMap(missingMap);
+
+      const attemptsMap: Record<string, ExamAttempt[]> = {};
+      for (const att of allAttempts) {
+        if (!attemptsMap[att.examId]) attemptsMap[att.examId] = [];
+        attemptsMap[att.examId].push(att);
+      }
+      setPastAttempts(attemptsMap);
+    };
+
+    load();
+  }, []);
+
+  const filteredExams = exams.filter((exam) => {
+    if (selectedSubjectId !== 'all' && exam.subjectId !== selectedSubjectId) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const subject = subjects.find((s) => s.id === exam.subjectId);
+      const matches =
+        exam.title.toLowerCase().includes(q) ||
+        exam.code.toLowerCase().includes(q) ||
+        (exam.description || '').toLowerCase().includes(q) ||
+        (subject?.name || '').toLowerCase().includes(q) ||
+        (subject?.code || '').toLowerCase().includes(q);
+      if (!matches) return false;
+    }
+    return true;
+  });
+
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setSelectedSubjectId('all');
+  };
+
+  const activeSubjectNames = subjects.filter(s => exams.some(e => e.subjectId === s.id));
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
+      {/* Compact page header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Exam Library</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
+            Select a published exam to begin a timed station session.
+          </p>
+        </div>
+        {onNavigateToHistory && (
+          <button
+            id="go-to-progress-btn"
+            onClick={onNavigateToHistory}
+            className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors min-h-[36px]"
+          >
+            View your progress →
+          </button>
+        )}
+      </div>
+
+      {/* Single unified filter bar */}
+      <div className="flex flex-col sm:flex-row gap-2">
+        {/* Search */}
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            id="exam-search-input"
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search exams by title, code, or subject…"
+            className="w-full pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 bg-white placeholder:text-slate-400"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              aria-label="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Subject dropdown */}
+        <div className="relative shrink-0">
+          <select
+            id="subject-filter-select"
+            value={selectedSubjectId}
+            onChange={(e) => setSelectedSubjectId(e.target.value)}
+            className="pl-3 pr-8 py-2 text-sm font-medium border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-900/20 focus:border-rose-900 cursor-pointer appearance-none"
+          >
+            <option value="all">All subjects ({exams.length})</option>
+            {activeSubjectNames.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name} ({exams.filter((e) => e.subjectId === s.id).length})
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        </div>
+      </div>
+
+      {/* Result count */}
+      <div className="flex items-center justify-between text-xs text-slate-500 -mt-1">
+        <span>
+          {filteredExams.length === exams.length
+            ? `${exams.length} exam${exams.length !== 1 ? 's' : ''}`
+            : `${filteredExams.length} of ${exams.length} exams`}
+          {selectedSubjectId !== 'all' && (
+            <> · <strong className="text-slate-700">{subjects.find((s) => s.id === selectedSubjectId)?.name}</strong></>
+          )}
+          {searchQuery && (
+            <> · matching "<strong className="text-slate-700">{searchQuery}</strong>"</>
+          )}
+        </span>
+        {(searchQuery || selectedSubjectId !== 'all') && (
+          <button
+            onClick={handleClearFilters}
+            className="text-rose-900 hover:text-rose-950 font-medium"
+          >
+            Clear filters
+          </button>
+        )}
+      </div>
+
+      {/* Exam grid */}
+      {filteredExams.length === 0 ? (
+        <div className="py-16 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
+          <BookOpen className="w-9 h-9 text-slate-300 mx-auto" />
+          <h2 className="text-base font-semibold text-slate-700">No exams found</h2>
+          <p className="text-sm text-slate-500 max-w-sm mx-auto">
+            {searchQuery
+              ? `No published exams match "${searchQuery}".`
+              : 'No published exams in this subject.'}
+            {' '}Educators can publish exams in the Educator Workspace.
+          </p>
+          {(searchQuery || selectedSubjectId !== 'all') && (
+            <button
+              onClick={handleClearFilters}
+              className="px-4 py-2 text-xs font-semibold text-white bg-rose-950 rounded-lg hover:bg-rose-900 inline-flex items-center gap-1.5"
+            >
+              <X className="w-3.5 h-3.5" />
+              Clear filters
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredExams.map((exam) => {
+            const subject = subjects.find((s) => s.id === exam.subjectId);
+            const stationCount = examStationCounts[exam.id] || 0;
+            const attempts = pastAttempts[exam.id] || [];
+            const bestPercentage = attempts.reduce((max, att) => Math.max(max, att.percentage), 0);
+            const hasPastAttempt = attempts.length > 0;
+            const missingForExam = missingImagesMap[exam.id] || [];
+            const hasMissingImages = missingForExam.length > 0;
+            const isAvailable = stationCount > 0 && !hasMissingImages;
+
+            return (
+              <div
+                key={exam.id}
+                className={`bg-white border rounded-xl overflow-hidden flex flex-col transition-all ${
+                  isAvailable
+                    ? 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                    : 'border-slate-200 opacity-90'
+                }`}
+              >
+                <div className="p-5 space-y-3 flex-1">
+                  {/* Subject + code row */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: subject?.color || '#881337' }}
+                        aria-hidden="true"
+                      />
+                      <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
+                        {subject?.name || 'Practical Exam'}
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
+                      {exam.code}
+                    </span>
+                  </div>
+
+                  <h2 className="text-base font-bold text-slate-900 leading-snug">
+                    {exam.title}
+                  </h2>
+
+                  {exam.description && (
+                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                      {exam.description}
+                    </p>
+                  )}
+
+                  {/* Station info */}
+                  <div className="flex items-center gap-3 text-xs text-slate-600 flex-wrap">
+                    <span className="flex items-center gap-1">
+                      <Crosshair className="w-3.5 h-3.5 text-slate-400" />
+                      {stationCount} station{stationCount !== 1 ? 's' : ''}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      {getTimingLabel(exam)}
+                    </span>
+                    {getTimingIcon(exam)}
+                  </div>
+
+                  {/* Missing images notice — student-facing only */}
+                  {hasMissingImages && (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                      <p className="text-xs text-amber-900 flex items-start gap-2">
+                        <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                        <span>
+                          <span className="font-semibold">{missingForExam.length} image{missingForExam.length > 1 ? 's' : ''} missing.</span>{' '}
+                          This exam cannot be started until an educator uploads the missing specimen slides.
+                        </span>
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Past attempt summary */}
+                  {hasPastAttempt && !hasMissingImages && (
+                    <div className="flex items-center gap-2 text-xs pt-1">
+                      {bestPercentage >= exam.passingScorePercent ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600 shrink-0" />
+                      ) : (
+                        <RotateCcw className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      )}
+                      <span className="text-slate-500">
+                        Best score:{' '}
+                        <span
+                          className={`font-semibold ${
+                            bestPercentage >= exam.passingScorePercent
+                              ? 'text-green-700'
+                              : 'text-slate-700'
+                          }`}
+                        >
+                          {bestPercentage}%
+                        </span>
+                        {' '}(pass: {exam.passingScorePercent}%){' '}
+                        · {attempts.length} attempt{attempts.length !== 1 ? 's' : ''}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Card footer action */}
+                <div className="px-5 pb-4 pt-1">
+                  {hasMissingImages ? (
+                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-200 rounded-lg">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      <span>Unavailable — missing images</span>
+                    </div>
+                  ) : stationCount === 0 ? (
+                    <div className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200 rounded-lg">
+                      <span>No stations added yet</span>
+                    </div>
+                  ) : (
+                    <button
+                      id={`start-exam-btn-${exam.id}`}
+                      onClick={() => onStartExam(exam)}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors min-h-[44px]"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-white" />
+                      <span>{hasPastAttempt ? 'Retake exam' : 'Start exam'}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Missing images detail modal (educator context) */}
+      {blockedExamModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-amber-700" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Missing specimen images</h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  "{blockedExamModal.examTitle}" cannot be started.
+                </p>
+              </div>
+            </div>
+
+            <ul className="text-xs text-slate-700 space-y-1 list-disc pl-5 max-h-40 overflow-y-auto">
+              {blockedExamModal.missing.map((m) => (
+                <li key={m.questionId}>
+                  <strong>{m.questionTitle}</strong> — image key{' '}
+                  <code className="font-mono bg-slate-100 px-1 rounded text-[11px]">{m.imageId}</code>
+                </li>
+              ))}
+            </ul>
+
+            <p className="text-xs text-slate-500">
+              Upload the missing images in the Educator Workspace to enable this exam.
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                onClick={() => setBlockedExamModal(null)}
+                className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  setBlockedExamModal(null);
+                  onNavigateToMissingImages();
+                }}
+                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-950 hover:bg-rose-900 rounded-lg transition-colors"
+              >
+                Go to Educator Workspace
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

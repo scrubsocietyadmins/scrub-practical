@@ -1,0 +1,6 @@
+{
+  "summary":  "Comprehensive implementation plan for Scrub Practical, a frontend-only medical practical examination platform featuring admin exam authoring, student OSCE/OSPE testing engine, offline ZIP package import/export, and Dexie IndexedDB persistence.",
+  "updatedAt":  "2026-10-29T23:08:41.129781614Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

@@ -1,0 +1,133 @@
+{
+  "formatVersion": "1.0.0",
+  "exportedAt": 1730246400000,
+  "subject": {
+    "id": "subj-surg-path-001",
+    "name": "General Surgery & Surgical Pathology",
+    "code": "SURG-401",
+    "description": "Clinical OSPE covering acute abdomen, vascular landmarks, and surgical specimens",
+    "color": "#881337"
+  },
+  "exam": {
+    "id": "exam-surg-demo-001",
+    "subjectId": "subj-surg-path-001",
+    "title": "Surgical Pathology & Operative Anatomy Mock OSPE",
+    "code": "SURG-OSPE-DEMO",
+    "description": "Comprehensive practical mock containing spotter pins, histology slides, clinical vignettes, and missing asset recovery demonstrations.",
+    "status": "draft",
+    "timingMode": "flexible",
+    "totalDurationMinutes": 15,
+    "stationDurationSeconds": 90,
+    "passingScorePercent": 60,
+    "shuffleQuestions": false,
+    "instructions": "Rotate stations when the OSPE bell rings. Enter identification keys or select multiple choice responses."
+  },
+  "questions": [
+    {
+      "id": "q-spotter-01",
+      "examId": "exam-surg-demo-001",
+      "orderIndex": 0,
+      "type": "spotter",
+      "title": "Station 01: Vascular Operative Anatomy",
+      "questionText": "Identify the major arterial trunk indicated by Pointer A.",
+      "imageId": "img-celiac-trunk-01",
+      "imageName": "celiac_axis_angiogram.jpg",
+      "spotterPin": {
+        "x": 48.5,
+        "y": 42.0,
+        "label": "Pointer A",
+        "pointerType": "arrow"
+      },
+      "spotterAnswerMode": "both",
+      "acceptableAnswers": [
+        "celiac trunk",
+        "celiac artery",
+        "celiac axis",
+        "truncus coeliacus"
+      ],
+      "options": [
+        { "id": "opt-1a", "text": "Celiac trunk", "isCorrect": true },
+        { "id": "opt-1b", "text": "Superior mesenteric artery", "isCorrect": false },
+        { "id": "opt-1c", "text": "Inferior mesenteric artery", "isCorrect": false },
+        { "id": "opt-1d", "text": "Left gastric artery", "isCorrect": false }
+      ],
+      "explanation": "The celiac trunk arises from the ventral abdominal aorta at the level of T12 immediately below the diaphragmatic aortic hiatus.",
+      "points": 2,
+      "stationDurationSeconds": 90
+    },
+    {
+      "id": "q-image-mcq-02",
+      "examId": "exam-surg-demo-001",
+      "orderIndex": 1,
+      "type": "image_mcq",
+      "title": "Station 02: Endocrine Histopathology",
+      "questionText": "Examine this thyroid FNA biopsy. What classic nuclear feature defines this neoplasm?",
+      "imageId": "img-thyroid-fna-missing-02",
+      "imageName": "papillary_thyroid_fna.jpg",
+      "options": [
+        { "id": "opt-2a", "text": "Orphan Annie eye ground-glass nuclei and nuclear pseudoinclusions", "isCorrect": true },
+        { "id": "opt-2b", "text": "Amyloid stroma staining positive with Congo red", "isCorrect": false },
+        { "id": "opt-2c", "text": "Pleomorphic spindle cells with frequent atypical mitoses", "isCorrect": false },
+        { "id": "opt-2d", "text": "Abundant Hurthle cells with granular eosinophilic cytoplasm", "isCorrect": false }
+      ],
+      "explanation": "Papillary thyroid carcinoma is characteristically identified by optically clear ground-glass nuclei (Orphan Annie eyes) and psammoma bodies.",
+      "points": 2,
+      "stationDurationSeconds": 90
+    },
+    {
+      "id": "q-clinical-mcq-03",
+      "examId": "exam-surg-demo-001",
+      "orderIndex": 2,
+      "type": "clinical_mcq",
+      "title": "Station 03: Surgical Triage",
+      "clinicalVignette": "A 24-year-old male presents with 14 hours of migratory periumbilical pain shifting to the right lower quadrant, low-grade pyrexia (38.1°C), and focal peritonism at McBurney's point. Alvarado score is 8.",
+      "questionText": "What is the most definitive immediate operative intervention?",
+      "options": [
+        { "id": "opt-3a", "text": "Emergency laparoscopic appendectomy", "isCorrect": true },
+        { "id": "opt-3b", "text": "Right hemicolectomy with primary ileocolic anastomosis", "isCorrect": false },
+        { "id": "opt-3c", "text": "Diagnostic colonoscopy and broad-spectrum IV antibiotics", "isCorrect": false },
+        { "id": "opt-3d", "text": "Percutaneous catheter drainage under ultrasound guidance", "isCorrect": false }
+      ],
+      "explanation": "An Alvarado score >=7 in a young adult male with clear peritoneal signs in the right iliac fossa warrants prompt surgical appendectomy.",
+      "points": 2,
+      "stationDurationSeconds": 90
+    },
+    {
+      "id": "q-text-mcq-04",
+      "examId": "exam-surg-demo-001",
+      "orderIndex": 3,
+      "type": "text_mcq",
+      "title": "Station 04: Surgical Principles",
+      "questionText": "During a Lichtenstein tension-free inguinal hernia repair, which nerve running on the anterior surface of the spermatic cord is at highest risk of entrapment?",
+      "options": [
+        { "id": "opt-4a", "text": "Ilioinguinal nerve (L1)", "isCorrect": true },
+        { "id": "opt-4b", "text": "Genital branch of genitofemoral nerve", "isCorrect": false },
+        { "id": "opt-4c", "text": "Lateral femoral cutaneous nerve", "isCorrect": false },
+        { "id": "opt-4d", "text": "Femoral nerve", "isCorrect": false }
+      ],
+      "explanation": "The ilioinguinal nerve travels through the superficial inguinal ring directly overlying the cord; inadvertent suture fixation leads to chronic postoperative neuralgia.",
+      "points": 1,
+      "stationDurationSeconds": 60
+    }
+  ],
+  "imageFiles": [
+    {
+      "id": "img-celiac-trunk-01",
+      "fileName": "celiac_axis_angiogram.jpg",
+      "mimeType": "image/jpeg",
+      "required": true,
+      "status": "available",
+      "altText": "Selective visceral angiogram showing trifurcation of the celiac axis",
+      "source": "ANGIOGRAPHY_SUITE"
+    },
+    {
+      "id": "img-thyroid-fna-missing-02",
+      "fileName": "papillary_thyroid_fna.jpg",
+      "mimeType": "image/jpeg",
+      "required": true,
+      "status": "missing",
+      "altText": "Thyroid aspirate requiring manual specimen upload in Missing Images Manager",
+      "source": "MANUAL_UPLOAD_REQUIRED"
+    }
+  ]
+}

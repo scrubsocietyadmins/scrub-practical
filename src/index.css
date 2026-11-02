@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    background-color: #f8fafc;
+  }
+}
+
+/* Custom scrollbars for high-density medical exam review */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================================================
+   Quiz Feedback & Answer Animations (Pure CSS, <600ms)
+   ============================================================ */
+
+/* Correct Option Pop / Pulse */
+@keyframes quizPopPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  40% {
+    transform: scale(1.028);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.anim-quiz-correct {
+  animation: quizPopPulse 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Wrong Option Shake */
+@keyframes quizShakeWrong {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-6px);
+  }
+  36% {
+    transform: translateX(6px);
+  }
+  54% {
+    transform: translateX(-4px);
+  }
+  72% {
+    transform: translateX(4px);
+  }
+  90% {
+    transform: translateX(-1px);
+  }
+}
+
+.anim-quiz-wrong {
+  animation: quizShakeWrong 480ms ease-in-out forwards;
+}
+
+/* Animated Checkmark Pop */
+@keyframes quizCheckmarkPop {
+  0% {
+    transform: scale(0) rotate(-25deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.22) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.anim-checkmark-pop {
+  animation: quizCheckmarkPop 380ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Pure CSS Confetti Burst Particles */
+@keyframes confettiBurst1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-38px, -48px) rotate(-45deg) scale(0.4); opacity: 0; }
+}
+@keyframes confettiBurst2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(38px, -52px) rotate(45deg) scale(0.4); opacity: 0; }
+}
+@keyframes confettiBurst3 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-50px, -18px) rotate(-70deg) scale(0.5); opacity: 0; }
+}
+@keyframes confettiBurst4 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(50px, -22px) rotate(60deg) scale(0.5); opacity: 0; }
+}
+@keyframes confettiBurst5 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-18px, -60px) rotate(30deg) scale(0.6); opacity: 0; }
+}
+@keyframes confettiBurst6 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(18px, -62px) rotate(-35deg) scale(0.6); opacity: 0; }
+}
+@keyframes confettiBurst7 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-30px, 20px) rotate(-15deg) scale(0.4); opacity: 0; }
+}
+@keyframes confettiBurst8 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(30px, 22px) rotate(25deg) scale(0.4); opacity: 0; }
+}
+
+.confetti-dot-1 { animation: confettiBurst1 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-2 { animation: confettiBurst2 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-3 { animation: confettiBurst3 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-4 { animation: confettiBurst4 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-5 { animation: confettiBurst5 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-6 { animation: confettiBurst6 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-7 { animation: confettiBurst7 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.confetti-dot-8 { animation: confettiBurst8 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-quiz-correct,
+  .anim-quiz-wrong,
+  .anim-checkmark-pop,
+  .confetti-dot-1,
+  .confetti-dot-2,
+  .confetti-dot-3,
+  .confetti-dot-4,
+  .confetti-dot-5,
+  .confetti-dot-6,
+  .confetti-dot-7,
+  .confetti-dot-8 {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+}
