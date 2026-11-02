@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import {
-  Stethoscope,
   BookOpen,
   TrendingUp,
   Shuffle,
@@ -10,6 +9,8 @@ import {
   VolumeX,
   RefreshCw,
   AlertCircle,
+  Moon,
+  Sun,
 } from 'lucide-react';
 
 export type MainNavTab = 'library' | 'practice' | 'progress' | 'educator';
@@ -36,6 +37,25 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSound,
   activeSessionBanner,
 }) => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem('scrub-practical-theme');
+      return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    document.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light';
+    try {
+      localStorage.setItem('scrub-practical-theme', isDarkMode ? 'dark' : 'light');
+    } catch {
+      // The theme still applies for this session if storage is unavailable.
+    }
+  }, [isDarkMode]);
+
   const studentTabs: Array<{ id: MainNavTab; label: string; shortLabel: string; icon: React.ElementType }> = [
     { id: 'library', label: 'Exam Library', shortLabel: 'Library', icon: BookOpen },
     { id: 'practice', label: 'Practice', shortLabel: 'Practice', icon: Shuffle },
@@ -70,9 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
             aria-label="Scrub Practical home"
           >
-            <div className="w-8 h-8 rounded-lg bg-rose-950 flex items-center justify-center text-white group-hover:bg-rose-900 transition-colors">
-              <Stethoscope className="w-4 h-4 text-rose-200" />
-            </div>
+            <img src="/logo.svg" alt="" className="w-9 h-9 object-contain" />
             <div className="leading-tight hidden sm:block">
               <span className="text-base font-bold tracking-tight text-slate-900">
                 Scrub <span className="text-rose-900">Practical</span>
@@ -98,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
                     id={`nav-tab-${tab.id}`}
                     onClick={() => onTabChange(tab.id)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
+                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[44px] ${
                       isActive
                         ? 'text-rose-950'
                         : 'text-slate-600 hover:text-slate-900'
@@ -132,7 +150,7 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={() => onTabChange(educatorTab.id)}
                     aria-current={isActive ? 'page' : undefined}
                     title="Educator Workspace — authoring, packages, backups"
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
+                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[44px] ${
                       isActive
                         ? 'text-rose-950'
                         : 'text-slate-500 hover:text-slate-800'
@@ -157,11 +175,23 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Actions */}
           <div className="flex items-center gap-1.5 shrink-0">
             <button
+              id="theme-toggle-btn"
+              type="button"
+              onClick={() => setIsDarkMode((current) => !current)}
+              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-pressed={isDarkMode}
+              className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px]"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" aria-hidden="true" /> : <Moon className="w-4 h-4" aria-hidden="true" />}
+              <span className="sr-only">{isDarkMode ? 'Light mode' : 'Dark mode'}</span>
+            </button>
+            <button
               id="sound-toggle-btn"
               onClick={onToggleSound}
               title={soundActive ? 'Bell audio: on — click to mute' : 'Bell audio: muted — click to enable'}
               aria-label={soundActive ? 'Mute OSPE bell sounds' : 'Enable OSPE bell sounds'}
-              className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium border transition-colors min-h-[36px] ${
+              className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium border transition-colors min-h-[44px] ${
                 soundActive
                   ? 'border-slate-200 text-slate-700 bg-white hover:bg-slate-50'
                   : 'border-slate-200 text-slate-400 bg-slate-50 hover:bg-white'
@@ -182,7 +212,7 @@ export const Header: React.FC<HeaderProps> = ({
                 id="reset-samples-btn"
                 onClick={onResetDefaults}
                 title="Restore default sample packages"
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors min-h-[36px]"
+                className="hidden xl:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors min-h-[44px]"
               >
                 <RefreshCw className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
                 <span>Samples</span>
@@ -194,3 +224,4 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
