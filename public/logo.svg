@@ -1,0 +1,161 @@
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 1000 1000" 
+  width="100%" 
+  height="100%"
+>
+  <defs>
+    <!-- Left 'S' Multi-Stop Purple/Magenta Linear Gradient -->
+    <linearGradient id="purpleGradient" x1="15%" y1="18%" x2="58%" y2="84%">
+      <stop offset="0%" stop-color="#461453" />
+      <stop offset="22%" stop-color="#58196c" />
+      <stop offset="46%" stop-color="#732287" />
+      <stop offset="72%" stop-color="#932b96" />
+      <stop offset="100%" stop-color="#9d3098" />
+    </linearGradient>
+
+    <!-- Right 'S' Periwinkle/Lavender Linear Gradient -->
+    <linearGradient id="blueGradient" x1="46%" y1="20%" x2="88%" y2="85%">
+      <stop offset="0%" stop-color="#848fe2" />
+      <stop offset="28%" stop-color="#7b78c6" />
+      <stop offset="55%" stop-color="#7272bf" />
+      <stop offset="82%" stop-color="#7381d9" />
+      <stop offset="100%" stop-color="#7a87dc" />
+    </linearGradient>
+
+    <!-- Left S Volumetric Inner Highlight -->
+    <linearGradient id="purpleGlowGradient" x1="15%" y1="20%" x2="60%" y2="85%">
+      <stop offset="0%" stop-color="#8b3ca0" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#b84ecb" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#e06ceb" stop-opacity="0.35" />
+    </linearGradient>
+
+    <!-- Right S Volumetric Inner Highlight -->
+    <linearGradient id="blueGlowGradient" x1="45%" y1="20%" x2="90%" y2="85%">
+      <stop offset="0%" stop-color="#a8b3ff" stop-opacity="0.4" />
+      <stop offset="50%" stop-color="#9aa2f5" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#a3b1ff" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Soft Gaussian Blur Filter for Tactile 3D Core -->
+    <filter id="tubularGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+    </filter>
+
+    <!-- 
+      Single S Centerline Path:
+      - Length & curvature verified for C1/C2 smoothness
+      - Starts at lower terminal (124, 690)
+      - Sweeps through bottom apex (315, 786)
+      - Loops up through right apex (506, 650)
+      - Glides through central diagonal spine (315, 500)
+      - Curves through left apex (124, 350)
+      - Sweeps through top apex (315, 214)
+      - Terminates at upper terminal (506, 310)
+    -->
+    <path 
+      id="base-s-spine" 
+      d="M 124,690 C 135,735 205,786 315,786 C 420,786 506,725 506,650 C 506,582 401,568 315,500 C 229,432 124,418 124,350 C 124,275 210,214 315,214 C 425,214 495,265 506,310" 
+    />
+  </defs>
+
+  <g id="layer-right-s" transform="translate(370, 0)">
+    <!-- Outer deep contour -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="#585faa" 
+      stroke-width="142" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+    <!-- Main periwinkle tubular body -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="url(#blueGradient)" 
+      stroke-width="138" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+    <!-- Volumetric core highlight -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="url(#blueGlowGradient)" 
+      stroke-width="64" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      filter="url(#tubularGlow)"
+    />
+    
+    <!-- Top Terminal Plus Badge -->
+    <!-- Dark Recessed Disc -->
+    <circle cx="506" cy="310" r="46" fill="#3e1a47" />
+    <!-- Pale Pink Medical Plus Sign (+) -->
+    <g id="medical-plus" fill="#f9dee5">
+      <rect x="498" y="288" width="16" height="44" rx="3.5" ry="3.5" />
+      <rect x="484" y="302" width="44" height="16" rx="3.5" ry="3.5" />
+    </g>
+  </g>
+
+  <g id="layer-left-s" opacity="0.88">
+    <!-- Outer deep contour -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="#320f3d" 
+      stroke-width="142" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+    <!-- Main vibrant purple-to-magenta tubular body -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="url(#purpleGradient)" 
+      stroke-width="138" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+    <!-- Volumetric core highlight -->
+    <use 
+      href="#base-s-spine" 
+      xlink:href="#base-s-spine"
+      fill="none" 
+      stroke="url(#purpleGlowGradient)" 
+      stroke-width="64" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      filter="url(#tubularGlow)"
+    />
+
+    <!-- Lower Terminal Heart & ECG Badge -->
+    <!-- Dark Recessed Disc -->
+    <circle cx="124" cy="690" r="46" fill="#340f3b" />
+
+    <!-- Pale Pink Heart Silhouette -->
+    <g id="badge-heart">
+      <path 
+        d="M 124, 715 C 122, 712 96, 694 96, 679 C 96, 669 105, 663 115, 667 C 120, 669 124, 674 124, 674 C 124, 674 128, 669 133, 667 C 143, 663 152, 669 152, 679 C 152, 694 126, 712 124, 715 Z"
+        fill="#f9dee5"
+      />
+      <!-- ECG / Cardiac Rhythm Wave Cutout -->
+      <path 
+        d="M 94, 690 L 108, 690 L 113, 696 L 121, 668 L 128, 706 L 134, 690 L 154, 690" 
+        fill="none" 
+        stroke="#340f3b" 
+        stroke-width="4.2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+</svg>
+
