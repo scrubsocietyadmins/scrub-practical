@@ -98,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
                     id={`nav-tab-${tab.id}`}
                     onClick={() => onTabChange(tab.id)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
+                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[44px] ${
                       isActive
                         ? 'text-rose-950'
                         : 'text-slate-600 hover:text-slate-900'
@@ -132,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={() => onTabChange(educatorTab.id)}
                     aria-current={isActive ? 'page' : undefined}
                     title="Educator Workspace — authoring, packages, backups"
-                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
+                    className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap min-h-[44px] ${
                       isActive
                         ? 'text-rose-950'
                         : 'text-slate-500 hover:text-slate-800'
@@ -161,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onToggleSound}
               title={soundActive ? 'Bell audio: on — click to mute' : 'Bell audio: muted — click to enable'}
               aria-label={soundActive ? 'Mute OSPE bell sounds' : 'Enable OSPE bell sounds'}
-              className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium border transition-colors min-h-[36px] ${
+              className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium border transition-colors min-h-[44px] ${
                 soundActive
                   ? 'border-slate-200 text-slate-700 bg-white hover:bg-slate-50'
                   : 'border-slate-200 text-slate-400 bg-slate-50 hover:bg-white'
@@ -182,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({
                 id="reset-samples-btn"
                 onClick={onResetDefaults}
                 title="Restore default sample packages"
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors min-h-[36px]"
+                className="hidden xl:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors min-h-[44px]"
               >
                 <RefreshCw className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
                 <span>Samples</span>
@@ -194,3 +194,4 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+

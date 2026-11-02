@@ -40,6 +40,7 @@ interface PersistedExamProgress {
   answers: Record<string, StudentStationAnswer>;
   startTimestamp: number; // wall-clock time the exam started, for accurate restoration
   totalTimeSpentSeconds: number;
+  stationStartedAt?: number;
 }
 
 interface PacingAlert {
@@ -81,6 +82,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   );
   // Elapsed time (all modes)
   const [totalTimeSpentSeconds, setTotalTimeSpentSeconds] = useState<number>(0);
+  const [stationStartedAt, setStationStartedAt] = useState<number>(Date.now());
 
   // Modals
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
@@ -98,6 +100,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   const warnedTotal60sRef = useRef<boolean>(false);
   const warnedTotal30sRef = useRef<boolean>(false);
   const timeExpiredRef = useRef<boolean>(false);
+  const stationBellRangRef = useRef<boolean>(false);
+  const stationTimerInitializedRef = useRef<boolean>(false);
+  const restoredProgressRef = useRef<PersistedExamProgress | null>(null);
+  const skipInitialProgressSaveRef = useRef<boolean>(false);
 
   const hasRestoredRef = useRef<boolean>(false);
   const currentStation = questions[currentStationIndex];
@@ -120,6 +126,15 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       if (savedRaw) {
         const saved: PersistedExamProgress = JSON.parse(savedRaw);
         if (saved && typeof saved === 'object') {
+          const restoredStationIndex =
+            typeof saved.currentStationIndex === 'number' &&
+            saved.currentStationIndex >= 0 &&
+            saved.currentStationIndex < questions.length
+              ? saved.currentStationIndex
+              : 0;
+          restoredProgressRef.current = saved;
+          skipInitialProgressSaveRef.current = true;
+
           if (
             typeof saved.currentStationIndex === 'number' &&
             saved.currentStationIndex >= 0 &&
@@ -129,6 +144,17 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           }
           if (saved.answers && typeof saved.answers === 'object') {
             setAnswers(saved.answers);
+          }
+
+          if (isBellRing) {
+            const restoredStation = questions[restoredStationIndex];
+            const allocatedTime = restoredStation?.stationDurationSeconds || exam.stationDurationSeconds || 90;
+            const stationStart = typeof saved.stationStartedAt === 'number'
+              ? saved.stationStartedAt
+              : Date.now();
+            const stationElapsed = Math.floor((Date.now() - stationStart) / 1000);
+            setStationStartedAt(stationStart);
+            setStationTimeRemaining(Math.max(0, allocatedTime - stationElapsed));
           }
 
           // Recompute elapsed time using wall-clock timestamp
@@ -156,6 +182,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   // Persist progress
   useEffect(() => {
     if (!hasRestoredRef.current) return;
+    if (skipInitialProgressSaveRef.current) {
+      skipInitialProgressSaveRef.current = false;
+      return;
+    }
     try {
       const existing = localStorage.getItem(storageKey);
       let startTimestamp = Date.now();
@@ -172,12 +202,13 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         answers,
         startTimestamp,
         totalTimeSpentSeconds,
+        stationStartedAt,
       };
       localStorage.setItem(storageKey, JSON.stringify(toSave));
     } catch (err) {
       console.warn('Error saving exam progress:', err);
     }
-  }, [storageKey, currentStationIndex, answers, totalTimeSpentSeconds]);
+  }, [storageKey, currentStationIndex, answers, totalTimeSpentSeconds, stationStartedAt]);
 
   // Load image when station changes
   useEffect(() => {
@@ -187,16 +218,36 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     warnedStation60sRef.current = false;
     warnedStation30sRef.current = false;
     warnedTenSecondsRef.current = false;
+    stationBellRangRef.current = false;
 
     const allocatedTime = currentStation.stationDurationSeconds || exam.stationDurationSeconds || 90;
-    setStationTimeRemaining(allocatedTime);
+    const restoredProgress = restoredProgressRef.current;
+    if (
+      isBellRing &&
+      restoredProgress &&
+      restoredProgress.currentStationIndex === currentStationIndex &&
+      typeof restoredProgress.stationStartedAt === 'number'
+    ) {
+      const elapsed = Math.floor((Date.now() - restoredProgress.stationStartedAt) / 1000);
+      setStationStartedAt(restoredProgress.stationStartedAt);
+      setStationTimeRemaining(Math.max(0, allocatedTime - elapsed));
+      restoredProgressRef.current = null;
+    } else {
+      if (stationTimerInitializedRef.current) {
+        restoredProgressRef.current = null;
+      }
+      const now = Date.now();
+      setStationStartedAt(now);
+      setStationTimeRemaining(allocatedTime);
+    }
+    stationTimerInitializedRef.current = true;
 
     if (currentStation.imageId) {
       getImageObjectUrl(currentStation.imageId).then(setCurrentImageUrl);
     } else {
       setCurrentImageUrl(null);
     }
-  }, [currentStationIndex, currentStation, exam.stationDurationSeconds]);
+  }, [currentStationIndex, currentStation, exam.stationDurationSeconds, isBellRing]);
 
   // Countdown timer
   useEffect(() => {
@@ -257,9 +308,12 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
             playWarningChime();
           }
           if (prev <= 1) {
-            playStationBell();
-            if (autoAdvanceOnBell && currentStationIndex < questions.length - 1) {
-              setCurrentStationIndex((curr) => curr + 1);
+            if (!stationBellRangRef.current) {
+              stationBellRangRef.current = true;
+              playStationBell();
+              if (autoAdvanceOnBell && currentStationIndex < questions.length - 1) {
+                setCurrentStationIndex((curr) => curr + 1);
+              }
             }
             return 0;
           }
@@ -910,3 +964,4 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
     </div>
   );
 };
+

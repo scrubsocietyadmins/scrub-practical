@@ -51,6 +51,7 @@ export default function App() {
 
   // Self-Grading Session State (persisted in IndexedDB)
   const [activeSelfGrading, setActiveSelfGrading] = useState<ActiveSelfGradingState | null>(null);
+  const [isSelfGradingVisible, setIsSelfGradingVisible] = useState(false);
 
   // Educator workspace sub-tab state
   const [educatorSubTab, setEducatorSubTab] = useState<'authoring' | 'packages' | 'missing_images' | 'backup'>('authoring');
@@ -75,6 +76,7 @@ export default function App() {
                 exam,
                 questions,
               });
+              setIsSelfGradingVisible(true);
             }
           }
         } catch (sessionErr) {
@@ -114,6 +116,12 @@ export default function App() {
 
   // Launch Candidate Pre-Start Modal
   const handleOpenPreStart = async (exam: Exam) => {
+    if (activeSelfGrading && !activeSelfGrading.session.isFinalized) {
+      showToast('Resume and finish grading your current attempt before starting another exam.', 'info');
+      setIsSelfGradingVisible(true);
+      return;
+    }
+
     const questionsCount = await db.questions.where('examId').equals(exam.id).count();
     setPreStartStationCount(questionsCount);
     setPreStartExam(exam);
@@ -153,6 +161,7 @@ export default function App() {
     await saveSelfGradingSession(session);
 
     setActiveSelfGrading({ session, exam, questions });
+    setIsSelfGradingVisible(true);
     setActiveExamRunning(null);
 
     showToast('Exam submitted. Review and grade your answers below.', 'info');
@@ -161,13 +170,17 @@ export default function App() {
   const handleRetakeExam = () => {
     const examToRetake = activeSelfGrading?.exam;
     setActiveSelfGrading(null);
+    setIsSelfGradingVisible(false);
     if (examToRetake) {
       handleOpenPreStart(examToRetake);
     }
   };
 
   const handleBackToCatalog = () => {
-    setActiveSelfGrading(null);
+    if (activeSelfGrading?.session.isFinalized) {
+      setActiveSelfGrading(null);
+    }
+    setIsSelfGradingVisible(false);
     setActiveExamRunning(null);
     setActiveTab('library');
   };
@@ -206,6 +219,7 @@ export default function App() {
     };
 
     setActiveSelfGrading({ session, exam, questions });
+    setIsSelfGradingVisible(true);
   };
 
   // Direct launcher from Educator Workspace
@@ -217,12 +231,11 @@ export default function App() {
   };
 
   // Session resume banner data
-  const sessionBanner = activeSelfGrading && !activeSelfGrading.session.isFinalized
+  const sessionBanner = activeSelfGrading && !activeSelfGrading.session.isFinalized && !isSelfGradingVisible
     ? {
         label: `Grading in progress · ${activeSelfGrading.exam.title}`,
         onResume: () => {
-          // activeSelfGrading is already set; just navigate away from current tab will show it
-          setActiveTab('library'); // triggers re-render showing SelfGradingView
+          setIsSelfGradingVisible(true);
         },
       }
     : null;
@@ -254,14 +267,13 @@ export default function App() {
   }
 
   // 2. Self-grading / review mode
-  if (activeSelfGrading) {
+  if (activeSelfGrading && isSelfGradingVisible) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
         <Header
           activeTab="library"
           onTabChange={(tab) => {
-            // If navigating away from grading, preserve state but switch view
-            setActiveSelfGrading(null);
+            setIsSelfGradingVisible(false);
             setActiveTab(tab);
           }}
           onResetDefaults={handleResetDefaults}
@@ -273,8 +285,17 @@ export default function App() {
             session={activeSelfGrading.session}
             exam={activeSelfGrading.exam}
             questions={activeSelfGrading.questions}
-            onFinalizeComplete={(_attempt) => {
-              // attempt is saved inside SelfGradingView; nothing needed here
+            onFinalizeComplete={(attempt) => {
+              setActiveSelfGrading((active) => active ? {
+                ...active,
+                session: {
+                  ...active.session,
+                  grades: attempt.grades || active.session.grades,
+                  completedAt: attempt.completedAt,
+                  isFinalized: true,
+                  updatedAt: attempt.completedAt,
+                },
+              } : active);
             }}
             onRetakeExam={handleRetakeExam}
             onBackToCatalog={handleBackToCatalog}
@@ -317,6 +338,11 @@ export default function App() {
         {activeTab === 'practice' && (
           <ShuffleDashboard
             onStartExam={(exam, subject, questions, autoAdvanceOnBell) => {
+              if (activeSelfGrading && !activeSelfGrading.session.isFinalized) {
+                showToast('Resume and finish grading your current attempt before starting another practice session.', 'info');
+                setIsSelfGradingVisible(true);
+                return;
+              }
               setActiveExamRunning({ exam, subject, questions, autoAdvanceOnBell });
             }}
             onNavigateToAuthoring={() => {
@@ -360,3 +386,4 @@ export default function App() {
     </div>
   );
 }
+
