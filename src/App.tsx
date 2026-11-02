@@ -233,7 +233,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] flex items-center justify-center p-4">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800/90 p-2 shadow-lg border border-purple-200/50 dark:border-purple-800/40 mx-auto flex items-center justify-center">
-            <img src="/logo.png" alt="Scrub Practical" className="w-full h-full object-contain animate-pulse" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Scrub Practical" className="w-full h-full object-contain animate-pulse" />
           </div>
           <div className="space-y-1">
             <div className="w-6 h-6 border-2 border-purple-900 dark:border-purple-400 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -365,3 +365,4 @@ export default function App() {
     </div>
   );
 }
+

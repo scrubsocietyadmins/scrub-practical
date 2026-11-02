@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-slate-800/80 p-0.5 flex items-center justify-center border border-purple-200/60 dark:border-purple-800/50 shadow-xs group-hover:scale-105 transition-transform overflow-hidden">
               <img
-                src="/logo.png"
+                src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="Scrub Practical SS Logo"
                 className="w-full h-full object-contain"
               />
@@ -218,3 +218,4 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
