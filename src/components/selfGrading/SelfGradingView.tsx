@@ -373,7 +373,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
           } space-y-5`}
         >
           {/* Question Details Card */}
-          <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
+          <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
               <span className="font-semibold uppercase tracking-wider text-purple-700 dark:text-purple-400">
                 {currentQuestion.type.replace('_', ' ')}
@@ -386,7 +386,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
           </div>
 
           {/* 1. Student's Submitted Answer Container */}
-          <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
+          <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
                 <User className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
@@ -425,7 +425,7 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
       {/* Confirmation Step Before Finalizing Grades */}
       {confirmModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-850 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3">
               <div
                 className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-xs ${

@@ -25,7 +25,7 @@ export const DistributionPreview: React.FC<DistributionPreviewProps> = ({
 
   if (!preview || preview.groups.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-850 rounded-2xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs text-center">
+      <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs text-center">
         <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-3">
           <PieChart className="w-6 h-6" />
         </div>
@@ -38,7 +38,7 @@ export const DistributionPreview: React.FC<DistributionPreviewProps> = ({
   const activeGroups = preview.groups.filter((g) => g.allocatedCount > 0);
 
   return (
-    <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-5">
+    <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div>
           <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export const DistributionPreview: React.FC<DistributionPreviewProps> = ({
                         className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs border ${
                           lecAllocated
                             ? 'bg-white dark:bg-slate-800 border-slate-200/80 dark:border-slate-700 text-slate-800 dark:text-slate-200 shadow-2xs'
-                            : 'bg-slate-100/50 dark:bg-slate-850/50 border-transparent text-slate-400'
+                            : 'bg-slate-100/50 dark:bg-slate-800/40 border-transparent text-slate-400'
                         }`}
                       >
                         <div className="flex items-center gap-1.5 truncate">

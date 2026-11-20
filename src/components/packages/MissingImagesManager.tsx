@@ -214,7 +214,7 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
   return (
     <div className="space-y-6">
       {/* Overview Banner */}
-      <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-4">
+      <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Specimen &amp; Missing Images Directory</h3>
@@ -285,14 +285,14 @@ export const MissingImagesManager: React.FC<MissingImagesManagerProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by ID, filename, station..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-700/30 focus:border-purple-700 bg-slate-50/60 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-750 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
+              className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-700/30 focus:border-purple-700 bg-slate-50/60 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-700 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
             />
           </div>
         </div>
       </div>
 
       {/* Images Table / List */}
-      <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs">
+      <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs">
         {filteredImages.length === 0 ? (
           <div className="p-12 text-center space-y-2">
             <FileQuestion className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />

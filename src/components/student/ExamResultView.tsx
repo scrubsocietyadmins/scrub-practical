@@ -284,7 +284,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       </div>
 
       {/* Candidate Personal Study Notes Card */}
-      <div className="bg-white dark:bg-slate-850 rounded-xl border border-amber-200 dark:border-amber-900/60 p-5 shadow-2xs space-y-3 bg-amber-50/20 dark:bg-amber-950/20">
+      <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-amber-200 dark:border-amber-900/60 p-5 shadow-2xs space-y-3 bg-amber-50/20 dark:bg-amber-950/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 flex items-center justify-center shrink-0">
@@ -342,7 +342,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
           return (
             <div
               key={q.id}
-              className={`bg-white dark:bg-slate-850 rounded-xl border overflow-hidden shadow-2xs transition-all ${
+              className={`bg-white dark:bg-slate-800/90 rounded-xl border overflow-hidden shadow-2xs transition-all ${
                 res.isCorrect ? 'border-emerald-200 dark:border-emerald-800' : 'border-rose-200 dark:border-rose-800'
               }`}
             >
@@ -350,8 +350,8 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
               <div
                 className={`px-5 py-3 border-b flex items-center justify-between gap-3 ${
                   res.isCorrect
-                    ? 'bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-100 dark:border-emerald-850'
-                    : 'bg-rose-50/60 dark:bg-rose-950/40 border-rose-100 dark:border-rose-850'
+                    ? 'bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-100 dark:border-emerald-800'
+                    : 'bg-rose-50/60 dark:bg-rose-950/40 border-rose-100 dark:border-rose-800'
                 }`}
               >
                 <div className="flex items-center gap-2.5">

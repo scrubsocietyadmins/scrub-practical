@@ -279,7 +279,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
             className={`relative border-2 border-dashed rounded-2xl p-8 sm:p-12 text-center transition-all ${
               isDragging
                 ? 'border-purple-700 bg-purple-50/50 dark:bg-purple-950/30 scale-[1.01]'
-                : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-850 hover:border-slate-400 dark:hover:border-slate-600'
+                : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/90 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <div className="max-w-md mx-auto space-y-4">
@@ -321,7 +321,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
           </div>
 
           {/* Installed Packages Table */}
-          <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs space-y-4 p-6">
+          <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden shadow-2xs space-y-4 p-6">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
@@ -416,7 +416,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
       {/* Subtab 3: Backup & Restore */}
       {activeSubTab === 'backup' && (
         <div className="space-y-6">
-          <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-6">
+          <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-2xs space-y-6">
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Clinical Database Backup &amp; Disaster Recovery</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -601,7 +601,7 @@ export const PackageHub: React.FC<PackageHubProps> = ({
                 <>
                   <button
                     onClick={() => handleConfirmImport('keep_both')}
-                    className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 rounded-lg shadow-2xs cursor-pointer"
+                    className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg shadow-2xs cursor-pointer"
                   >
                     Keep Both (Import as Copy)
                   </button>

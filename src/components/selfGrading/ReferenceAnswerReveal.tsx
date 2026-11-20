@@ -84,7 +84,7 @@ export const ReferenceAnswerReveal: React.FC<ReferenceAnswerRevealProps> = ({
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 overflow-hidden space-y-0">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/90 overflow-hidden space-y-0">
       {/* Official / Model answer */}
       <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-2">

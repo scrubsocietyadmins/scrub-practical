@@ -290,7 +290,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
 
       {totalAttempts === 0 ? (
         /* Empty State */
-        <div className="p-12 text-center bg-white dark:bg-slate-850 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 space-y-4">
+        <div className="p-12 text-center bg-white dark:bg-slate-800/90 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 space-y-4">
           <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-400 flex items-center justify-center mx-auto">
             <TrendingUp className="w-6 h-6" />
           </div>
@@ -322,7 +322,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
         <div className="space-y-8">
           {/* Key Metric Indicators (KPIs) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
+            <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
               <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Total Exams Taken
               </span>
@@ -334,7 +334,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
+            <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
               <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Average Score
               </span>
@@ -346,7 +346,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
+            <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
               <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Pass Rate
               </span>
@@ -360,7 +360,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
+            <div className="bg-white dark:bg-slate-800/90 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-1">
               <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Peak Score
               </span>
@@ -376,7 +376,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
           {/* Visual Charts Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* 1. Score Trends Over Time Line Chart */}
-            <div className="bg-white dark:bg-slate-850 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-4">
+            <div className="bg-white dark:bg-slate-800/90 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                   Score Trajectory Over Time
@@ -457,7 +457,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
             </div>
 
             {/* 2. Average Score by Subject Bar Chart (Clickable for drilldown) */}
-            <div className="bg-white dark:bg-slate-850 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3">
+            <div className="bg-white dark:bg-slate-800/90 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -623,7 +623,7 @@ export const PerformanceHistory: React.FC<PerformanceHistoryProps> = ({
           {/* Detailed Subject Drilldown / Attempts Log Table */}
           <div
             ref={attemptsTableRef}
-            className={`bg-white dark:bg-slate-850 rounded-xl border transition-all overflow-hidden shadow-2xs space-y-4 p-6 ${
+            className={`bg-white dark:bg-slate-800/90 rounded-xl border transition-all overflow-hidden shadow-2xs space-y-4 p-6 ${
               selectedSubject
                 ? 'border-purple-600/40 ring-2 ring-purple-600/10'
                 : 'border-slate-200 dark:border-slate-800'

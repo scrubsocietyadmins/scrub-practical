@@ -211,7 +211,7 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
 
       {/* Main Configuration Layout */}
       {totalAvailable === 0 ? (
-        <div className="bg-white dark:bg-slate-850 rounded-2xl p-12 text-center border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-12 text-center border border-slate-200 dark:border-slate-800">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
           <h3 className="text-base font-bold text-slate-900 dark:text-white">No Questions in Question Bank</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
@@ -241,7 +241,7 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             />
 
             {/* 2. Topic Group Filter Selector */}
-            <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300">
@@ -300,7 +300,7 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             </div>
 
             {/* 3. Examination Options */}
-            <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Clock className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                 Session Settings
@@ -374,7 +374,7 @@ export const ShuffleDashboard: React.FC<ShuffleDashboardProps> = ({
             />
 
             {/* Explanatory Callout */}
-            <div className="bg-slate-50 dark:bg-slate-850 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-2">
+            <div className="bg-slate-50 dark:bg-slate-800/90 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-2">
               <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
                 <HelpCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 How the Stratified Practice Engine Works

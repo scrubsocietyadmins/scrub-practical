@@ -22,7 +22,7 @@ export const SelfGradingControls: React.FC<SelfGradingControlsProps> = ({
   const awardedPoints = currentGrade !== undefined ? Math.round(currentGrade * maxPoints * 10) / 10 : null;
 
   return (
-    <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 shadow-2xs space-y-3.5">
+    <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/90 shadow-2xs space-y-3.5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2 flex-wrap">
           <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">

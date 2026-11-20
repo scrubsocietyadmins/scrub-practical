@@ -542,7 +542,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
                                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded border transition-colors cursor-pointer ${
                                     pointerType === pt.id
                                       ? 'bg-purple-700 text-white border-purple-700'
-                                      : 'bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-650'
+                                      : 'bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600'
                                   }`}
                                 >
                                   <Icon className="w-3.5 h-3.5" />
@@ -562,7 +562,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
                             value={pointerLabel}
                             onChange={(e) => handlePointerLabelChange(e.target.value)}
                             placeholder="e.g. Pointer A, Pointer 1"
-                            className="w-full px-2.5 py-1 text-xs border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-750 text-slate-900 dark:text-white"
+                            className="w-full px-2.5 py-1 text-xs border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                           />
                         </div>
                       </div>
@@ -590,7 +590,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
                                   });
                                 }}
                                 placeholder="50"
-                                className="w-14 px-1.5 py-0.5 border border-slate-300 dark:border-slate-750 rounded text-center text-xs focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                                className="w-14 px-1.5 py-0.5 border border-slate-300 dark:border-slate-700 rounded text-center text-xs focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                               />
                               <span>%</span>
                             </label>
@@ -613,7 +613,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
                                   });
                                 }}
                                 placeholder="50"
-                                className="w-14 px-1.5 py-0.5 border border-slate-300 dark:border-slate-750 rounded text-center text-xs focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                                className="w-14 px-1.5 py-0.5 border border-slate-300 dark:border-slate-700 rounded text-center text-xs focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                               />
                               <span>%</span>
                             </label>
@@ -832,7 +832,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
                       placeholder={`Option ${String.fromCharCode(65 + idx)}`}
                       value={opt.text}
                       onChange={(e) => handleOptionChange(idx, e.target.value)}
-                      className="flex-1 px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-750 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      className="flex-1 px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
 
                     {options.length > 2 && (

@@ -59,6 +59,7 @@ export default function App() {
 
   // Self-Grading Session State (persisted in IndexedDB)
   const [activeSelfGrading, setActiveSelfGrading] = useState<ActiveSelfGradingState | null>(null);
+  const [pendingGradingSession, setPendingGradingSession] = useState<ActiveSelfGradingState | null>(null);
 
   // Interrupted Running Exam State (persisted in localStorage)
   const [interruptedExam, setInterruptedExam] = useState<InterruptedExamState | null>(null);
@@ -115,7 +116,9 @@ export default function App() {
               .sortBy('orderIndex');
 
             if (exam && questions.length > 0) {
-              setActiveSelfGrading({
+              // Always land on Home (library) on boot; do not hijack view into grading screen.
+              // Instead, preserve as a pending session visible via the header resume banner.
+              setPendingGradingSession({
                 session: activeSession,
                 exam,
                 questions,
@@ -212,6 +215,9 @@ export default function App() {
   };
 
   const handleBackToCatalog = () => {
+    if (activeSelfGrading && !activeSelfGrading.session.isFinalized) {
+      setPendingGradingSession(activeSelfGrading);
+    }
     setActiveSelfGrading(null);
     setActiveExamRunning(null);
     setActiveTab('library');
@@ -305,8 +311,15 @@ export default function App() {
     ? {
         label: `Grading in progress · ${activeSelfGrading.exam.title}`,
         onResume: () => {
-          // activeSelfGrading is already set; just navigate away from current tab will show it
-          setActiveTab('library'); // triggers re-render showing SelfGradingView
+          setActiveTab('library');
+        },
+      }
+    : pendingGradingSession
+    ? {
+        label: `Grading pending · ${pendingGradingSession.exam.title}`,
+        onResume: () => {
+          setActiveSelfGrading(pendingGradingSession);
+          setPendingGradingSession(null);
         },
       }
     : interruptedExam
@@ -356,7 +369,10 @@ export default function App() {
         <Header
           activeTab="library"
           onTabChange={(tab) => {
-            // If navigating away from grading, preserve state but switch view
+            // If navigating away from grading, preserve state in pending session but switch view
+            if (!activeSelfGrading.session.isFinalized) {
+              setPendingGradingSession(activeSelfGrading);
+            }
             setActiveSelfGrading(null);
             setActiveTab(tab);
           }}
@@ -370,7 +386,7 @@ export default function App() {
             exam={activeSelfGrading.exam}
             questions={activeSelfGrading.questions}
             onFinalizeComplete={(_attempt) => {
-              // attempt is saved inside SelfGradingView; nothing needed here
+              setPendingGradingSession(null);
             }}
             onRetakeExam={handleRetakeExam}
             onBackToCatalog={handleBackToCatalog}

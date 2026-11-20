@@ -100,7 +100,7 @@ export const QuestionList: React.FC<QuestionListProps> = ({
       </div>
 
       {questions.length === 0 ? (
-        <div className="p-8 text-center bg-white dark:bg-slate-850 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+        <div className="p-8 text-center bg-white dark:bg-slate-800/90 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
           <Crosshair className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
           <p className="text-sm font-bold text-slate-800 dark:text-slate-200">No stations created yet</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">
@@ -118,7 +118,7 @@ export const QuestionList: React.FC<QuestionListProps> = ({
           {questions.map((q, idx) => (
             <div
               key={q.id}
-              className="bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/80 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-2xs"
+              className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-2xs"
             >
               <div className="flex items-start gap-3 flex-1 min-w-0">
                 <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono font-bold text-xs flex items-center justify-center shrink-0">

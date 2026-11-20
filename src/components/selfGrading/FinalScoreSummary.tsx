@@ -45,7 +45,7 @@ export const FinalScoreSummary: React.FC<FinalScoreSummaryProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6 transition-colors">
+    <div className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6 transition-colors">
       {/* Result banner */}
       <div className="flex flex-col sm:flex-row items-start justify-between gap-5 pb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-4">

@@ -37,7 +37,7 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
   return (
     <div className="space-y-6">
       {/* Header and Filter Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-800/90 p-4 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors">
         <div>
           <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
             <span>Comprehensive Question Evaluation Review</span>
@@ -138,7 +138,7 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
           return (
             <div
               key={q.id}
-              className="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden transition-colors"
+              className="bg-white dark:bg-slate-800/90 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden transition-colors"
             >
               {/* Question Header & Awarded Mark Badge */}
               <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/60 dark:bg-slate-800/50">

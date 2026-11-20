@@ -459,7 +459,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                   selectedSubjectId === 'all'
                     ? 'bg-purple-700 text-white shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 All Subjects ({exams.length})
@@ -474,7 +474,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                       isSelected
                         ? 'bg-purple-700 text-white shadow-xs'
-                        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750'
+                        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <span
@@ -527,7 +527,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Exam Cards Grid */}
           {filteredExams.length === 0 ? (
-            <div className="p-12 text-center bg-white dark:bg-slate-850 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 space-y-3">
+            <div className="p-12 text-center bg-white dark:bg-slate-800/90 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 space-y-3">
               <Layers className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">No practical exams found</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
@@ -556,7 +556,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 return (
                   <div
                     key={exam.id}
-                    className="bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/80 rounded-xl overflow-hidden shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 transition-all flex flex-col justify-between"
+                    className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-xl overflow-hidden shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 transition-all flex flex-col justify-between"
                   >
                     <div className="p-5 space-y-3">
                       <div className="flex items-center justify-between gap-2">

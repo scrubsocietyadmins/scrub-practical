@@ -495,7 +495,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               ? 'bg-red-50 dark:bg-red-950/80 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200'
               : activePacingAlert.severity === 'warning'
               ? 'bg-amber-50 dark:bg-amber-950/80 border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200'
-              : 'bg-slate-50 dark:bg-slate-850 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200'
+              : 'bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200'
           }`}
         >
           <Timer className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -607,7 +607,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 className={`p-2 rounded-lg border transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer ${
                   currentAnswer.isFlagged
                     ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300'
-                    : 'bg-white dark:bg-slate-850 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <Bookmark className={`w-4 h-4 ${currentAnswer.isFlagged ? 'fill-amber-500 text-amber-500' : ''}`} aria-hidden="true" />
@@ -619,7 +619,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 onClick={() => setIsStationDrawerOpen(true)}
                 title="View Stations Roster"
                 aria-label="Open station roster"
-                className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors min-h-[36px] cursor-pointer"
+                className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors min-h-[36px] cursor-pointer"
               >
                 <Menu className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" aria-hidden="true" />
                 <span className="hidden sm:inline">Answered:</span>
@@ -638,7 +638,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 }}
                 title={soundOn ? 'Mute audio chimes' : 'Enable audio chimes'}
                 aria-label={soundOn ? 'Mute OSPE bell sounds' : 'Enable OSPE bell sounds'}
-                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
               >
                 {soundOn ? (
                   <Volume2 className="w-4 h-4 text-purple-700 dark:text-purple-400" aria-hidden="true" />
@@ -653,7 +653,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 onClick={() => setIsLeaveConfirmOpen(true)}
                 title="Leave exam session"
                 aria-label="Leave exam session"
-                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
               >
                 <LogOut className="w-4 h-4" aria-hidden="true" />
               </button>
@@ -706,7 +706,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           } space-y-4`}
         >
           {/* Station Question Card */}
-          <div className="bg-white dark:bg-slate-850 p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div className="bg-white dark:bg-slate-800/90 p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <div className="space-y-1.5 mb-4">
               <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span className="font-semibold uppercase tracking-wide text-purple-700 dark:text-purple-400">
@@ -962,7 +962,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       {/* Station Roster Drawer Modal */}
       {isStationDrawerOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Station roster">
-          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-5 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-lg w-full p-5 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">Stations Roster</h3>
@@ -1032,7 +1032,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       {/* Submit Confirmation Modal */}
       {isSubmitConfirmOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Submit exam">
-          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-950/60 flex items-center justify-center shrink-0">
                 <Send className="w-5 h-5 text-purple-700 dark:text-purple-400" />
@@ -1081,7 +1081,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       {/* Leave Session Confirmation Modal */}
       {isLeaveConfirmOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Leave session">
-          <div className="bg-white dark:bg-slate-850 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-6 space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center shrink-0">
                 <LogOut className="w-5 h-5 text-amber-600 dark:text-amber-400" />

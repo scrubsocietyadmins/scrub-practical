@@ -38,7 +38,7 @@ export const QuestionCountSelector: React.FC<QuestionCountSelectorProps> = ({
   const percentOfBank = safeMax > 0 ? Math.round((safeCount / safeMax) * 100) : 0;
 
   return (
-    <div className="bg-white dark:bg-slate-850 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-5">
+    <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300">
