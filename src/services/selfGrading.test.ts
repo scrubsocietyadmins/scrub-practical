@@ -227,4 +227,72 @@ console.log('Test 6: Independent retake attempts without overwriting previous hi
   console.log('✓ Test 6 Passed: Retake creates new independent attempt while retaining history.');
 }
 
+// Test 7: New Question Types (identify & mention_characters)
+console.log('Test 7: Evaluating identify and mention_characters question types with manual self-grading...');
+{
+  const newQuestions: Question[] = [
+    {
+      id: 'q-id-01',
+      examId: 'exam-upper-limb-01',
+      orderIndex: 0,
+      type: 'identify',
+      questionText: 'Identify the specimen organ and pathological lesion.',
+      referenceAnswer: 'Spleen with caseating granulomatous inflammation (tuberculosis)',
+      points: 2,
+      explanation: 'Characteristic caseous necrosis and Langhans giant cells.',
+    },
+    {
+      id: 'q-mention-01',
+      examId: 'exam-upper-limb-01',
+      orderIndex: 1,
+      type: 'mention_characters',
+      questionText: 'Mention three cardinal microscopic features of papillary thyroid carcinoma.',
+      referenceAnswer: '1. Orphan Annie eye nuclei\n2. Nuclear pseudoinclusions and grooves\n3. Psammoma bodies',
+      points: 3,
+      explanation: 'Ground-glass nuclei and psammomatous calcifications are diagnostic.',
+    },
+  ];
+
+  const studentAnswers = {
+    'q-id-01': {
+      questionId: 'q-id-01',
+      typedAnswer: 'Spleen showing tuberculosis',
+      isFlagged: false,
+      timeSpentSeconds: 45,
+    },
+    'q-mention-01': {
+      questionId: 'q-mention-01',
+      typedAnswer: '1. Orphan annie nuclei\n2. Nuclear grooves',
+      isFlagged: false,
+      timeSpentSeconds: 60,
+    },
+  };
+
+  // Initial session: new question types MUST NOT be auto-graded or auto-revealed
+  const session = createInitialSelfGradingSession(mockExam, 'Pathology', studentAnswers, 105, newQuestions);
+  assert(session.grades['q-id-01'] === undefined, 'identify type must require manual grading');
+  assert(session.grades['q-mention-01'] === undefined, 'mention_characters type must require manual grading');
+  assert(session.revealedQuestions['q-id-01'] !== true, 'identify reference answer must remain hidden initially');
+  assert(session.revealedQuestions['q-mention-01'] !== true, 'mention_characters model answer must remain hidden initially');
+
+  // Candidate assigns grades:
+  // q-id-01: 1 (full mark -> 1 * 2 = 2 pts)
+  // q-mention-01: 0.5 (partial mark -> 0.5 * 3 = 1.5 pts)
+  session.grades['q-id-01'] = 1;
+  session.grades['q-mention-01'] = 0.5;
+
+  const scoreResult = calculateSelfGradingScore(newQuestions, session.grades, 60);
+  assert(scoreResult.totalScore === 3.5, `Expected totalScore 3.5, got ${scoreResult.totalScore}`);
+  assert(scoreResult.maxScore === 5, `Expected maxScore 5, got ${scoreResult.maxScore}`);
+  assert(scoreResult.percentage === 70, `Expected percentage 70%, got ${scoreResult.percentage}`);
+  assert(scoreResult.passed === true, 'Expected passed=true');
+  assert(scoreResult.fullyCorrectCount === 1, 'Expected 1 fully correct');
+  assert(scoreResult.partiallyCorrectCount === 1, 'Expected 1 partially correct');
+
+  const finalized = finalizeSelfGradingAttempt(session, newQuestions, 60);
+  assert(finalized.score === 3.5, `Expected finalized score 3.5, got ${finalized.score}`);
+  assert(finalized.maxScore === 5, 'Expected maxScore 5');
+  console.log('✓ Test 7 Passed: identify and mention_characters types support weighted self-grading and correct score contribution.');
+}
+
 console.log('\n--- All Student Self-Grading Tests Passed Successfully! ---');

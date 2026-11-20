@@ -80,6 +80,11 @@ export function autoGradeStation(
 ): SelfGradeValue | undefined {
   if (!answer) return 0;
 
+  // New question types: always require manual self-grading
+  if (question.type === 'identify' || question.type === 'mention_characters') {
+    return undefined; // Needs manual evaluation
+  }
+
   // 1. If student selected an option (MCQ or spotter answered via MCQ)
   if (answer.selectedOptionId && question.options && question.options.length > 0) {
     const chosen = question.options.find((o) => o.id === answer.selectedOptionId);

@@ -95,7 +95,12 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
         const auto = autoGradeStation(q, session.answers[q.id]);
         if (auto !== undefined) {
           newGrades[q.id] = auto;
-          if (['image_mcq', 'clinical_mcq', 'text_mcq'].includes(q.type) || session.answers[q.id]?.selectedOptionId) {
+          // Only auto-reveal for objective MCQ types — never for identify/mention_characters
+          if (
+            (['image_mcq', 'clinical_mcq', 'text_mcq'].includes(q.type) || session.answers[q.id]?.selectedOptionId) &&
+            q.type !== 'identify' &&
+            q.type !== 'mention_characters'
+          ) {
             newRevealed[q.id] = true;
           }
           hasNewGrades = true;
@@ -408,8 +413,10 @@ export const SelfGradingView: React.FC<SelfGradingViewProps> = ({
             onSelectGrade={handleSelectGrade}
             maxPoints={currentQuestion.points || 1}
             isAutoGraded={
-              ['image_mcq', 'clinical_mcq', 'text_mcq'].includes(currentQuestion.type) ||
-              Boolean(session.answers[currentQuestion.id]?.selectedOptionId)
+              ((['image_mcq', 'clinical_mcq', 'text_mcq'].includes(currentQuestion.type) ||
+              Boolean(session.answers[currentQuestion.id]?.selectedOptionId)) &&
+              currentQuestion.type !== 'identify' &&
+              currentQuestion.type !== 'mention_characters')
             }
           />
         </div>

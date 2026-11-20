@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type QuestionType = 'image_mcq' | 'spotter' | 'text_mcq' | 'clinical_mcq';
+export type QuestionType = 'image_mcq' | 'spotter' | 'text_mcq' | 'clinical_mcq' | 'identify' | 'mention_characters';
 export type TimingMode = 'bell_ring' | 'total_timer' | 'flexible';
 export type PointerType = 'arrow' | 'ring' | 'crosshair';
 export type ExamStatus = 'draft' | 'review' | 'published';
@@ -172,7 +172,7 @@ export const QuestionSchema = z
     id: z.string().min(1, 'Question ID is required'),
     examId: z.string().min(1, 'Exam ID is required'),
     orderIndex: z.number().int().min(0),
-    type: z.enum(['image_mcq', 'spotter', 'text_mcq', 'clinical_mcq']),
+    type: z.enum(['image_mcq', 'spotter', 'text_mcq', 'clinical_mcq', 'identify', 'mention_characters']),
     title: z.string().optional(),
     clinicalVignette: z.string().optional(),
     questionText: z.string().min(1, 'Question prompt is required'),

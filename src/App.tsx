@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   db,
   ensureDatabaseInitialized,
@@ -25,12 +25,20 @@ import { isSoundEnabled, toggleSound } from './services/sound';
 import { createInitialSelfGradingSession } from './services/selfGradingService';
 import { SelfGradingView } from './components/selfGrading/SelfGradingView';
 import { ShuffleDashboard } from './features/shuffle/components/ShuffleDashboard';
+import { AnimatedBackground } from './components/common/AnimatedBackground';
 import { v4 as uuidv4 } from './db/uuid';
 
 interface ActiveSelfGradingState {
   session: SelfGradingSession;
   exam: Exam;
   questions: Question[];
+}
+
+interface InterruptedExamState {
+  examId: string;
+  examTitle: string;
+  stationCount: number;
+  answeredCount: number;
 }
 
 export default function App() {
@@ -52,14 +60,51 @@ export default function App() {
   // Self-Grading Session State (persisted in IndexedDB)
   const [activeSelfGrading, setActiveSelfGrading] = useState<ActiveSelfGradingState | null>(null);
 
+  // Interrupted Running Exam State (persisted in localStorage)
+  const [interruptedExam, setInterruptedExam] = useState<InterruptedExamState | null>(null);
+
   // Educator workspace sub-tab state
   const [educatorSubTab, setEducatorSubTab] = useState<'authoring' | 'packages' | 'missing_images' | 'backup'>('authoring');
 
-  // Initialize DB and restore any unfinalized self-grading session on boot
+  const checkInterruptedExam = useCallback(async () => {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('scrubPracticalExamRunning:')) {
+          const examId = key.replace('scrubPracticalExamRunning:', '');
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            const exam = await db.exams.get(examId);
+            if (exam) {
+              const questionsCount = await db.questions.where('examId').equals(examId).count();
+              const answers = parsed.answers || {};
+              const answeredCount = Object.values(answers).filter(
+                (a: any) => a?.selectedOptionId || (a?.typedAnswer && a.typedAnswer.trim().length > 0)
+              ).length;
+              setInterruptedExam({
+                examId,
+                examTitle: exam.title,
+                stationCount: questionsCount,
+                answeredCount,
+              });
+              return;
+            }
+          }
+        }
+      }
+      setInterruptedExam(null);
+    } catch {
+      setInterruptedExam(null);
+    }
+  }, []);
+
+  // Initialize DB and restore any unfinalized self-grading session or interrupted exam on boot
   useEffect(() => {
     ensureDatabaseInitialized()
       .then(async () => {
         setIsDbReady(true);
+        await checkInterruptedExam();
         try {
           const activeSession = await getActiveSelfGradingSession();
           if (activeSession) {
@@ -85,7 +130,7 @@ export default function App() {
         console.error('Failed to initialize database:', err);
         setIsDbReady(true);
       });
-  }, []);
+  }, [checkInterruptedExam]);
 
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     const id = uuidv4();
@@ -208,6 +253,45 @@ export default function App() {
     setActiveSelfGrading({ session, exam, questions });
   };
 
+  // Resume interrupted running exam from localStorage
+  const handleResumeInterruptedExam = async () => {
+    if (!interruptedExam) return;
+    try {
+      const exam = await db.exams.get(interruptedExam.examId);
+      if (!exam) {
+        showToast('Exam record no longer exists', 'error');
+        handleDiscardInterruptedExam();
+        return;
+      }
+      const questions = await db.questions
+        .where('examId')
+        .equals(exam.id)
+        .sortBy('orderIndex');
+      const subject = await db.subjects.get(exam.subjectId);
+      setActiveExamRunning({
+        exam,
+        subject,
+        questions,
+        autoAdvanceOnBell: false,
+      });
+      setInterruptedExam(null);
+    } catch (err) {
+      console.error('Failed to resume interrupted exam:', err);
+      showToast('Could not resume interrupted exam session', 'error');
+    }
+  };
+
+  const handleDiscardInterruptedExam = () => {
+    if (!interruptedExam) return;
+    try {
+      localStorage.removeItem(`scrubPracticalExamRunning:${interruptedExam.examId}`);
+    } catch {
+      /* ignore */
+    }
+    setInterruptedExam(null);
+    showToast('Interrupted session discarded', 'info');
+  };
+
   // Direct launcher from Educator Workspace
   const handleLaunchFromAdmin = async (examId: string) => {
     const exam = await db.exams.get(examId);
@@ -225,13 +309,19 @@ export default function App() {
           setActiveTab('library'); // triggers re-render showing SelfGradingView
         },
       }
+    : interruptedExam
+    ? {
+        label: `Interrupted exam · ${interruptedExam.examTitle} (${interruptedExam.answeredCount}/${interruptedExam.stationCount} answered)`,
+        onResume: handleResumeInterruptedExam,
+      }
     : null;
 
   // Loading screen
   if (!isDbReady) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] flex items-center justify-center p-4 relative overflow-hidden">
+        <AnimatedBackground />
+        <div className="text-center space-y-4 relative z-10">
           <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800/90 p-2 shadow-lg border border-purple-200/50 dark:border-purple-800/40 mx-auto flex items-center justify-center">
             <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Scrub Practical" className="w-full h-full object-contain animate-pulse" />
           </div>
@@ -261,7 +351,8 @@ export default function App() {
   // 2. Self-grading / review mode
   if (activeSelfGrading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors relative">
+        <AnimatedBackground />
         <Header
           activeTab="library"
           onTabChange={(tab) => {
@@ -293,7 +384,8 @@ export default function App() {
 
   // 3. Primary views
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors relative">
+      <AnimatedBackground />
       <Header
         activeTab={activeTab}
         onTabChange={(tab) => {
@@ -315,6 +407,7 @@ export default function App() {
               setActiveTab('educator');
             }}
             onNavigateToHistory={() => setActiveTab('progress')}
+            onReviewAttempt={handleReviewPastAttempt}
           />
         )}
 

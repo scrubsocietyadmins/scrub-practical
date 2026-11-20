@@ -154,8 +154,59 @@
 .confetti-dot-7 { animation: confettiBurst7 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 .confetti-dot-8 { animation: confettiBurst8 540ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
+/* ============================================================
+   Subtle Medical Ambient Animated Background
+   ============================================================ */
+@keyframes ambientDrift1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 25px) scale(0.97);
+  }
+}
+
+@keyframes ambientDrift2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-35px, 25px) scale(1.04);
+  }
+  66% {
+    transform: translate(25px, -15px) scale(0.96);
+  }
+}
+
+@keyframes ambientDrift3 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(20px, 30px) scale(1.03);
+  }
+}
+
+.anim-ambient-orb-1 {
+  animation: ambientDrift1 26s ease-in-out infinite;
+}
+
+.anim-ambient-orb-2 {
+  animation: ambientDrift2 32s ease-in-out infinite;
+}
+
+.anim-ambient-orb-3 {
+  animation: ambientDrift3 22s ease-in-out infinite;
+}
+
 /* Accessibility: Respect Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+  .anim-ambient-orb-1,
+  .anim-ambient-orb-2,
+  .anim-ambient-orb-3,
   .anim-quiz-correct,
   .anim-quiz-wrong,
   .anim-checkmark-pop,

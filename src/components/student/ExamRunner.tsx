@@ -783,6 +783,50 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 </div>
               )}
 
+            {/* Identify Question: free-text answer */}
+            {currentStation.type === 'identify' && (
+              <div className="space-y-2 p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl mb-4">
+                <label htmlFor="identify-answer-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Your answer:
+                </label>
+                <input
+                  id="identify-answer-input"
+                  type="text"
+                  disabled={isStationLocked}
+                  placeholder="Write your answer here…"
+                  value={currentAnswer.typedAnswer || ''}
+                  onChange={(e) => handleTypedAnswerChange(e.target.value)}
+                  className="w-full px-3.5 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/30 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                  autoComplete="off"
+                />
+                <p className="text-[11px] text-slate-400 dark:text-slate-500">
+                  Write your answer. The model answer will be revealed during self-grading.
+                </p>
+              </div>
+            )}
+
+            {/* Mention Characters Question: multi-line text area */}
+            {currentStation.type === 'mention_characters' && (
+              <div className="space-y-2 p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl mb-4">
+                <label htmlFor="mention-answer-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Mention the required characters/features:
+                </label>
+                <textarea
+                  id="mention-answer-input"
+                  disabled={isStationLocked}
+                  placeholder="List each character or feature on a new line, or separate with commas…"
+                  value={currentAnswer.typedAnswer || ''}
+                  onChange={(e) => handleTypedAnswerChange(e.target.value)}
+                  rows={5}
+                  className="w-full px-3.5 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600/30 focus:border-purple-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed resize-y"
+                  autoComplete="off"
+                />
+                <p className="text-[11px] text-slate-400 dark:text-slate-500">
+                  List all relevant characters or features. The model answer will be revealed during self-grading.
+                </p>
+              </div>
+            )}
+
             {/* 2. Multiple Choice Options: Rendered for MCQs or spotters in MCQ mode */}
             {currentStation.options &&
               currentStation.options.length > 0 &&
@@ -959,7 +1003,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   >
                     <span>{idx + 1}</span>
                     <span className="text-[10px] font-normal opacity-70 uppercase">
-                      {q.type === 'spotter' ? 'Spotter' : 'MCQ'}
+                      {q.type === 'spotter' ? 'Spotter' : q.type === 'identify' ? 'ID' : q.type === 'mention_characters' ? 'List' : 'MCQ'}
                     </span>
                   </button>
                 );

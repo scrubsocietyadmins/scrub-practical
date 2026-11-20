@@ -153,6 +153,8 @@ export function summarizeQuestionBank(
     image_mcq: 0,
     clinical_mcq: 0,
     text_mcq: 0,
+    identify: 0,
+    mention_characters: 0,
   };
 
   for (const grp of topicGroups) {

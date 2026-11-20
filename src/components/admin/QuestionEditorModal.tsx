@@ -12,6 +12,8 @@ import {
   Crosshair,
   ArrowUpRight,
   Circle,
+  FileText,
+  List,
 } from 'lucide-react';
 import type { Question, QuestionType, SpotterPin, QuestionOption, PointerType } from '../../types';
 import { v4 as uuidv4 } from '../../db/uuid';
@@ -57,6 +59,9 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
   const [newAcceptableAnswer, setNewAcceptableAnswer] = useState('');
   const [spotterAnswerMode, setSpotterAnswerMode] = useState<'typed' | 'multiple_choice' | 'both'>('both');
 
+  // Reference answer for identify / mention_characters
+  const [referenceAnswer, setReferenceAnswer] = useState<string>('');
+
   // Options for MCQ
   const [options, setOptions] = useState<QuestionOption[]>([
     { id: uuidv4(), text: '', isCorrect: true },
@@ -82,6 +87,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
       setLectureName(initialQuestion.lectureName || '');
       setImageId(initialQuestion.imageId);
       setSpotterPin(initialQuestion.spotterPin);
+      setReferenceAnswer(initialQuestion.referenceAnswer || '');
       if (initialQuestion.spotterPin) {
         setPointerType(initialQuestion.spotterPin.pointerType || 'arrow');
         setPointerLabel(initialQuestion.spotterPin.label || 'Pointer A');
@@ -125,6 +131,7 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
       setAcceptableAnswers([]);
       setNewAcceptableAnswer('');
       setSpotterAnswerMode('both');
+      setReferenceAnswer('');
       setOptions([
         { id: uuidv4(), text: '', isCorrect: true },
         { id: uuidv4(), text: '', isCorrect: false },
@@ -249,7 +256,15 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
       }
     }
 
-    if (type !== 'spotter' || spotterAnswerMode === 'multiple_choice' || spotterAnswerMode === 'both') {
+    if (type === 'identify' || type === 'mention_characters') {
+      if (!referenceAnswer.trim()) {
+        setError('Please provide a reference/model answer for self-grading comparison');
+        return;
+      }
+    }
+
+    const isMcqFormat = type === 'image_mcq' || type === 'clinical_mcq' || type === 'text_mcq' || (type === 'spotter' && (spotterAnswerMode === 'multiple_choice' || spotterAnswerMode === 'both'));
+    if (isMcqFormat) {
       const validOptions = options.filter((o) => o.text.trim().length > 0);
       if (validOptions.length < 2) {
         setError('Please provide at least 2 multiple choice options');
@@ -285,7 +300,8 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
         spotterPin: type === 'spotter' ? spotterPin : undefined,
         acceptableAnswers: type === 'spotter' ? acceptableAnswers : undefined,
         spotterAnswerMode: type === 'spotter' ? spotterAnswerMode : undefined,
-        options: (type !== 'spotter' || spotterAnswerMode !== 'typed')
+        referenceAnswer: referenceAnswer.trim() ? referenceAnswer.trim() : undefined,
+        options: isMcqFormat
           ? options.filter((o) => o.text.trim().length > 0)
           : undefined,
         explanation: explanation.trim(),
@@ -334,9 +350,11 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
               Station Question Format *
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {[
                 { id: 'spotter', label: 'Spotter Station', desc: 'Pinned specimen identifier' },
+                { id: 'identify', label: 'Identify', desc: 'Text answer & model reveal' },
+                { id: 'mention_characters', label: 'Mention Characters', desc: 'Feature list & rubric comparison' },
                 { id: 'image_mcq', label: 'Image MCQ', desc: 'Slide/radiology MCQ' },
                 { id: 'clinical_mcq', label: 'Clinical MCQ', desc: 'Case history + MCQ' },
                 { id: 'text_mcq', label: 'Text MCQ', desc: 'Conceptual station' },
@@ -734,8 +752,43 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
             </div>
           )}
 
+          {/* Reference / Model Answer for Identify and Mention Characters */}
+          {(type === 'identify' || type === 'mention_characters') && (
+            <div className="border border-purple-200 dark:border-purple-850 rounded-xl p-4 bg-purple-50/40 dark:bg-purple-950/20 space-y-3">
+              <div className="flex items-center gap-2">
+                {type === 'mention_characters' ? (
+                  <List className="w-4 h-4 text-purple-700 dark:text-purple-400" />
+                ) : (
+                  <FileText className="w-4 h-4 text-purple-700 dark:text-purple-400" />
+                )}
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  {type === 'mention_characters'
+                    ? 'Model Answer (Required Characters / Features) *'
+                    : 'Reference / Model Answer *'}
+                </label>
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                {type === 'mention_characters'
+                  ? 'List the required characteristics, histological features, or diagnostic criteria (one per line or separated by semicolons). Revealed during self-grading for manual scoring.'
+                  : 'Enter the canonical reference answer. Kept strictly concealed until the student reveals it during self-grading.'}
+              </p>
+              <textarea
+                rows={type === 'mention_characters' ? 4 : 2}
+                required
+                placeholder={
+                  type === 'mention_characters'
+                    ? '1. Owl-eye appearance with prominent eosinophilic nucleoli\n2. Binucleated or multinucleated giant cells\n3. Abundant amphophilic cytoplasm\n4. Surrounding inflammatory background (lymphocytes, eosinophils)'
+                    : 'e.g. Medullary carcinoma of the thyroid / Amyloid stroma with calcitonin positivity'
+                }
+                value={referenceAnswer}
+                onChange={(e) => setReferenceAnswer(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-700/30 focus:border-purple-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              />
+            </div>
+          )}
+
           {/* Multiple Choice Options (if MCQ or spotter with MCQ) */}
-          {(type !== 'spotter' || spotterAnswerMode !== 'typed') && (
+          {type !== 'identify' && type !== 'mention_characters' && (type !== 'spotter' || spotterAnswerMode !== 'typed') && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">

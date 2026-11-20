@@ -199,14 +199,26 @@ export async function inspectZipPackage(file: File): Promise<InspectedZipPackage
     throw new Error('Manifest contains invalid or corrupted JSON.');
   }
 
+  if (rawManifest && typeof rawManifest === 'object') {
+    const rawObj = rawManifest as Record<string, unknown>;
+    if (!rawObj.formatVersion) {
+      throw new Error('Incompatible package: missing "formatVersion" in manifest.json.');
+    }
+    if (typeof rawObj.formatVersion === 'string' && !rawObj.formatVersion.startsWith('1.')) {
+      throw new Error(`Unsupported package version "${rawObj.formatVersion}". Supported versions: 1.x.x.`);
+    }
+  }
+
   // Validate with Zod
   const validationResult = ExamPackageManifestSchema.safeParse(rawManifest);
   if (!validationResult.success) {
-    const errorDetails = validationResult.error.issues
-      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
-      .slice(0, 4)
-      .join('; ');
-    throw new Error(`Package schema validation failed: ${errorDetails}`);
+    const formattedErrors = validationResult.error.issues.map((issue) => {
+      const fieldPath = issue.path.join('.');
+      return `${fieldPath ? `"${fieldPath}": ` : ''}${issue.message}`;
+    });
+    const summary = formattedErrors.slice(0, 5).join('; ');
+    const more = formattedErrors.length > 5 ? ` (+${formattedErrors.length - 5} more issues)` : '';
+    throw new Error(`Package validation failed: ${summary}${more}`);
   }
 
   const manifest = validationResult.data;
@@ -276,6 +288,12 @@ export async function inspectZipPackage(file: File): Promise<InspectedZipPackage
       if (!q.imageId || !imageBlobMap.has(q.imageId)) {
         questionsNeedingReviewCount++;
       } else if (q.type === 'spotter' && !q.spotterPin) {
+        questionsNeedingReviewCount++;
+      }
+    } else if (q.type === 'identify' || q.type === 'mention_characters') {
+      if (!q.referenceAnswer || !q.referenceAnswer.trim()) {
+        questionsNeedingReviewCount++;
+      } else if (q.imageId && !imageBlobMap.has(q.imageId)) {
         questionsNeedingReviewCount++;
       }
     }

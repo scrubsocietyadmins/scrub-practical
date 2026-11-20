@@ -142,9 +142,25 @@ export async function checkExamReadiness(examId: string): Promise<ExamReadinessR
         }
       }
     }
-  }
+    if (q.type === 'identify' || q.type === 'mention_characters') {
+        if (!q.referenceAnswer || !q.referenceAnswer.trim()) {
+          validationErrors.push(`${stationLabel}: Reference / model answer is required for self-grading.`);
+        }
+        if (q.imageId) {
+          const imgRecord = await db.images.get(q.imageId);
+          if (!imgRecord || !imgRecord.blob || imgRecord.blob.size === 0 || imgRecord.status === 'missing') {
+            missingImageDetails.push({
+              questionId: q.id,
+              questionTitle: stationLabel,
+              imageId: q.imageId,
+            });
+            validationErrors.push(`${stationLabel}: Associated specimen image ("${q.imageId}") is missing from storage.`);
+          }
+        }
+      }
+    }
 
-  const hasMissingImages = missingImageDetails.length > 0;
+    const hasMissingImages = missingImageDetails.length > 0;
   const canStart = questions.length > 0 && !hasMissingImages;
   const canPublish = validationErrors.length === 0;
 

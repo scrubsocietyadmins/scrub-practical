@@ -54,6 +54,20 @@ export const QuestionList: React.FC<QuestionListProps> = ({
             <span>Clinical Vignette</span>
           </span>
         );
+      case 'identify':
+        return (
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-900 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+            <FileText className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
+            <span>Identify</span>
+          </span>
+        );
+      case 'mention_characters':
+        return (
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-teal-900 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/50 px-2 py-0.5 rounded border border-teal-200 dark:border-teal-800">
+            <Award className="w-3 h-3 text-teal-700 dark:text-teal-400" />
+            <span>Mention Characters</span>
+          </span>
+        );
       case 'text_mcq':
         return (
           <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-800 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">

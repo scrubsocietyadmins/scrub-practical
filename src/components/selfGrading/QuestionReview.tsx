@@ -211,7 +211,7 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
                       <User className="w-3.5 h-3.5 text-slate-500" />
                       <span>Candidate Submitted Answer:</span>
                     </div>
-                    <div className="text-sm font-semibold text-slate-900 dark:text-white font-mono bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-white font-mono bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700 whitespace-pre-line">
                       {studentAnswerText}
                     </div>
                   </div>
@@ -222,7 +222,7 @@ export const QuestionReview: React.FC<QuestionReviewProps> = ({
                       <FileCheck2 className="w-3.5 h-3.5 text-indigo-700 dark:text-indigo-400" />
                       <span>Official Reference Answer:</span>
                     </div>
-                    <div className="text-sm font-semibold text-indigo-950 dark:text-indigo-100 font-mono bg-white dark:bg-slate-900 p-3 rounded-lg border border-indigo-200 dark:border-indigo-900/60">
+                    <div className="text-sm font-semibold text-indigo-950 dark:text-indigo-100 font-mono bg-white dark:bg-slate-900 p-3 rounded-lg border border-indigo-200 dark:border-indigo-900/60 whitespace-pre-line">
                       {referenceText}
                     </div>
                   </div>

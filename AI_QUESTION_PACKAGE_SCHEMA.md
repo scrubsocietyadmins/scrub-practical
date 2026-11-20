@@ -93,9 +93,18 @@ exam-package.zip
 | Type | Description | Mandatory Fields |
 |---|---|---|
 | `spotter` | Visual pinned landmark identification | `imageId`, `spotterPin`, `acceptableAnswers` (if typed) |
+| `identify` | Medical specimen / finding identification with candidate typed input and post-submission model answer comparison | `questionText`, `referenceAnswer` (model answer) |
+| `mention_characters` | Enumeration / diagnostic feature listing with structured multi-item model answer comparison | `questionText`, `referenceAnswer` (structured model answer) |
 | `image_mcq` | Diagnostic slide / radiology / histology MCQ | `imageId`, `options` (>=2 choices, exactly 1 correct) |
 | `clinical_mcq` | Case vignette + clinical MCQ | `clinicalVignette`, `options` (>=2 choices, exactly 1 correct) |
 | `text_mcq` | High-yield conceptual medical question | `options` (>=2 choices, exactly 1 correct) |
+
+### Self-Grading Convention for `identify` & `mention_characters`
+Candidates evaluate their typed responses against the package's `referenceAnswer` (and optional `markingRubric`):
+- `1.0` = Fully correct (Full mark)
+- `0.5` = Partially correct (Partial mark)
+- `0.0` = Incorrect (Zero mark)
+The model answer remains strictly concealed during the examination and is revealed only during the self-grading phase.
 
 ---
 
