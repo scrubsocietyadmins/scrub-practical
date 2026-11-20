@@ -514,7 +514,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       )}
 
       {/* Exam Header — Compact, streamlined, no premature Finish button */}
-      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs safe-top">
         {/* Progress bar */}
         <div className="w-full bg-slate-100 dark:bg-slate-800 h-1 overflow-hidden">
           <div
@@ -890,7 +890,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
       </main>
 
       {/* Bottom Navigation Bar */}
-      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-3 px-4 sticky bottom-0 z-20 transition-colors">
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-3 px-4 sticky bottom-0 z-20 transition-colors safe-bottom">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           {/* Previous Station button */}
           <button

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
   BookOpen,
@@ -11,8 +11,12 @@ import {
   AlertCircle,
   Sun,
   Moon,
+  Download,
+  WifiOff,
+  Sparkles,
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { pwaManager, type PWAState } from '../../services/pwaService';
 
 export type MainNavTab = 'library' | 'practice' | 'progress' | 'educator';
 
@@ -39,6 +43,13 @@ export const Header: React.FC<HeaderProps> = ({
   activeSessionBanner,
 }) => {
   const { isDark, toggleTheme } = useTheme();
+  const [pwaState, setPwaState] = useState<PWAState>(() => pwaManager.getState());
+
+  useEffect(() => {
+    return pwaManager.subscribe((state) => {
+      setPwaState(state);
+    });
+  }, []);
 
   const studentTabs: Array<{ id: MainNavTab; label: string; shortLabel: string; icon: React.ElementType }> = [
     { id: 'library', label: 'Exam Library', shortLabel: 'Library', icon: BookOpen },
@@ -49,7 +60,25 @@ export const Header: React.FC<HeaderProps> = ({
   const educatorTab = { id: 'educator' as MainNavTab, label: 'Educator Workspace', shortLabel: 'Educator', icon: GraduationCap };
 
   return (
-    <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.4)] transition-colors">
+    <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.4)] transition-colors safe-top">
+      {/* PWA Update Ready Banner */}
+      {pwaState.updateAvailable && (
+        <div className="bg-indigo-950 text-white px-4 py-2 flex items-center justify-between gap-3 text-xs border-b border-indigo-900/50 shadow-xs">
+          <span className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-indigo-300 shrink-0" />
+            <span className="text-indigo-100">
+              An application update is ready. You can install it now or wait until you finish your current session.
+            </span>
+          </span>
+          <button
+            onClick={() => pwaManager.applyUpdate()}
+            className="shrink-0 px-3 py-1 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-colors cursor-pointer text-xs"
+          >
+            Update Now
+          </button>
+        </div>
+      )}
+
       {/* Session resume banner */}
       {activeSessionBanner && (
         <div className="bg-purple-950 dark:bg-purple-950/90 text-white px-4 py-1.5 flex items-center justify-between gap-3 text-xs border-b border-purple-900/40">
@@ -162,6 +191,30 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Actions */}
           <div className="flex items-center gap-1.5 shrink-0">
+            {/* Offline Connectivity Status Pill */}
+            {!pwaState.isOnline && (
+              <span
+                title="Working offline — local examinations, questions, and records are fully accessible"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-800 animate-pulse"
+              >
+                <WifiOff className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                <span className="hidden sm:inline">Offline Mode</span>
+              </span>
+            )}
+
+            {/* PWA Install Button */}
+            {pwaState.canInstall && !pwaState.isInstalled && (
+              <button
+                id="pwa-install-btn"
+                onClick={() => pwaManager.promptInstall()}
+                title="Install Scrub Practical as an app on your device"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 dark:from-purple-600 dark:to-indigo-500 shadow-xs transition-all min-h-[36px] cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Install</span>
+              </button>
+            )}
+
             {/* Theme Toggle Button */}
             <button
               id="theme-toggle-btn"

@@ -20,6 +20,22 @@
     color: #f1f5f9;
     background-color: #0b0f19;
   }
+
+  /* Mobile PWA Safe-Area Insets & Standalone Optimizations */
+  html, body {
+    overscroll-behavior-y: contain;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Safe-area insets support for standalone mobile devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 /* Custom scrollbars for high-density medical exam review */
