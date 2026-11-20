@@ -1,0 +1,65 @@
+{
+  "name": "Scrub Practical",
+  "short_name": "Scrub Practical",
+  "description": "Lightweight medical practical examination platform for authoring, testing, and sharing OSPE and spotter exams offline.",
+  "id": "./?source=pwa",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
+  "orientation": "any",
+  "theme_color": "#4c0519",
+  "background_color": "#0b0f19",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "medical"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Exam Library",
+      "short_name": "Library",
+      "description": "Browse clinical practical examinations",
+      "url": "./#library",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Shuffle Practice",
+      "short_name": "Practice",
+      "description": "Start custom question shuffle practice",
+      "url": "./#practice",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Performance History",
+      "short_name": "History",
+      "description": "View scores and analytics",
+      "url": "./#progress",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
